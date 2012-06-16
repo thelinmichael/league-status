@@ -1,9 +1,9 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import play.db.jpa.Model;
@@ -40,5 +40,29 @@ public class League extends Model {
 	
 	public List<Game> getGames() {
 		return this.games;
+	}
+
+	public void addGame(Game game) {
+		games.add(game);
+	}
+
+	public List<Game> getPlayedGames() {
+		List<Game> playedGames = new ArrayList<Game>();
+		for (Game game : this.getGames()) {
+			if (game.isPlayed()) {
+				playedGames.add(game);
+			}
+		}
+ 		return playedGames;
+	}
+	
+	public List<Game> getRemainingGames() {
+		List<Game> remainingGames = new ArrayList<Game>();
+		for (Game game : this.getGames()) {
+			if (!game.isPlayed()) {
+				remainingGames.add(game);
+			}
+		}
+		return remainingGames;
 	}
 }

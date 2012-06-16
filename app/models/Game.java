@@ -20,9 +20,7 @@ public class Game extends Model {
 	public List<Team> teams = new ArrayList<Team>();
 
 	@OneToMany
-	public List<Score> scores;
-	
-	public boolean isPlayed = false;
+	public List<Score> scores = new ArrayList<Score>();
 	
 	public Game(List<Team> teams, League league) {
 		this.league = league;
@@ -37,10 +35,17 @@ public class Game extends Model {
 		for (Integer score : scores) {
 			this.scores.add(new Score(score));
 		}
-		this.isPlayed = true;
+	}
+	
+	public boolean isPlayed() {
+		return !(scores.size() == 0);
 	}
 
 	public List<Team> getTeams() {
 		return teams;
+	}
+	
+	public String toString() {
+		return teams.get(0) + " - " + teams.get(1);
 	}
 }

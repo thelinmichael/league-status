@@ -38,9 +38,9 @@ public class GameTest extends UnitTest{
 		League league = League.find("byName", "allsvenskan").first();
 		
 		Game game = new Game(Arrays.asList(team1, team2), league);
-		assertThat(game.isPlayed, is(false));
+		assertThat(game.isPlayed(), is(false));
 		
 		game.setScore(Arrays.asList(new Integer[] {1,2}));
-		assertThat(game.isPlayed, is(true));
+		assertThat(game.isPlayed(), is(true));
 	}
 }

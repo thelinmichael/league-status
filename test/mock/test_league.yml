@@ -69,13 +69,23 @@ Player(somewesthamplayer):
 
 Game(allsvenskan_game1):
     league:         allsvenskan
-    teams:          {mancity,chelsea}
+    teams:          {gefle,djurgarden}
     scores:         {0,1}
 
 Game(allsvenskan_game2):
     teams:          {aik,djurgarden}
     league:         allsvenskan      
-    scores:         {1,1} 
+    scores:         {3,1} 
+    
+Game(allsvenskan_game3):
+    teams:          {aik,djurgarden}
+    league:         allsvenskan      
+    scores:         {1,5}
+
+Game(allsvenskan_game4):
+    teams:          {aik,djurgarden}
+    league:         allsvenskan      
+    scores:         {1,0}
     
 Game(premierleague_game1):
     teams:          {mancity,westham}

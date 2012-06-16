@@ -5,17 +5,18 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import play.test.Fixtures;
 import play.test.FunctionalTest;
 
 public class ApplicationTest extends FunctionalTest {
 	
+	@Ignore
 	@Test
 	public void badLeagueNameShowsErrorMessage() {
 		WebDriver driver = new FirefoxDriver();
@@ -27,6 +28,7 @@ public class ApplicationTest extends FunctionalTest {
 		driver.close();
 	}
 	
+	@Ignore
 	@Test
 	public void showsLeagueTeamsInList() {
 		WebDriver driver = new FirefoxDriver();

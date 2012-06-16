@@ -1,5 +1,27 @@
+#{extends 'main.html' /}
+
 #{if league != null} 
-	The league's name is ${league.getDisplayName()}
+	<h1>${league.getDisplayName()}</h1>
+		
+	<div class="leagueTable"> 
+		<div class="teamDisplayName column">
+		<p class="big">Team</p>
+		#{list items:league.getTeams(), as:'team'}
+			<p> ${team.getDisplayName()} </p>
+		#{/list}
+		</div>
+	</div>
+	
+	<div>
+		#{if league.getGames() != null}
+			<p>Number of games: ${league.getGames().size()}</p>
+			<p>Number of played games: ${league.getPlayedGames().size()}</p>
+			<p>Number of remaining games: ${league.getRemainingGames().size()}</p>
+			#{list items:league.getGames(), as:'game'}
+			#{/list}		
+		#{/if}
+	</div>
+	
 #{/if}
 #{else}
 	<p class="errorMessage">${flash.get("errorMessage")}</p>

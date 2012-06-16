@@ -1,0 +1,12 @@
+p.big {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.leagueTable {
+	width: 1000px;
+}
+
+.column {
+	width: 300px;
+}	
