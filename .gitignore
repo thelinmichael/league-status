@@ -6,4 +6,4 @@ eclipse
 lib
 modules
 test-result
-tmp/
+tmp
