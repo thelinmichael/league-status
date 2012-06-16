@@ -1,0 +1,87 @@
+# Test data
+
+League(allsvenskan):
+    displayName:     "Allsvenskan"
+    name:            "allsvenskan"
+
+League(premierleague):
+    displayName:     "Premier League"
+    name:            "premier_league"   
+    
+League(championsleague):
+    displayName:      "Champions League"
+    name:             "champions_league"
+      
+Team(gefle):
+    displayName:      "Gefle IF"
+    name:             "gefle_if"
+    league:           allsvenskan
+    
+Team(djurgarden):
+    displayName:      "Djurgårdens IF"
+    name:             "djurgardens_if"
+    league:           allsvenskan
+
+Team(mjallby):
+    displayName:      "Mjällby"
+    name:             "mjallby"
+    league:           allsvenskan 
+    
+Team(aik):
+    displayName:    "AIK"
+    name:           "AIK"
+    league:         allsvenskan
+       
+Team(atvidaberg):
+    displayName:    "Åtvidaberg"
+    name:           "atvidaberg"
+    league:         allsvenskan
+    
+Team(chelsea):     
+    displayName:    "Chelsea"
+    name:           "chelsea"
+    league:         premierleague
+
+Team(westham):     
+    displayName:    "West Ham"
+    name:           "westham"
+    league:         premierleague
+     
+Team(mancity):
+    displayName:    "Manchester City"
+    name:           "manchester_city"
+    league:         premierleague
+    
+Player(michaelt):
+    displayName:    "Michael Thelin"
+    name:           "michael_thelin"
+    team:           gefle
+    
+Player(zlatani):
+    team:           gefle
+    displayName:    "Zlatan Ibrahimovic"
+    name:           "zlatan_ibrahimovic"
+
+Player(somewesthamplayer):
+    team:           westham
+    displayName:    "Some WesthamPlayer"
+    name:           "some_westhamplayer"
+
+Game(allsvenskan_game1):
+    league:         allsvenskan
+    teams:          {mancity,chelsea}
+    scores:         {0,1}
+
+Game(allsvenskan_game2):
+    teams:          {aik,djurgarden}
+    league:         allsvenskan      
+    scores:         {1,1} 
+    
+Game(premierleague_game1):
+    teams:          {mancity,westham}
+    league:         premierleague
+    scores:         {1,3}
+   
+Game(championsleague_game1):
+    teams:          {mancity, chelsea}
+    league:         championsleague

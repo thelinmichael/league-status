@@ -1,0 +1,6 @@
+# Application dependencies
+
+require:
+    - play
+    - org.seleniumhq.selenium -> selenium-java 2.23.1
+    - play -> db 1.1

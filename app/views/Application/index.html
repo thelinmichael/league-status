@@ -1,0 +1,11 @@
+#{extends 'main.html' /}
+#{set title:'Advanced league stats' /}
+
+<input type="text" id="showLeagueInput"/>
+<input type="button" value="Show league" id="showLeagueButton" onclick="showLeague(document.getElementById('showLeagueInput').value()); "/>
+
+<script>
+var showLeague = function(league) {
+	console.log(league);
+}
+</script>

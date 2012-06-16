@@ -1,0 +1,9 @@
+.git
+.classpath
+.project
+.settings
+eclipse
+lib
+modules
+test-result
+tmp/

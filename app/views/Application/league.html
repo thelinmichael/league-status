@@ -1,0 +1,6 @@
+#{if league != null} 
+	The league's name is ${league.getDisplayName()}
+#{/if}
+#{else}
+	<p class="errorMessage">${flash.get("errorMessage")}</p>
+#{/else}
