@@ -8,9 +8,9 @@ import play.db.jpa.Model;
 @Entity
 public class Score extends Model {
 	
-	public int goals;
+	public Integer goals;
 
-	public Score(int goals) {
+	public Score(Integer goals) {
 		this.goals = goals;
 	}
 	

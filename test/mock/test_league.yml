@@ -50,34 +50,42 @@ Team(westham):
 Team(mancity):
     displayName:    "Manchester City"
     name:           "manchester_city"
-    league:         premierleague    
-
+    league:         premierleague
+    
+Score(score1):
+    goals:          1
+         
+Score(score0):
+    goals:          0
+ 
+Score(score4):
+    goals:          4
+            
 Game(allsvenskan_game1):
     league:         allsvenskan
-    homeTeam:       gefle
-    awayTeam:       djurgarden
+    teams:          [gefle,djurgarden]
+    scores:         [score1,score0]
 
 Game(allsvenskan_game2):
-    homeTeam:       aik
-    awayTeam:       djurgarden
+    teams:          {aik,djurgarden}
     league:         allsvenskan      
+    scores:         {score4,score1} 
     
 Game(allsvenskan_game3):
-    homeTeam:       aik
-    awayTeam:       djurgarden
+    teams:          {aik,djurgarden}
     league:         allsvenskan      
+    scores:         {score1,score4}
 
 Game(allsvenskan_game4):
-    homeTeam:       aik
-    awayTeam:       djurgarden
+    teams:          {aik,djurgarden}
     league:         allsvenskan      
+    scores:         {score0,score1}
     
 Game(premierleague_game1):
-    awayTeam:       westham
-    homeTeam:       mancity
+    teams:          {mancity,westham}
     league:         premierleague
+    scores:         {score1,score1}
    
 Game(championsleague_game1):
-    homeTeam:       mancity
-    awayTeam:       chelsea
+    teams:          {mancity, chelsea}
     league:         championsleague
