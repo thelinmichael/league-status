@@ -17,35 +17,33 @@ public class Game extends Model {
 	public League league;
 	
 	@ManyToMany
-	public List<Team> teams = new ArrayList<Team>();
+	public List<Team> teams;
 
 	@OneToMany
-	public List<Score> scores = new ArrayList<Score>();
+	public List<Score> scores;
 	
-	public Game(List<Team> teams, League league) {
+	public Game(League league, List<Team> teams) {
 		this.league = league;
 		this.teams = teams;
 	}
 	
-	public void setScore(List<Integer> scores) {
-		if (scores == null || scores.size() != teams.size()) {
-			throw new IllegalArgumentException();
-		} 
-		this.scores = new ArrayList<Score>();
-		for (Integer score : scores) {
-			this.scores.add(new Score(score));
-		}
-	}
-	
-	public boolean isPlayed() {
-		return !(scores.size() == 0);
-	}
-
 	public List<Team> getTeams() {
 		return teams;
 	}
 	
-	public String toString() {
-		return teams.get(0) + " - " + teams.get(1);
+	public void setScore(List<Integer> intScores) {
+		if (this.scores == null) {
+			this.scores = new ArrayList<Score>();
+		}
+		
+		for (Integer intScore : intScores) {
+			Score score = new Score(intScore);
+			this.scores.add(score);
+		}
 	}
+	
+	public boolean isPlayed() {
+		return (scores != null && scores.size() != 0);
+	}
+	
 }

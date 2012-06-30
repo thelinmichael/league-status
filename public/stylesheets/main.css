@@ -1,6 +1,9 @@
 p.big {
-	font-size: 14px;
 	font-weight: bold;
+}
+
+h1 {
+	font-family: 'Arial'
 }
 
 .leagueTable {
@@ -10,3 +13,9 @@ p.big {
 .column {
 	width: 300px;
 }	
+
+.normalText, p {
+	font-size: 14px;
+	font-family: 'Arial';
+}	
+

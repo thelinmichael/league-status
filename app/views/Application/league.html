@@ -1,9 +1,11 @@
 #{extends 'main.html' /}
 
+<p> <a href="/">Home</a> </p>
+
 #{if league != null} 
 	<h1>${league.getDisplayName()}</h1>
 		
-	<div class="leagueTable"> 
+	<div class="normalText"> 
 		<div class="teamDisplayName column">
 		<p class="big">Team</p>
 		#{list items:league.getTeams(), as:'team'}
@@ -12,12 +14,13 @@
 		</div>
 	</div>
 	
-	<div>
+	<div class="normalText">
 		#{if league.getGames() != null}
 			<p>Number of games: ${league.getGames().size()}</p>
-			<p>Number of played games: ${league.getPlayedGames().size()}</p>
-			<p>Number of remaining games: ${league.getRemainingGames().size()}</p>
+			<p>Number of played games: ${stats.getPlayedGames().size()}</p>
+			<p>Number of remaining games: ${stats.getRemainingGames().size()}</p>
 			#{list items:league.getGames(), as:'game'}
+				${game}
 			#{/list}		
 		#{/if}
 	</div>

@@ -1,24 +1,23 @@
 package controllers;
 
-import java.util.Arrays;
 import java.util.List;
 
 import models.League;
 import play.mvc.Controller;
+import util.LeagueStats;
+import util.Stats;
 
 public class Application extends Controller {
 
     public static void index() {
-    	render();
+    	List<League> leagues = League.findAll();
+    	render(leagues);
     }
     
     public static void league(String leagueName) {
     	League league = League.find("byName", leagueName).first();
-    	
-    	if (league == null) {
-    		flash.put("errorMessage", "League not found");
-    	}
-    	
-    	render(league);
+    	notFoundIfNull(league);
+    	LeagueStats stats = Stats.getLeagueStats(league);
+    	render(league, stats);
     }
 }

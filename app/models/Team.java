@@ -23,9 +23,6 @@ public class Team extends Model {
 	@ManyToOne
 	public League league;
 	
-	@OneToMany(mappedBy="team", cascade=CascadeType.ALL)
-	public List<Player> players;
-	
 	public Team(String name) {
 		this.name = name;
 		this.displayName = name.replace(' ', '_').toLowerCase();

@@ -50,48 +50,34 @@ Team(westham):
 Team(mancity):
     displayName:    "Manchester City"
     name:           "manchester_city"
-    league:         premierleague
-    
-Player(michaelt):
-    displayName:    "Michael Thelin"
-    name:           "michael_thelin"
-    team:           gefle
-    
-Player(zlatani):
-    team:           gefle
-    displayName:    "Zlatan Ibrahimovic"
-    name:           "zlatan_ibrahimovic"
-
-Player(somewesthamplayer):
-    team:           westham
-    displayName:    "Some WesthamPlayer"
-    name:           "some_westhamplayer"
+    league:         premierleague    
 
 Game(allsvenskan_game1):
     league:         allsvenskan
-    teams:          {gefle,djurgarden}
-    scores:         {0,1}
+    homeTeam:       gefle
+    awayTeam:       djurgarden
 
 Game(allsvenskan_game2):
-    teams:          {aik,djurgarden}
+    homeTeam:       aik
+    awayTeam:       djurgarden
     league:         allsvenskan      
-    scores:         {3,1} 
     
 Game(allsvenskan_game3):
-    teams:          {aik,djurgarden}
+    homeTeam:       aik
+    awayTeam:       djurgarden
     league:         allsvenskan      
-    scores:         {1,5}
 
 Game(allsvenskan_game4):
-    teams:          {aik,djurgarden}
+    homeTeam:       aik
+    awayTeam:       djurgarden
     league:         allsvenskan      
-    scores:         {1,0}
     
 Game(premierleague_game1):
-    teams:          {mancity,westham}
+    awayTeam:       westham
+    homeTeam:       mancity
     league:         premierleague
-    scores:         {1,3}
    
 Game(championsleague_game1):
-    teams:          {mancity, chelsea}
+    homeTeam:       mancity
+    awayTeam:       chelsea
     league:         championsleague

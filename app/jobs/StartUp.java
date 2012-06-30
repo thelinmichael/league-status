@@ -21,5 +21,4 @@ public class StartUp extends Job {
 			System.out.println("Loaded " + leagues.size() + " leagues from fixtures.");
 		} 
 	}
-	
 }

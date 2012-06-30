@@ -43,26 +43,9 @@ public class League extends Model {
 	}
 
 	public void addGame(Game game) {
+		if (games == null) {
+			games = new ArrayList<Game>();
+		}
 		games.add(game);
-	}
-
-	public List<Game> getPlayedGames() {
-		List<Game> playedGames = new ArrayList<Game>();
-		for (Game game : this.getGames()) {
-			if (game.isPlayed()) {
-				playedGames.add(game);
-			}
-		}
- 		return playedGames;
-	}
-	
-	public List<Game> getRemainingGames() {
-		List<Game> remainingGames = new ArrayList<Game>();
-		for (Game game : this.getGames()) {
-			if (!game.isPlayed()) {
-				remainingGames.add(game);
-			}
-		}
-		return remainingGames;
 	}
 }

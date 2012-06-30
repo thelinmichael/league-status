@@ -3,6 +3,7 @@
 # ~~~~
 
 # Home page
+GET 	/showUsers/{<[\0-9]+>ids}/?				Application.showUsers
 GET     /                                       Application.index
 GET		/league/{leagueName}					Application.league
 
@@ -11,6 +12,7 @@ GET     /favicon.ico                            404
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
+GET		/test									Application.test
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}

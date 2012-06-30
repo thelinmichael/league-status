@@ -19,8 +19,10 @@ public class ApplicationTest extends FunctionalTest {
 	public void gettingALeagueWorks() {
 		Response response = GET("/league/allsvenskan");
 		assertIsOk(response);
-		
-		response = GET("/league/bogusLeagueName");
-		assertIsOk(response);
 	}
+	
+	@Test
+	public void gettingALeagueWithBadNameReturns404() {
+		Response response = GET("/league/bogusLeagueName");
+		assertIsNotFound(response);	}
 }
