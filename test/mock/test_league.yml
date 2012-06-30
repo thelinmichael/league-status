@@ -63,8 +63,8 @@ Score(score4):
             
 Game(allsvenskan_game1):
     league:         allsvenskan
-    teams:          [gefle,djurgarden]
-    scores:         [score1,score0]
+    teams:          {gefle,djurgarden}
+    scores:         {score1,score0}
 
 Game(allsvenskan_game2):
     teams:          {aik,djurgarden}

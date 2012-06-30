@@ -48,7 +48,7 @@ public class Game extends Model implements Comparable<Game> {
 	public boolean isPlayed() {
 		return (scores != null && scores.size() != 0);
 	}
-
+	
 	@Override
 	public int compareTo(Game otherGame) {
 		if (time == null && otherGame.time == null) {

@@ -1,4 +1,4 @@
-#{extends 'main.html' /}
+#{extends 'main.html'/}
 
 <p> <a href="/">Home</a> </p>
 
@@ -20,7 +20,7 @@
 			<p>Number of played games: ${league.getPlayedGames().size()}</p>
 			<p>Number of remaining games: ${league.getRemainingGames().size()}</p>
 			#{list items:league.getGames(), as:'game'}
-				${game}
+				${ game }
 			#{/list}		
 		#{/if}
 	</div>

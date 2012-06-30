@@ -16,7 +16,7 @@ public class League extends Model {
 	
 	public String displayName;
 	
-	@OneToMany
+	@OneToMany(mappedBy="league")
 	public List<Game> games;
 	
 	@OneToMany(mappedBy="league")
