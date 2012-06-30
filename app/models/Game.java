@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -18,9 +19,11 @@ public class Game extends Model {
 	
 	@ManyToMany
 	public List<Team> teams;
-
+	
 	@OneToMany
 	public List<Score> scores;
+	
+	public Date time;
 	
 	public Game(League league, List<Team> teams) {
 		this.league = league;

@@ -48,4 +48,24 @@ public class League extends Model {
 		}
 		games.add(game);
 	}
+	
+	public List<Game> getPlayedGames() {
+		List<Game> playedGames = new ArrayList<Game>();
+		for (Game game : getGames()) {
+			if (game.isPlayed()) {
+				playedGames.add(game);
+			}
+		}
+ 		return playedGames;
+	}
+	
+	public List<Game> getRemainingGames() {
+		List<Game> remainingGames = new ArrayList<Game>();
+		for (Game game : getGames()) {
+			if (!game.isPlayed()) {
+				remainingGames.add(game);
+			}
+		}
+		return remainingGames;
+	}
 }
