@@ -12,8 +12,8 @@ import javax.persistence.OneToMany;
 import play.db.jpa.Model;
 
 @Entity
-public class Game extends Model {
-
+public class Game extends Model implements Comparable<Game> {
+ 
 	@ManyToOne
 	public League league;
 	
@@ -48,5 +48,17 @@ public class Game extends Model {
 	public boolean isPlayed() {
 		return (scores != null && scores.size() != 0);
 	}
-	
+
+	@Override
+	public int compareTo(Game otherGame) {
+		if (time == null && otherGame.time == null) {
+			return 0;
+		} else if (time == null && otherGame.time != null) {
+			return -1;
+		} else if (time != null && otherGame.time == null) {
+			return 1;
+		} else {
+			return time.compareTo(otherGame.time);
+		}
+	}
 }

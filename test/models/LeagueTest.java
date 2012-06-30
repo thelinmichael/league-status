@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
@@ -81,5 +82,47 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.getPlayedGames().contains(game2), is(true));
 		assertThat(league.getPlayedGames().contains(game3), is(true));
 		assertThat(league.getRemainingGames().contains(game4), is(true));
+	}
+	
+	@Test
+	public void canGetGamesInChronologicalOrder() {
+		League league = new League("league");
+		Team team1 = new Team("team1").save();
+		Team team2 = new Team("team2").save();
+		league.teams = Arrays.asList(new Team[] { team1, team2 });
+		league.save();
+		
+		Game game1 = new Game(league, Arrays.asList(new Team[] {team1, team2})).save();
+		Game game2 = new Game(league, Arrays.asList(new Team[] {team1, team2})).save();
+		Game game3 = new Game(league, Arrays.asList(new Team[] {team2, team1})).save();
+		Game game4 = new Game(league, Arrays.asList(new Team[] {team2, team1})).save();
+		
+		Date date1 = new Date(377257800L);
+		Date date2 = new Date(477257800L);
+		Date date3 = new Date(577257800L);
+		Date date4 = new Date(677257800L);
+		
+		game4.time = date1;
+		game3.time = date2;
+		game1.time = date3;
+		game2.time = date4;
+		
+		league.addGame(game1);
+		league.addGame(game2);
+		league.addGame(game3);
+		league.addGame(game4);
+		
+		List<Game> unsortedGames = league.getGames();
+		assertThat(unsortedGames.get(0), is(game1));
+		assertThat(unsortedGames.get(1), is(game2));
+		assertThat(unsortedGames.get(2), is(game3));
+		assertThat(unsortedGames.get(3), is(game4));
+		
+		List<Game> sortedGames = league.getGamesInChronologicalOrder();
+		
+		assertThat(sortedGames.get(0), is(game4));
+		assertThat(sortedGames.get(1), is(game3));
+		assertThat(sortedGames.get(2), is(game1));
+		assertThat(sortedGames.get(3), is(game2));
 	}
 }

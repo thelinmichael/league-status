@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -67,5 +68,15 @@ public class League extends Model {
 			}
 		}
 		return remainingGames;
+	}
+	
+	public List<Game> getGamesInChronologicalOrder() {
+		if (games == null) {
+			games = new ArrayList<Game>();
+		}
+		List<Game> sortedGames = new ArrayList<Game>(games);
+		Collections.sort(sortedGames);
+		
+		return sortedGames;
 	}
 }

@@ -59,5 +59,4 @@ public class GameTest extends UnitTest{
 		Game retrievedGame = Game.findById(id);
 		assertThat(retrievedGame.time, is(time));
 	}
-	
 }
