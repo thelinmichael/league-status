@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import play.test.Fixtures;
 import play.test.UnitTest;
+import sports.ISport;
 
 public class LeagueTest extends UnitTest { 
 	
@@ -124,5 +125,22 @@ public class LeagueTest extends UnitTest {
 		assertThat(sortedGames.get(1), is(game3));
 		assertThat(sortedGames.get(2), is(game1));
 		assertThat(sortedGames.get(3), is(game2));
+	}
+	
+	@Test
+	public void canGetNumberOfPointsForWinLossAndTie() {
+		League league = League.find("byName", "allsvenskan").first();
+		Sport football = new Football();
+		league.sport = football;
+		
+		assertThat(league.sport.pointsForWin(), is(3));
+		assertThat(league.sport.pointsForTie(), is(1));
+		assertThat(league.sport.pointsForLoss(), is(0));
+	}
+	
+	@Test
+	public void canGetSport() {
+		League league = League.find("byName", "allsvenskan").first();
+		assertThat(league.sport.getName(), is("football"));
 	}
 }

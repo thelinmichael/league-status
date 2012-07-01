@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import play.db.jpa.Model;
@@ -13,6 +14,9 @@ import play.db.jpa.Model;
 public class League extends Model {
 	
 	public String name;
+	
+	@ManyToOne
+	public Sport sport;
 	
 	public String displayName;
 	

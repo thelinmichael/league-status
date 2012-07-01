@@ -1,9 +1,14 @@
 # Test data
 
+Football(football):
+    displayName:     "Football"
+    name:            "football"
+
 League(allsvenskan):
     displayName:     "Allsvenskan"
     name:            "allsvenskan"
-
+    sport:           football
+    
 League(premierleague):
     displayName:     "Premier League"
     name:            "premier_league"   

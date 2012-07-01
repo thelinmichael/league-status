@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import play.db.jpa.Model;
+import sports.ISport;
 
 @Entity
 public class Score extends Model {
@@ -14,8 +15,4 @@ public class Score extends Model {
 		this.goals = goals;
 	}
 	
-	public String toString() {
-		return String.valueOf(goals);
-	}
-
 }
