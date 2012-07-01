@@ -22,11 +22,11 @@ public class LeagueTest extends UnitTest {
 	}
 	
 	@Test
-	public void canGetTeamsFromLeague() {
-		League league = League.find("byName", "allsvenskan").first();
-		assertThat(league, is(notNullValue()));
-
-		assertThat(league.getTeams().size(), is(5));
+	public void canGetTeamsAndGamesFromLeague() {
+		League allsvenskan = League.find("byName", "allsvenskan").first();
+		assertThat(allsvenskan, is(notNullValue()));
+		assertThat(allsvenskan.getTeams().size(), is(5));
+		assertThat(allsvenskan.getGames().size(), is(4));
 	}
 	
 	@Test

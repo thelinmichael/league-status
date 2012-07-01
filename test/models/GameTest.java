@@ -1,9 +1,11 @@
 package models;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +20,21 @@ public class GameTest extends UnitTest{
 		Fixtures.deleteAllModels();
 		Fixtures.loadModels("/mock/test_league.yml");
 	}
+
+	@Test
+	public void canGetGameScoresAndTeamsFromFixtures() {
+		League allsvenskan = League.find("byName", "allsvenskan").first();
+		
+		// Game related
+		List<Game> games = Game.find("byLeague", allsvenskan).fetch();
+		assertThat(games.size(), is(4));
+		
+		Game game = games.get(0);
+		assertThat(game.league.name, is(notNullValue()));
+		assertThat(game.scores, is(notNullValue()));
+		assertThat(game.teams, is(notNullValue()));
+	}
+
 	
 	@Test
 	public void canGetParticipatingTeams() {

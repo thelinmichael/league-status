@@ -20,7 +20,7 @@ public class Game extends Model implements Comparable<Game> {
 	@ManyToMany
 	public List<Team> teams;
 	
-	@OneToMany
+	@ManyToMany
 	public List<Score> scores;
 	
 	public Date time;
