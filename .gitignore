@@ -8,3 +8,4 @@ modules
 test-result
 tmp
 logs
+*.log

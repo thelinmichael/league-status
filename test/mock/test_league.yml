@@ -59,10 +59,10 @@ Score(score1):
     goals:          1
 
 Score(score2):
-    goals:          1
+    goals:          2
   
 Score(score3):
-    goals:          1
+    goals:          3
         
 Score(score4):
     goals:          4
