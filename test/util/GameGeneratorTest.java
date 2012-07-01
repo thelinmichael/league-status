@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import java.util.Arrays;
 import java.util.List;
 
+import models.Football;
 import models.Game;
 import models.League;
 import models.Team;
@@ -31,13 +32,13 @@ public class GameGeneratorTest extends UnitTest {
 		List<Game> generatedGames = GameGenerator.generateAllVsAll(league);
 		assertThat(generatedGames.size(), is(20));
 		
-		league = new League("smallLeague");
+		league = new League("smallLeague", new Football());
 		Team team = new Team("onlyTeam");
 		league.teams = Arrays.asList(new Team[] { team });
 		generatedGames = GameGenerator.generateAllVsAll(league);
 		assertThat(generatedGames.size(), is(0));
 
-		league = new League("twoTeamLeague");
+		league = new League("twoTeamLeague", new Football());
 		Team firstTeam = new Team("firstTeam");
 		Team secondteam = new Team("secondTeam");
 		league.teams = Arrays.asList(new Team[] { firstTeam, secondteam });

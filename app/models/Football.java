@@ -3,6 +3,7 @@ package models;
 import javax.persistence.Entity;
 
 import sports.ISport;
+import util.Result;
 
 @Entity
 public class Football extends Sport {
@@ -14,17 +15,17 @@ public class Football extends Sport {
 	public String name = "football";
 	
 	@Override
-	public Integer pointsForWin() {
+	public Integer getPointsForWin() {
 		return win;
 	}
 
 	@Override
-	public Integer pointsForLoss() {
+	public Integer getPointsForLoss() {
 		return loss;
 	}
 
 	@Override
-	public Integer pointsForTie() {
+	public Integer getPointsForTie() {
 		return tie;
 	}
 	
@@ -37,4 +38,17 @@ public class Football extends Sport {
 	public String getName() {
 		return name;
 	}
+	
+	public Integer getPointsFor(Result result) {
+		if (result == Result.WIN) {
+			return win;
+		} else if (result == Result.TIE) {
+			return tie;
+		} else if (result == Result.LOSS) { 
+			return loss;
+		} else {
+			throw new IllegalArgumentException("Result not available.");
+		}
+	}
+
 }

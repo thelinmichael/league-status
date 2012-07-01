@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import play.test.Fixtures;
 import play.test.UnitTest;
+import util.Result;
 
 public class GameTest extends UnitTest{
 	
@@ -40,7 +41,7 @@ public class GameTest extends UnitTest{
 	public void canGetParticipatingTeams() {
 		Team team1 = new Team("Gefle IF");
 		Team team2 = new Team("Djurgårdens IF");
-		League league = new League("Allsvenskan");
+		League league = new League("Allsvenskan", new Football());
 		
 		Game game = new Game(league, Arrays.asList(new Team[] {team1, team2}));
 		league.addGame(game);
@@ -102,5 +103,37 @@ public class GameTest extends UnitTest{
 
 		assertThat(game.getHomeTeamGoals(), is(1));
 		assertThat(game.getAwayTeamGoals(), is(1));
+	}
+	
+	@Test
+	public void canGetResultForTeam() {
+		Football football = new Football().save();
+		League league = new League("league", football);
+		Team team1 = new Team("team1");
+		Team team2 = new Team("team2");
+		league.teams = Arrays.asList(new Team[] { team1, team2 } );
+		
+		Game game1 = new Game(league, Arrays.asList(new Team[] { team1, team2 } ));
+		Game game2 = new Game(league, Arrays.asList(new Team[] { team2, team1 } ));
+		
+		assertThat(game1.getResultFor(team1), is(Result.UNDECIDED));
+		
+		game1.setScore(Arrays.asList(new Integer[] { 0, 0 }));
+		assertThat(game1.getResultFor(team1), is(Result.TIE));
+
+		game1.setScore(Arrays.asList(new Integer[] { 1, 0 }));
+		assertThat(game1.getResultFor(team1), is(Result.WIN));
+
+		game1.setScore(Arrays.asList(new Integer[] { 0, 1 }));
+		assertThat(game1.getResultFor(team1), is(Result.LOSS));
+		
+		game2.setScore(Arrays.asList(new Integer[] { 0, 0 }));
+		assertThat(game2.getResultFor(team1), is(Result.TIE));
+		
+		game2.setScore(Arrays.asList(new Integer[] { 1, 0 }));
+		assertThat(game2.getResultFor(team1), is(Result.LOSS));
+		
+		game2.setScore(Arrays.asList(new Integer[] { 0, 1 }));
+		assertThat(game2.getResultFor(team1), is(Result.WIN));
 	}
 }

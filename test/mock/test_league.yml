@@ -12,11 +12,13 @@ League(allsvenskan):
 League(premierleague):
     displayName:     "Premier League"
     name:            "premier_league"   
-    
+    sport:           football
+        
 League(championsleague):
     displayName:      "Champions League"
     name:             "champions_league"
-      
+    sport:           football
+          
 Team(gefle):
     displayName:      "Gefle IF"
     name:             "gefle_if"

@@ -7,9 +7,9 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import play.db.jpa.Model;
+import util.Result;
 
 @Entity
 public class Game extends Model implements Comparable<Game> {
@@ -35,10 +35,7 @@ public class Game extends Model implements Comparable<Game> {
 	}
 	
 	public void setScore(List<Integer> intScores) {
-		if (this.scores == null) {
-			this.scores = new ArrayList<Score>();
-		}
-		
+		this.scores = new ArrayList<Score>();
 		for (Integer intScore : intScores) {
 			Score score = new Score(intScore);
 			this.scores.add(score);
@@ -84,5 +81,33 @@ public class Game extends Model implements Comparable<Game> {
 		} else {
 			return null;
 		}
+	}
+
+	public Result getResultFor(Team team) {
+		final Result result;
+		
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team did not play this game.");
+		} else if (!isPlayed()) {
+			result = Result.UNDECIDED; 
+		} else if (team.name == getHomeTeam().name) {
+			if (getHomeTeamGoals() > getAwayTeamGoals()) {
+				result = Result.WIN;
+			} else if (getHomeTeamGoals() == getAwayTeamGoals()) {
+				result = Result.TIE;
+			} else {
+				result = Result.LOSS;
+			}
+		} else {
+			if (getHomeTeamGoals() > getAwayTeamGoals()) {
+				result = Result.LOSS;
+			} else if (getHomeTeamGoals() == getAwayTeamGoals()) {
+				result = Result.TIE;
+			} else {
+				result = Result.WIN;
+			}
+		}
+		
+		return result;
 	}
 }

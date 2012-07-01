@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import play.db.jpa.Model;
+import util.Result;
 
 @Entity
 public class League extends Model {
@@ -26,7 +27,8 @@ public class League extends Model {
 	@OneToMany(mappedBy="league")
 	public List<Team> teams;
 	
-	public League(String name) {
+	public League(String name, Sport sport) {
+		this.sport = sport;
 		this.name = name;
 		this.displayName = name.replace(' ', '_').toLowerCase();
 	}
@@ -52,6 +54,13 @@ public class League extends Model {
 			games = new ArrayList<Game>();
 		}
 		games.add(game);
+	}
+	
+	public void addGames(List<Game> games) {
+		if (this.games == null) {
+			this.games = new ArrayList<Game>();
+		}
+		this.games.addAll(games);
 	}
 	
 	public List<Game> getPlayedGames() {
@@ -82,5 +91,22 @@ public class League extends Model {
 		Collections.sort(sortedGames);
 		
 		return sortedGames;
+	}
+	
+	public Integer getPointsForTeam(Team team) {
+		Integer points = 0;
+		
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
+		for (Game game : games) {
+			if (game.isPlayed() && game.teams.contains(team)) {
+				Result result = game.getResultFor(team);
+				points += sport.getPointsFor(result);
+			}
+		}
+		
+		return points;
 	}
 }
