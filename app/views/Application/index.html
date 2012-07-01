@@ -1,6 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'Advanced league stats' /}
 
+Choose league..
 <ul>
 #{list items:leagues, as:'league'}
 	<li><a href="/league/${league.getName()}">${league.getDisplayName()}</a></li>

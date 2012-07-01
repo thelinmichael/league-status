@@ -1,0 +1,10 @@
+#{extends 'main.html'/}
+
+<p> <a href="/">Home</a> </p>
+
+#{if team != null} 
+	<h1>${team.getDisplayName()}</h1>
+#{/if}
+#{else}
+	<p class="errorMessage">Team not found.</p>
+#{/else}

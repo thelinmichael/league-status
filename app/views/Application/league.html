@@ -8,9 +8,18 @@
 	<div class="normalText"> 
 		<div class="teamDisplayName column">
 		<p class="big">Team</p>
-		#{list items:league.getTeams(), as:'team'}
-			<p> ${team.getDisplayName()} </p>
-		#{/list}
+		<ul>
+			#{list items:league.getTeams(), as:'team'}
+				<li> 
+					<p class="teamRow">
+						<span class="teamName">${team.getDisplayName()}</span> 
+						<span>${league.getWinsForTeam(team)}</span>
+						<span>${league.getTiesForTeam(team)}</span>
+						<span>${league.getLossesForTeam(team)}</span>
+						<span>${league.getPointsForTeam(team)}</span>
+					</p>
+			#{/list}
+		</ul>
 		</div>
 	</div>
 	
@@ -34,5 +43,5 @@
 	
 #{/if}
 #{else}
-	<p class="errorMessage">${flash.get("errorMessage")}</p>
+	<p class="errorMessage">League not found.</p>
 #{/else}

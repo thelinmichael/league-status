@@ -24,5 +24,18 @@ public class ApplicationTest extends FunctionalTest {
 	@Test
 	public void gettingALeagueWithBadNameReturns404() {
 		Response response = GET("/league/bogusLeagueName");
-		assertIsNotFound(response);	}
+		assertIsNotFound(response);	
+	}
+	
+	@Test
+	public void gettingATeamWorks() {
+		Response response = GET("/team/gefle_if");
+		assertIsOk(response);
+	}
+	
+	@Test
+	public void gettingATeamWithBadNameReturns404() {
+		Response response = GET("/team/bogusTeamName");
+		assertIsNotFound(response);	
+	}
 }

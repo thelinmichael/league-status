@@ -109,4 +109,61 @@ public class League extends Model {
 		
 		return points;
 	}
+
+	public Integer getWinsForTeam(Team team) {
+		Integer wins = 0;
+		
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
+		for (Game game : games) {
+			if (game.isPlayed() && game.teams.contains(team)) {
+				Result result = game.getResultFor(team);
+				if (result == Result.WIN) {
+					wins++;
+				}
+			}
+		}
+		
+		return wins;
+	}
+
+	public Integer getLossesForTeam(Team team) {
+		Integer losses = 0;
+		
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
+		for (Game game : games) {
+			if (game.isPlayed() && game.teams.contains(team)) {
+				Result result = game.getResultFor(team);
+				if (result == Result.LOSS) {
+					losses++;
+				}
+			}
+		}
+		
+		return losses;
+	}
+
+	public Integer getTiesForTeam(Team team) {
+		Integer ties = 0;
+		
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
+		for (Game game : games) {
+			if (game.isPlayed() && game.teams.contains(team)) {
+				Result result = game.getResultFor(team);
+				if (result == Result.TIE) {
+					ties++;
+				}
+			}
+		}
+		
+		return ties;
+	}
 }

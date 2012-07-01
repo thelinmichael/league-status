@@ -6,6 +6,7 @@
 GET 	/showUsers/{<[\0-9]+>ids}/?				Application.showUsers
 GET     /                                       Application.index
 GET		/league/{leagueName}					Application.league
+GET		/team/{teamName}						Application.team
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
