@@ -19,9 +19,16 @@
 			<p>Number of games: ${league.getGames().size()}</p>
 			<p>Number of played games: ${league.getPlayedGames().size()}</p>
 			<p>Number of remaining games: ${league.getRemainingGames().size()}</p>
+			<ul>
 			#{list items:league.getGames(), as:'game'}
-				${ game }
+				<li>
+					${game.getHomeTeam()} - ${game.getAwayTeam()}
+					#{if game.isPlayed()} 
+						${game.getHomeTeamGoals()} - ${game.getAwayTeamGoals()}
+					#{/if}
+				</li>
 			#{/list}		
+			</ul>
 		#{/if}
 	</div>
 	

@@ -61,4 +61,28 @@ public class Game extends Model implements Comparable<Game> {
 			return time.compareTo(otherGame.time);
 		}
 	}
+	
+	public Team getHomeTeam() {
+		return teams.get(0);
+	}
+	
+	public Team getAwayTeam() {
+		return teams.get(1);
+	}
+	
+	public Integer getHomeTeamGoals() {
+		if (isPlayed()) { 
+			return scores.get(0).goals;
+		} else {
+			return null;
+		}
+	}
+	
+	public Integer getAwayTeamGoals() {
+		if (isPlayed()) { 
+			return scores.get(1).goals;
+		} else {
+			return null;
+		}
+	}
 }

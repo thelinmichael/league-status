@@ -29,7 +29,7 @@ Team(mjallby):
     
 Team(aik):
     displayName:    "AIK"
-    name:           "AIK"
+    name:           "aik"
     league:         allsvenskan
        
 Team(atvidaberg):

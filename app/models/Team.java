@@ -38,4 +38,8 @@ public class Team extends Model {
 	public League getLeague() {
 		return league;
 	}
+	
+	public String toString() {
+		return displayName;
+	}
 }
