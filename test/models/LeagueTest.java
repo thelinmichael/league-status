@@ -296,71 +296,71 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.getGoalsScoredAgainstTeam(team4), is(3));
 	}
 	
-//	@Test
-//	public void canGetTeamsOrderedByPointsWithOnePrioritiy() {
-//		League league = new League("Fantasy League", new Football());
-//		Team team1 = new Team("team1");
-//		Team team2 = new Team("team2");
-//		Team team3 = new Team("team3");
-//		Team team4 = new Team("team4");
-//		league.teams = Arrays.asList(new Team[] { team1, team2, team3, team4 } );
-//		team1.league = league;
-//		team2.league = league;
-//		team3.league = league;
-//		team4.league = league;
-//		
-//		List<Game> newGames = new ArrayList<Game>();
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team2 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team3 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team4 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team1 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team3 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team4 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team1 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team2 } )));
-//		
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team4 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team1 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team2 } )));
-//		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team3 } )));
-//		
-//		league.addGames(newGames);
-//		assertThat(league.games, is(notNullValue()));
-//		league.games.get(0).setScore(Arrays.asList(new Integer[] { 1, 2 } ));
-//		league.games.get(1).setScore(Arrays.asList(new Integer[] { 5, 0 } ));
-//		league.games.get(2).setScore(Arrays.asList(new Integer[] { 1, 0 } ));
-//		league.games.get(3).setScore(Arrays.asList(new Integer[] { 0, 0 } ));
-//		league.games.get(4).setScore(Arrays.asList(new Integer[] { 4, 6 } ));
-//		league.games.get(5).setScore(Arrays.asList(new Integer[] { 2, 2 } ));
-//		league.games.get(6).setScore(Arrays.asList(new Integer[] { 10, 1 } ));
-//		league.games.get(7).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
-//		
-//		assertThat(league.teams.get(0), is(team1));
-//		assertThat(league.teams.get(1), is(team2));
-//		assertThat(league.teams.get(2), is(team3));
-//		assertThat(league.teams.get(3), is(team4));
-//
-//		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS } );
-//		List<Team> teamsOrderedByRank = league.sortTeamsByRank(priorities);
-//		assertThat(teamsOrderedByRank.get(0), is(team1));
-//		assertThat(teamsOrderedByRank.get(1), is(team3));
-//		assertThat(teamsOrderedByRank.get(2), is(team2));
-//		assertThat(teamsOrderedByRank.get(3), is(team4));
-//
-//		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.GOALS_SCORED } );
-//		teamsOrderedByRank = league.sortTeamsByRank(priorities);
-//		assertThat(teamsOrderedByRank.get(0), is(team3));
-//		assertThat(teamsOrderedByRank.get(1), is(team2));
-//		assertThat(teamsOrderedByRank.get(2), is(team1));
-//		assertThat(teamsOrderedByRank.get(3), is(team4));
-//		
-//		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.GOAL_DIFFERENCE } );
-//		teamsOrderedByRank = league.sortTeamsByRank(priorities);
-//		assertThat(teamsOrderedByRank.get(0), is(team1));
-//		assertThat(teamsOrderedByRank.get(1), is(team2));
-//		assertThat(teamsOrderedByRank.get(2), is(team3));
-//		assertThat(teamsOrderedByRank.get(3), is(team4));
-//	}
+	@Test
+	public void canGetTeamsOrderedByPointsWithOnePrioritiy() {
+		League league = new League("Fantasy League", new Football());
+		Team team1 = new Team("team1");
+		Team team2 = new Team("team2");
+		Team team3 = new Team("team3");
+		Team team4 = new Team("team4");
+		league.teams = Arrays.asList(new Team[] { team1, team2, team3, team4 } );
+		team1.league = league;
+		team2.league = league;
+		team3.league = league;
+		team4.league = league;
+		
+		List<Game> newGames = new ArrayList<Game>();
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team2 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team3 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team4 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team1 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team3 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team4 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team1 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team2 } )));
+		
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team4 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team1 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team2 } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team3 } )));
+		
+		league.addGames(newGames);
+		assertThat(league.games, is(notNullValue()));
+		league.games.get(0).setScore(Arrays.asList(new Integer[] { 1, 2 } ));
+		league.games.get(1).setScore(Arrays.asList(new Integer[] { 5, 0 } ));
+		league.games.get(2).setScore(Arrays.asList(new Integer[] { 2, 0 } ));
+		league.games.get(3).setScore(Arrays.asList(new Integer[] { 0, 0 } ));
+		league.games.get(4).setScore(Arrays.asList(new Integer[] { 4, 6 } ));
+		league.games.get(5).setScore(Arrays.asList(new Integer[] { 2, 2 } ));
+		league.games.get(6).setScore(Arrays.asList(new Integer[] { 10, 1 } ));
+		league.games.get(7).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
+		
+		assertThat(league.teams.get(0), is(team1));
+		assertThat(league.teams.get(1), is(team2));
+		assertThat(league.teams.get(2), is(team3));
+		assertThat(league.teams.get(3), is(team4));
+
+		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS } );
+		List<Team> teamsOrderedByRank = league.sortTeamsByRank(priorities);
+		assertThat(teamsOrderedByRank.get(0), is(team3));
+		assertThat(teamsOrderedByRank.get(1), is(team1));
+		assertThat(teamsOrderedByRank.get(2), is(team2));
+		assertThat(teamsOrderedByRank.get(3), is(team4));
+
+		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.GOALS_SCORED } );
+		teamsOrderedByRank = league.sortTeamsByRank(priorities);
+		assertThat(teamsOrderedByRank.get(0), is(team3));
+		assertThat(teamsOrderedByRank.get(1), is(team2));
+		assertThat(teamsOrderedByRank.get(2), is(team1));
+		assertThat(teamsOrderedByRank.get(3), is(team4));
+		
+		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.GOAL_DIFFERENCE } );
+		teamsOrderedByRank = league.sortTeamsByRank(priorities);
+		assertThat(teamsOrderedByRank.get(0), is(team3));
+		assertThat(teamsOrderedByRank.get(1), is(team2));
+		assertThat(teamsOrderedByRank.get(2), is(team4));
+		assertThat(teamsOrderedByRank.get(3), is(team1));
+	}
 	
 	@Test
 	public void canGetTeamsOrderedByPointsWithSeveralPriorities() {

@@ -254,9 +254,13 @@ public class League extends Model {
 				break;
 			}
 			case GOAL_DIFFERENCE: {
-				Integer otherTeamGoalDifference = getGoalsScoredByTeam(otherTeamRank.team) - getGoalsScoredAgainstTeam(otherTeamRank.team);
 				Integer thisTeamGoalDifference = getGoalsScoredByTeam(team) - getGoalsScoredAgainstTeam(team);
+				Integer otherTeamGoalDifference = getGoalsScoredByTeam(otherTeamRank.team) - getGoalsScoredAgainstTeam(otherTeamRank.team);
 				difference = thisTeamGoalDifference.compareTo(otherTeamGoalDifference);
+				
+				System.out.println("Goal difference for " + team.name + " is " + thisTeamGoalDifference);
+				System.out.println("Goal difference for " + otherTeamRank.team.name + " is " + otherTeamGoalDifference);
+				System.out.println("Difference: " + difference);
 				break;
 			}
 			default: {
