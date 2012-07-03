@@ -64,7 +64,7 @@ public class Football extends Sport {
 		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { 
 														StatsPriority.POINTS, 
 														StatsPriority.GOAL_DIFFERENCE,
-													  //StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS,
+													    StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS,
 														StatsPriority.GOALS_SCORED
 		});
 		return priorities;

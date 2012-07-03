@@ -9,7 +9,7 @@
 		<div class="teamDisplayName column">
 		<p class="big">Team</p>
 		<ul>
-			#{list items:league.getTeams(), as:'team'}
+			#{list items:league.getTeamsByRank(), as:'team'}
 				<li> 
 					<p class="teamRow">
 						<span class="teamName">${team.getDisplayName()}</span> 

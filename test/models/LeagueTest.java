@@ -341,21 +341,21 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.teams.get(3), is(team4));
 
 		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS } );
-		List<Team> teamsOrderedByRank = league.sortTeamsByRank(priorities);
+		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(team3));
 		assertThat(teamsOrderedByRank.get(1), is(team1));
 		assertThat(teamsOrderedByRank.get(2), is(team2));
 		assertThat(teamsOrderedByRank.get(3), is(team4));
 
 		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.GOALS_SCORED } );
-		teamsOrderedByRank = league.sortTeamsByRank(priorities);
+		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(team3));
 		assertThat(teamsOrderedByRank.get(1), is(team2));
 		assertThat(teamsOrderedByRank.get(2), is(team1));
 		assertThat(teamsOrderedByRank.get(3), is(team4));
 		
 		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.GOAL_DIFFERENCE } );
-		teamsOrderedByRank = league.sortTeamsByRank(priorities);
+		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(team3));
 		assertThat(teamsOrderedByRank.get(1), is(team2));
 		assertThat(teamsOrderedByRank.get(2), is(team4));
@@ -391,13 +391,13 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.getGoalsScoredByTeam(team3) - league.getGoalsScoredAgainstTeam(team3), is(-4));
 		
 		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.GOAL_DIFFERENCE } );
-		List<Team> teamsOrderedByRank = league.sortTeamsByRank(priorities);
+		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0).getName(), is("team2"));
 		assertThat(teamsOrderedByRank.get(1).getName(), is("team1"));
 		assertThat(teamsOrderedByRank.get(2).getName(), is("team3"));
 		
 		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.GOALS_SCORED } );
-		teamsOrderedByRank = league.sortTeamsByRank(priorities);
+		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0).getName(), is("team1"));
 		assertThat(teamsOrderedByRank.get(1).getName(), is("team2"));
 		assertThat(teamsOrderedByRank.get(2).getName(), is("team3"));
@@ -406,9 +406,60 @@ public class LeagueTest extends UnitTest {
 		league.games.get(4).setScore(Arrays.asList(new Integer[] { 2, 3 } ));
 		
 		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.GOALS_SCORED, StatsPriority.GOAL_DIFFERENCE } );
-		teamsOrderedByRank = league.sortTeamsByRank(priorities);
+		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0).getName(), is("team2"));
 		assertThat(teamsOrderedByRank.get(1).getName(), is("team1"));
 		assertThat(teamsOrderedByRank.get(2).getName(), is("team3"));
+	}
+	
+	@Test
+	public void canGetTeamsOrderedByIndividualGames() {
+		League league = new League("Euro Cup Group A", new Football());
+		Team poland = new Team("Poland");
+		Team greece = new Team("Greece");
+		Team russia = new Team("Russia");
+		Team czech = new Team("Czech");
+		league.teams = Arrays.asList(new Team[] { poland, greece, russia, czech } );
+		poland.league = league;
+		greece.league = league;
+		russia.league = league;
+		czech.league = league;
+		
+		List<Game> newGames = new ArrayList<Game>();
+		newGames.add(new Game(league, Arrays.asList(new Team[] { poland, greece } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { russia, czech } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { greece, czech } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { poland, russia } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { czech, poland } )));
+		newGames.add(new Game(league, Arrays.asList(new Team[] { greece, russia } )));
+		
+		league.addGames(newGames);
+		league.games.get(0).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
+		league.games.get(1).setScore(Arrays.asList(new Integer[] { 4, 1 } ));
+		league.games.get(2).setScore(Arrays.asList(new Integer[] { 1, 2 } ));
+		league.games.get(3).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
+		league.games.get(4).setScore(Arrays.asList(new Integer[] { 1, 0 } ));
+		league.games.get(5).setScore(Arrays.asList(new Integer[] { 1, 0 } ));
+		
+		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS } );
+		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
+		assertThat(teamsOrderedByRank.get(0), is(czech));
+		assertThat(teamsOrderedByRank.get(1), is(russia));
+		assertThat(teamsOrderedByRank.get(2), is(greece));
+		assertThat(teamsOrderedByRank.get(3), is(poland));
+		
+		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS, StatsPriority.GOAL_DIFFERENCE, StatsPriority.GOALS_SCORED } );
+		teamsOrderedByRank = league.getTeamsByRank(priorities);
+		assertThat(teamsOrderedByRank.get(0), is(czech));
+		assertThat(teamsOrderedByRank.get(1), is(greece));
+		assertThat(teamsOrderedByRank.get(2), is(russia));
+		assertThat(teamsOrderedByRank.get(3), is(poland));
+		
+		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.GOAL_DIFFERENCE, StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS, StatsPriority.GOALS_SCORED } );
+		teamsOrderedByRank = league.getTeamsByRank(priorities);
+		assertThat(teamsOrderedByRank.get(0), is(czech));
+		assertThat(teamsOrderedByRank.get(1), is(russia));
+		assertThat(teamsOrderedByRank.get(2), is(greece));
+		assertThat(teamsOrderedByRank.get(3), is(poland));
 	}
 }

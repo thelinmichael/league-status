@@ -197,8 +197,12 @@ public class League extends Model {
 		}
 		return goals;
 	}
+	
+	public List<Team> getTeamsByRank() {
+		 return getTeamsByRank(sport.getStatsPriorities());
+	}
 
-	public List<Team> sortTeamsByRank(List<StatsPriority> priorities) {
+	public List<Team> getTeamsByRank(List<StatsPriority> priorities) {
 		List<TeamRank> teamRanks;
 		List<Team> sortedTeams = new ArrayList<Team>();
 		
@@ -215,6 +219,16 @@ public class League extends Model {
 		}
 		
 		return sortedTeams;
+	}
+	
+	public List<Game> getGamesPlayedByTeam(Team team) {
+		List<Game> returnedGames = new ArrayList<Game>();
+		for (Game game : games) {
+			if (game.teams.contains(team)) {
+				returnedGames.add(game);
+			}
+		}
+		return returnedGames;
 	}
 	
 	private class TeamRank implements Comparable {
@@ -257,10 +271,28 @@ public class League extends Model {
 				Integer thisTeamGoalDifference = getGoalsScoredByTeam(team) - getGoalsScoredAgainstTeam(team);
 				Integer otherTeamGoalDifference = getGoalsScoredByTeam(otherTeamRank.team) - getGoalsScoredAgainstTeam(otherTeamRank.team);
 				difference = thisTeamGoalDifference.compareTo(otherTeamGoalDifference);
+				break;
+			}
+			case INDIVIDUAL_GAMES_BETWEEN_TEAMS: {
+				List<Game> thisTeamsGames = getGamesPlayedByTeam(team);
+				List<Game> otherTeamsGames = getGamesPlayedByTeam(otherTeamRank.team);
+				thisTeamsGames.retainAll(otherTeamsGames);
 				
-				System.out.println("Goal difference for " + team.name + " is " + thisTeamGoalDifference);
-				System.out.println("Goal difference for " + otherTeamRank.team.name + " is " + otherTeamGoalDifference);
-				System.out.println("Difference: " + difference);
+				Integer thisTeamPoints = 0;
+				Integer otherTeamPoints = 0;
+				for (Game game : thisTeamsGames) {
+					if (game.getResultFor(team) == Result.WIN) {
+						thisTeamPoints += sport.getPointsForWin();
+						otherTeamPoints += sport.getPointsForLoss();
+					} else if (game.getResultFor(team) == Result.TIE) {
+						thisTeamPoints += sport.getPointsForTie();
+						otherTeamPoints += sport.getPointsForTie();
+					} else {
+						thisTeamPoints += sport.getPointsForLoss();
+						otherTeamPoints += sport.getPointsForWin();
+					}
+				}
+				difference = thisTeamPoints.compareTo(otherTeamPoints);
 				break;
 			}
 			default: {
