@@ -110,4 +110,40 @@ public class Game extends Model implements Comparable<Game> {
 		
 		return result;
 	}
+
+	public int getGoalsForTeam(Team team) {
+		final int goals; 
+		
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team did not play this game.");
+		} else if (!isPlayed()) {
+			throw new IllegalArgumentException("Game is not played.");
+		}
+		
+		if (team.name == getHomeTeam().name) {
+			goals = getHomeTeamGoals();
+		} else {
+			goals = getAwayTeamGoals();
+		}
+		
+		return goals;
+	}
+
+	public int getGoalsAgainstTeam(Team team) {
+		final int goals; 
+		
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team did not play this game.");
+		} else if (!isPlayed()) {
+			throw new IllegalArgumentException("Game is not played.");
+		}
+		
+		if (team.name == getHomeTeam().name) {
+			goals = getAwayTeamGoals();
+		} else {
+			goals = getHomeTeamGoals();
+		}
+		
+		return goals; 
+	}
 }

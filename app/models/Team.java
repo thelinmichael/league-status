@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import play.db.jpa.Model;
 
 @Entity
-public class Team extends Model {
+public class Team extends Model implements Comparable {
 	
 	public String name;
 	
@@ -41,5 +41,14 @@ public class Team extends Model {
 	
 	public String toString() {
 		return displayName;
+	}
+
+	@Override
+	public int compareTo(Object object) {
+		Team otherTeam = (Team) object;
+		if (!league.teams.contains(otherTeam)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		return league.getPointsForTeam(otherTeam).compareTo(league.getPointsForTeam(this));
 	}
 }

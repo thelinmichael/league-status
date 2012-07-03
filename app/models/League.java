@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 
 import play.db.jpa.Model;
 import util.Result;
+import util.StatsPriority;
 
 @Entity
 public class League extends Model {
@@ -165,5 +166,114 @@ public class League extends Model {
 		}
 		
 		return ties;
+	}
+
+	public Integer getGoalsScoredByTeam(Team team) {
+		Integer goals = 0;
+		
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
+		for (Game game : games) {
+			if (game.isPlayed() && game.teams.contains(team)) {
+				goals += game.getGoalsForTeam(team);
+			}
+		}
+		return goals;
+	}
+
+	public Integer getGoalsScoredAgainstTeam(Team team) {
+		Integer goals = 0;
+		
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
+		for (Game game : games) {
+			if (game.isPlayed() && game.teams.contains(team)) {
+				goals += game.getGoalsAgainstTeam(team);
+			}
+		}
+		return goals;
+	}
+
+	public List<Team> sortTeamsByRank(List<StatsPriority> priorities) {
+		List<TeamRank> teamRanks;
+		List<Team> sortedTeams = new ArrayList<Team>();
+		
+		teamRanks = new ArrayList<TeamRank>();
+		for (Team team : teams) {
+			teamRanks.add(new TeamRank(team, priorities));
+		}
+		Collections.sort(teamRanks);
+		Collections.reverse(teamRanks);
+
+		sortedTeams = new ArrayList<Team>();
+		for (TeamRank teamRank : teamRanks) {
+			sortedTeams.add(teamRank.getTeam());
+		}
+		
+		return sortedTeams;
+	}
+	
+	private class TeamRank implements Comparable {
+
+		private List<StatsPriority> priorities;
+		private Team team;
+
+		public TeamRank(Team team, List<StatsPriority> priorities) {
+			this.team = team;
+			this.priorities = priorities;
+		}
+		
+		public Team getTeam() {
+			return team;
+		}
+
+		@Override
+		public int compareTo(Object o) {
+			TeamRank otherTeamRank = (TeamRank) o;
+			
+			if (priorities.size() == 0) {
+				return 0;
+			}
+			
+			int difference; 
+			
+			switch (priorities.get(0)) {
+			case POINTS: {
+				difference = getPointsForTeam(team).compareTo(getPointsForTeam(otherTeamRank.team));
+				break;
+			}
+			case GOALS_SCORED: {
+				Integer thisTeamGoalsScored = getGoalsScoredByTeam(team);
+				Integer otherTeamGoalsScored = getGoalsScoredByTeam(otherTeamRank.team);
+				
+				difference = thisTeamGoalsScored.compareTo(otherTeamGoalsScored);
+				break;
+			}
+			case GOAL_DIFFERENCE: {
+				Integer otherTeamGoalDifference = getGoalsScoredByTeam(otherTeamRank.team) - getGoalsScoredAgainstTeam(otherTeamRank.team);
+				Integer thisTeamGoalDifference = getGoalsScoredByTeam(team) - getGoalsScoredAgainstTeam(team);
+				difference = thisTeamGoalDifference.compareTo(otherTeamGoalDifference);
+				break;
+			}
+			default: {
+				throw new IllegalArgumentException("Can't handle this priority.");
+			}
+			}
+			
+			if (difference == 0) {
+				List<StatsPriority> newPriorities = new ArrayList<StatsPriority>();
+				for (int i = 1; i < priorities.size(); i++) {
+					newPriorities.add(priorities.get(i));
+				}
+				priorities = newPriorities;
+				return compareTo(otherTeamRank);
+			} else {
+				return difference;
+			}
+		}
 	}
 }
