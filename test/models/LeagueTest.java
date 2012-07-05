@@ -14,6 +14,7 @@ import org.openqa.selenium.By;
 
 import play.test.Fixtures;
 import play.test.UnitTest;
+import util.Result;
 import util.StatsPriority;
 
 public class LeagueTest extends UnitTest { 
@@ -114,6 +115,18 @@ public class LeagueTest extends UnitTest {
 	}
 	
 	@Test
+	public void shouldThrowExceptionWhenGettingPointsForTeamNotInLeague() {
+		League league = League.find("byName", "euro-group-a").first();
+		Team bogusTeam = new Team("Bogus Team");
+		
+		try {
+			league.getPointsForTeam(bogusTeam);
+			fail();
+		} catch(IllegalArgumentException e) {
+		}
+	}
+	
+	@Test
 	public void canGetNumberOfPointsForTeam() {
 		League league = League.find("byName", "euro-group-a").first();
 		Team czech = Team.find("byLeagueAndName", league, "czech").first();
@@ -128,7 +141,7 @@ public class LeagueTest extends UnitTest {
 	}
 	
 	@Test
-	public void canGetWinsTiesAndLossesForTeam() {
+	public void canGetWinsTiesAndLossesAndOtherResultsForTeam() {
 		League league = League.find("byName", "euro-group-a").first();
 		Team czech = Team.find("byLeagueAndName", league, "czech").first();
 		Team russia = Team.find("byLeagueAndName", league, "russia").first();
@@ -326,12 +339,12 @@ public class LeagueTest extends UnitTest {
 		czech.league = league;
 		
 		List<Game> newGames = new ArrayList<Game>();
-		Game polandGreece = new Game(league, Arrays.asList(new Team[] { poland, greece } ));
-		Game russiaCzech = new Game(league, Arrays.asList(new Team[] { russia, czech } ));
-		Game greeceCzech = new Game(league, Arrays.asList(new Team[] { greece, czech } ));
-		Game polandRussia = new Game(league, Arrays.asList(new Team[] { poland, russia } ));
-		Game czechPoland = new Game(league, Arrays.asList(new Team[] { czech, poland } ));
-		Game greeceRussia = new Game(league, Arrays.asList(new Team[] { greece, russia } ));
+		Game polandGreece = new Game(league, Arrays.asList(poland, greece));
+		Game russiaCzech = new Game(league, Arrays.asList(russia, czech));
+		Game greeceCzech = new Game(league, Arrays.asList(greece, czech));
+		Game polandRussia = new Game(league, Arrays.asList(poland, russia));
+		Game czechPoland = new Game(league, Arrays.asList(czech, poland));
+		Game greeceRussia = new Game(league, Arrays.asList(greece, russia));
 		newGames.addAll(Arrays.asList(polandGreece, russiaCzech, greeceCzech, polandRussia, czechPoland, greeceRussia));
 		
 		league.addGames(newGames);
@@ -347,5 +360,18 @@ public class LeagueTest extends UnitTest {
 		assertThat(russiaAllGames.containsAll(Arrays.asList(russiaCzech, polandRussia, greeceRussia)), is(true));
 		assertThat(russiaFinishedGames.size(), is(2));
 		assertThat(russiaFinishedGames.containsAll(Arrays.asList(russiaCzech, polandRussia)), is(true));
+	}
+	
+	@Test
+	public void canMakeDisplayName() {
+		String teamName = "Gefle";
+		League league = new League(teamName, new Football());
+		
+		assertThat(league.makeDisplayName(teamName), is("gefle"));
+		
+		teamName = "Gefle IF";
+		league = new League(teamName, new Football());
+		
+		assertThat(league.makeDisplayName(teamName), is("gefle_if"));
 	}
 }

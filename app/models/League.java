@@ -11,16 +11,17 @@ import javax.persistence.OneToMany;
 import play.db.jpa.Model;
 import util.Result;
 import util.StatsPriority;
+import util.TeamRank;
 
 @Entity
 public class League extends Model {
 	
 	public String name;
 	
+	public String displayName;
+
 	@ManyToOne
 	public Sport sport;
-	
-	public String displayName;
 	
 	@OneToMany(mappedBy="league")
 	public List<Game> games;
@@ -31,7 +32,11 @@ public class League extends Model {
 	public League(String name, Sport sport) {
 		this.sport = sport;
 		this.name = name;
-		this.displayName = name.replace(' ', '_').toLowerCase();
+		this.displayName = makeDisplayName(name);
+	}
+	
+	public String makeDisplayName(String teamName) {
+		return teamName.replace(' ', '_').toLowerCase();
 	}
 	
 	public String getName() {
@@ -91,6 +96,7 @@ public class League extends Model {
 		List<Game> sortedGames = new ArrayList<Game>(games);
 		Collections.sort(sortedGames);
 		
+		
 		return sortedGames;
 	}
 	
@@ -107,67 +113,38 @@ public class League extends Model {
 				points += sport.getPointsFor(result);
 			}
 		}
-		
+
 		return points;
 	}
-
+	
 	public Integer getWinsForTeam(Team team) {
-		Integer wins = 0;
-		
-		if (!teams.contains(team)) {
-			throw new IllegalArgumentException("Team not in league.");
-		}
-		
-		for (Game game : games) {
-			if (game.isPlayed() && game.teams.contains(team)) {
-				Result result = game.getResultFor(team);
-				if (result == Result.WIN) {
-					wins++;
-				}
-			}
-		}
-		
-		return wins;
+		return getResultForTeam(team, Result.WIN);
 	}
 
 	public Integer getLossesForTeam(Team team) {
-		Integer losses = 0;
-		
-		if (!teams.contains(team)) {
-			throw new IllegalArgumentException("Team not in league.");
-		}
-		
-		for (Game game : games) {
-			if (game.isPlayed() && game.teams.contains(team)) {
-				Result result = game.getResultFor(team);
-				if (result == Result.LOSS) {
-					losses++;
-				}
-			}
-		}
-		
-		return losses;
+		return getResultForTeam(team, Result.LOSS);
 	}
 
 	public Integer getTiesForTeam(Team team) {
-		Integer ties = 0;
+		return getResultForTeam(team, Result.TIE);
+	}
+	
+	private Integer getResultForTeam(Team team, Result result) {
+		Integer numberOfResult = 0;
 		
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
 		}
 		
 		for (Game game : games) {
-			if (game.isPlayed() && game.teams.contains(team)) {
-				Result result = game.getResultFor(team);
-				if (result == Result.TIE) {
-					ties++;
-				}
+			if (game.isPlayed() && game.teams.contains(team) && game.getResultFor(team) == result) {
+				numberOfResult++;
 			}
 		}
 		
-		return ties;
+		return numberOfResult;
 	}
-
+	
 	public Integer getGoalsScoredByTeam(Team team) {
 		Integer goals = 0;
 		
@@ -208,7 +185,7 @@ public class League extends Model {
 		
 		teamRanks = new ArrayList<TeamRank>();
 		for (Team team : teams) {
-			teamRanks.add(new TeamRank(team, priorities));
+			teamRanks.add(new TeamRank(team, priorities, this));
 		}
 		Collections.sort(teamRanks);
 		Collections.reverse(teamRanks);
@@ -249,86 +226,5 @@ public class League extends Model {
 		}
 		return returnedGames;
 	}
-	
-	private class TeamRank implements Comparable {
 
-		private List<StatsPriority> priorities;
-		private Team team;
-
-		public TeamRank(Team team, List<StatsPriority> priorities) {
-			this.team = team;
-			this.priorities = priorities;
-		}
-		
-		public Team getTeam() {
-			return team;
-		}
-
-		@Override
-		public int compareTo(Object o) {
-			TeamRank otherTeamRank = (TeamRank) o;
-			
-			if (priorities.size() == 0) {
-				return 0;
-			}
-			
-			int difference; 
-			
-			switch (priorities.get(0)) {
-			case POINTS: {
-				difference = getPointsForTeam(team).compareTo(getPointsForTeam(otherTeamRank.team));
-				break;
-			}
-			case GOALS_SCORED: {
-				Integer thisTeamGoalsScored = getGoalsScoredByTeam(team);
-				Integer otherTeamGoalsScored = getGoalsScoredByTeam(otherTeamRank.team);
-				
-				difference = thisTeamGoalsScored.compareTo(otherTeamGoalsScored);
-				break;
-			}
-			case GOAL_DIFFERENCE: {
-				Integer thisTeamGoalDifference = getGoalsScoredByTeam(team) - getGoalsScoredAgainstTeam(team);
-				Integer otherTeamGoalDifference = getGoalsScoredByTeam(otherTeamRank.team) - getGoalsScoredAgainstTeam(otherTeamRank.team);
-				difference = thisTeamGoalDifference.compareTo(otherTeamGoalDifference);
-				break;
-			}
-			case INDIVIDUAL_GAMES_BETWEEN_TEAMS: {
-				List<Game> thisTeamsGames = getAllGamesWithTeam(team);
-				List<Game> otherTeamsGames = getAllGamesWithTeam(otherTeamRank.team);
-				thisTeamsGames.retainAll(otherTeamsGames);
-				
-				Integer thisTeamPoints = 0;
-				Integer otherTeamPoints = 0;
-				for (Game game : thisTeamsGames) {
-					if (game.getResultFor(team) == Result.WIN) {
-						thisTeamPoints += sport.getPointsForWin();
-						otherTeamPoints += sport.getPointsForLoss();
-					} else if (game.getResultFor(team) == Result.TIE) {
-						thisTeamPoints += sport.getPointsForTie();
-						otherTeamPoints += sport.getPointsForTie();
-					} else {
-						thisTeamPoints += sport.getPointsForLoss();
-						otherTeamPoints += sport.getPointsForWin();
-					}
-				}
-				difference = thisTeamPoints.compareTo(otherTeamPoints);
-				break;
-			}
-			default: {
-				throw new IllegalArgumentException("Can't handle this priority.");
-			}
-			}
-			
-			if (difference == 0) {
-				List<StatsPriority> newPriorities = new ArrayList<StatsPriority>();
-				for (int i = 1; i < priorities.size(); i++) {
-					newPriorities.add(priorities.get(i));
-				}
-				priorities = newPriorities;
-				return compareTo(otherTeamRank);
-			} else {
-				return difference;
-			}
-		}
-	}
 }
