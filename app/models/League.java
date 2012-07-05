@@ -221,8 +221,27 @@ public class League extends Model {
 		return sortedTeams;
 	}
 	
-	public List<Game> getGamesPlayedByTeam(Team team) {
+	public List<Game> getFinishedGamesWithTeam(Team team) {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
 		List<Game> returnedGames = new ArrayList<Game>();
+		for (Game game : games) {
+			if (game.teams.contains(team) && game.isPlayed()) {
+				returnedGames.add(game);
+			}
+		}
+		return returnedGames;
+ 	}
+	
+	public List<Game> getAllGamesWithTeam(Team team) {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
+		List<Game> returnedGames = new ArrayList<Game>();
+		
 		for (Game game : games) {
 			if (game.teams.contains(team)) {
 				returnedGames.add(game);
@@ -274,8 +293,8 @@ public class League extends Model {
 				break;
 			}
 			case INDIVIDUAL_GAMES_BETWEEN_TEAMS: {
-				List<Game> thisTeamsGames = getGamesPlayedByTeam(team);
-				List<Game> otherTeamsGames = getGamesPlayedByTeam(otherTeamRank.team);
+				List<Game> thisTeamsGames = getAllGamesWithTeam(team);
+				List<Game> otherTeamsGames = getAllGamesWithTeam(otherTeamRank.team);
 				thisTeamsGames.retainAll(otherTeamsGames);
 				
 				Integer thisTeamPoints = 0;

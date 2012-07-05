@@ -1,34 +1,44 @@
 #{extends 'main.html'/}
 
-<p> <a href="/">Home</a> </p>
+<p> #{a @Application.index()}Home#{/a}</p>
 
 #{if league != null} 
+	#{set title: league.getDisplayName() /}
 	<h1>${league.getDisplayName()}</h1>
 		
-	<div class="normalText"> 
-		<div class="teamDisplayName column">
-		<p class="big">Team</p>
-		<ul>
-			#{list items:league.getTeamsByRank(), as:'team'}
-				<li> 
-					<p class="teamRow">
-						<span class="teamName">${team.getDisplayName()}</span> 
-						<span>${league.getWinsForTeam(team)}</span>
-						<span>${league.getTiesForTeam(team)}</span>
-						<span>${league.getLossesForTeam(team)}</span>
-						<span>${league.getGoalsScoredByTeam(team)} - ${league.getGoalsScoredAgainstTeam(team)}</span>
-						<span>${league.getPointsForTeam(team)}</span>
-					</p>
-			#{/list}
-		</ul>
-		</div>
+	<table id="leagueTable">
+		<tr>
+			<td>Team</td>
+			<td>P</td>
+			<td>W</td>
+			<td>D</td>
+			<td>L</td>
+			<td>GF</td>
+			<td>GA</td>
+			<td>GD</td>
+			<td>PTS</td>
+		</tr>
+		#{list items:league.getTeamsByRank(), as:'team'}
+		<tr>
+			<td>${team.getDisplayName()}</td> 
+			<td>
+			<td>${league.getWinsForTeam(team)}</td>
+			<td>${league.getTiesForTeam(team)}</td>
+			<td>${league.getLossesForTeam(team)}</td>
+			<td>${league.getGoalsScoredByTeam(team)}</td>
+			<td${league.getGoalsScoredAgainstTeam(team)}</span>
+			<td>${league.getPointsForTeam(team)}</span>
+		</tr>
+		#{/list}
 	</div>
+	
+	<hr />
 	
 	<div class="normalText">
 		#{if league.getGames() != null}
-			<p>Number of games: ${league.getGames().size()}</p>
-			<p>Number of played games: ${league.getPlayedGames().size()}</p>
-			<p>Number of remaining games: ${league.getRemainingGames().size()}</p>
+			<p>This season has ${league.getGames().size()} game#{if league.getGames().size() > 1}s#{/if}. ${league.getPlayedGames().size()} #{if league.getPlayedGames().size() > 1}are#{/if}#{else}are#{/else} played, 
+			${league.getRemainingGames().size()} remain#{if league.getRemainingGames().size > 1}s#{/if}.</p>
+			
 			<ul>
 			#{list items:league.getGames(), as:'game'}
 				<li>
@@ -39,6 +49,7 @@
 				</li>
 			#{/list}		
 			</ul>
+			
 		#{/if}
 	</div>
 	

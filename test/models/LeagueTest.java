@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import play.test.Fixtures;
 import play.test.UnitTest;
@@ -26,65 +27,47 @@ public class LeagueTest extends UnitTest {
 	@Test
 	public void canGetTeamsAndGamesFromLeague() {
 		League allsvenskan = League.find("byName", "allsvenskan").first();
+		
 		assertThat(allsvenskan, is(notNullValue()));
 		assertThat(allsvenskan.getTeams().size(), is(5));
 		assertThat(allsvenskan.getGames().size(), is(4));
 	}
 	
 	@Test
-	public void canAddGames() {
+	public void canAddGamesToLeague() {
 		League league = League.find("byName", "allsvenskan").first();
 
-		int numberOfGames = league.getGames().size();
+		int numberOfGamesBeforeAddingAnotherGame = league.getGames().size();
 		
 		Team team1 = league.getTeams().get(0);
 		Team team2 = league.getTeams().get(1);
 		
-		Game game = new Game(league, Arrays.asList(new Team[] {team1, team2}));
-		
+		Game game = new Game(league, Arrays.asList(team1, team2));
 		league.addGame(game);
-		assertThat(league.getGames().size(), is(numberOfGames + 1));
+		
+		assertThat(league.getGames().size(), is(numberOfGamesBeforeAddingAnotherGame + 1));
 	}
 		
 	@Test
 	public void canGetTeamsInLeague() {
 		League league = League.find("byName", "allsvenskan").first();
-
-		assertThat(league, is(notNullValue()));
-		
-		List<Team> teams = league.getTeams();
-		assertThat(teams.size(), is(5));
+	
+		Team gefleIf = Team.find("byName", "gefle_if").first();
+		Team djurgardensIf = Team.find("byName", "djurgardens_if").first();
+		Team mjallby = Team.find("byName", "mjallby").first();
+		Team aik = Team.find("byName", "aik").first();
+		Team atvidaberg = Team.find("byName", "atvidaberg").first();
+				
+		assertThat(league.teams.size(), is(5));
+		assertThat(league.teams.containsAll(Arrays.asList(gefleIf, djurgardensIf, mjallby, aik, atvidaberg)), is(true));
 	}
 	
 	@Test
 	public void canGetALeaguesPlayedGames_andRemainingGames() {
-		Football football = new Football().save();
-		League league = new League("league", football);
-		Team team1 = new Team("team1").save();
-		Team team2 = new Team("team2").save();
-		league.teams = Arrays.asList(new Team[] { team1, team2 });
-		league.save();
-		
-		Game game1 = new Game(league, Arrays.asList(new Team[] {team1, team2})).save();
-		Game game2 = new Game(league, Arrays.asList(new Team[] {team1, team2})).save();
-		Game game3 = new Game(league, Arrays.asList(new Team[] {team2, team1})).save();
-		Game game4 = new Game(league, Arrays.asList(new Team[] {team2, team1})).save();
-		
-		game1.setScore(Arrays.asList(new Integer[] {1,2}));
-		game2.setScore(Arrays.asList(new Integer[] {2,1}));
-		game3.setScore(Arrays.asList(new Integer[] {5,0}));
-		
-		league.addGame(game1);
-		league.addGame(game2);
-		league.addGame(game3);
-		league.addGame(game4);
-	
+		League league = League.find("byName", "allsvenskan").first();
+
 		assertThat(league.getPlayedGames().size(), is(3));
 		assertThat(league.getRemainingGames().size(), is(1));
-		assertThat(league.getPlayedGames().contains(game1), is(true));
-		assertThat(league.getPlayedGames().contains(game2), is(true));
-		assertThat(league.getPlayedGames().contains(game3), is(true));
-		assertThat(league.getRemainingGames().contains(game4), is(true));
 	}
 	
 	@Test
@@ -93,13 +76,13 @@ public class LeagueTest extends UnitTest {
 		League league = new League("league", football);
 		Team team1 = new Team("team1").save();
 		Team team2 = new Team("team2").save();
-		league.teams = Arrays.asList(new Team[] { team1, team2 });
+		league.teams = Arrays.asList(team1, team2);
 		league.save();
 		
-		Game game1 = new Game(league, Arrays.asList(new Team[] {team1, team2})).save();
-		Game game2 = new Game(league, Arrays.asList(new Team[] {team1, team2})).save();
-		Game game3 = new Game(league, Arrays.asList(new Team[] {team2, team1})).save();
-		Game game4 = new Game(league, Arrays.asList(new Team[] {team2, team1})).save();
+		Game game1 = new Game(league, Arrays.asList(team1, team2)).save();
+		Game game2 = new Game(league, Arrays.asList(team1, team2)).save();
+		Game game3 = new Game(league, Arrays.asList(team2, team1)).save();
+		Game game4 = new Game(league, Arrays.asList(team2, team1)).save();
 		
 		Date date1 = new Date(377257800L);
 		Date date2 = new Date(477257800L);
@@ -131,230 +114,117 @@ public class LeagueTest extends UnitTest {
 	}
 	
 	@Test
-	public void canGetNumberOfPointsForWinLossAndTie() {
-		League league = League.find("byName", "allsvenskan").first();
-		Sport football = new Football();
-		league.sport = football;
+	public void canGetNumberOfPointsForTeam() {
+		League league = League.find("byName", "euro-group-a").first();
+		Team czech = Team.find("byLeagueAndName", league, "czech").first();
+		Team russia = Team.find("byLeagueAndName", league, "russia").first();
+		Team greece = Team.find("byLeagueAndName", league, "greece").first();
+		Team poland = Team.find("byLeagueAndName", league, "poland").first();
 		
-		assertThat(league.sport.getPointsForWin(), is(3));
-		assertThat(league.sport.getPointsForTie(), is(1));
-		assertThat(league.sport.getPointsForLoss(), is(0));
-	}
-	
-	@Test
-	public void canGetSport() {
-		League league = League.find("byName", "allsvenskan").first();
-		assertThat(league.sport.getName(), is("football"));
-	}
-	
-	@Test
-	public void canGetNumberOfPoints() {
-		League allsvenskan = League.find("byName", "allsvenskan").first();
-		Team gefleIf = Team.find("byName", "gefle_if").first();
-		
-		Integer gefleIf_points = allsvenskan.getPointsForTeam(gefleIf);
-		
-		assertThat(gefleIf_points, is(3));
-		
-		League league = new League("Fantasy League", new Football());
-		Team team1 = new Team("team1");
-		Team team2 = new Team("team2");
-		Team team3 = new Team("team3");
-		Team team4 = new Team("team4");
-		league.teams = Arrays.asList(new Team[] { team1, team2, team3, team4 } );
-		
-		List<Game> newGames = new ArrayList<Game>();
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team2 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team3 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team3 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team2 } )));
-		
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team2 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team3 } )));
-		
-		league.addGames(newGames);
-		assertThat(league.games, is(notNullValue()));
-		league.games.get(0).setScore(Arrays.asList(new Integer[] { 1, 2 } ));
-		league.games.get(1).setScore(Arrays.asList(new Integer[] { 5, 0 } ));
-		league.games.get(2).setScore(Arrays.asList(new Integer[] { 1, 0 } ));
-		league.games.get(3).setScore(Arrays.asList(new Integer[] { 0, 0 } ));
-		league.games.get(4).setScore(Arrays.asList(new Integer[] { 4, 6 } ));
-		league.games.get(5).setScore(Arrays.asList(new Integer[] { 2, 2 } ));
-		league.games.get(6).setScore(Arrays.asList(new Integer[] { 2, 1 } ));
-		league.games.get(7).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
-		
-		assertThat(league.getPointsForTeam(team1), is(7));
-		assertThat(league.getPointsForTeam(team2), is(6));
-		assertThat(league.getPointsForTeam(team3), is(7));
-		assertThat(league.getPointsForTeam(team4), is(1));
+		assertThat(league.getPointsForTeam(czech), is(6));
+		assertThat(league.getPointsForTeam(russia), is(4));
+		assertThat(league.getPointsForTeam(greece), is(4));
+		assertThat(league.getPointsForTeam(poland), is(2));
 	}
 	
 	@Test
 	public void canGetWinsTiesAndLossesForTeam() {
-		League allsvenskan = League.find("byName", "allsvenskan").first();
-		Team gefleIf = Team.find("byName", "gefle_if").first();
+		League league = League.find("byName", "euro-group-a").first();
+		Team czech = Team.find("byLeagueAndName", league, "czech").first();
+		Team russia = Team.find("byLeagueAndName", league, "russia").first();
+		Team greece = Team.find("byLeagueAndName", league, "greece").first();
+		Team poland = Team.find("byLeagueAndName", league, "poland").first();
 		
-		Integer gefleIf_points = allsvenskan.getPointsForTeam(gefleIf);
-		
-		assertThat(gefleIf_points, is(3));
-		
-		League league = new League("Fantasy League", new Football());
-		Team team1 = new Team("team1");
-		Team team2 = new Team("team2");
-		Team team3 = new Team("team3");
-		Team team4 = new Team("team4");
-		league.teams = Arrays.asList(new Team[] { team1, team2, team3, team4 } );
-		
-		List<Game> newGames = new ArrayList<Game>();
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team2 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team3 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team3 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team2 } )));
-		
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team2 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team3 } )));
-		
-		league.addGames(newGames);
-		assertThat(league.games, is(notNullValue()));
-		league.games.get(0).setScore(Arrays.asList(new Integer[] { 1, 2 } ));
-		league.games.get(1).setScore(Arrays.asList(new Integer[] { 5, 0 } ));
-		league.games.get(2).setScore(Arrays.asList(new Integer[] { 1, 0 } ));
-		league.games.get(3).setScore(Arrays.asList(new Integer[] { 0, 0 } ));
-		league.games.get(4).setScore(Arrays.asList(new Integer[] { 4, 6 } ));
-		league.games.get(5).setScore(Arrays.asList(new Integer[] { 2, 2 } ));
-		league.games.get(6).setScore(Arrays.asList(new Integer[] { 2, 1 } ));
-		league.games.get(7).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
-		
-		assertThat(league.getWinsForTeam(team1), is(2));
-		assertThat(league.getWinsForTeam(team2), is(1));
-		assertThat(league.getWinsForTeam(team3), is(2));
-		assertThat(league.getWinsForTeam(team4), is(0));
-		assertThat(league.getLossesForTeam(team1), is(2));
-		assertThat(league.getLossesForTeam(team2), is(1));
-		assertThat(league.getLossesForTeam(team3), is(1));
-		assertThat(league.getLossesForTeam(team4), is(1));
-		assertThat(league.getTiesForTeam(team1), is(1));
-		assertThat(league.getTiesForTeam(team2), is(3));
-		assertThat(league.getTiesForTeam(team3), is(1));
-		assertThat(league.getTiesForTeam(team4), is(1));
+		assertThat(league.getWinsForTeam(czech), is(2));
+		assertThat(league.getWinsForTeam(russia), is(1));
+		assertThat(league.getWinsForTeam(greece), is(1));
+		assertThat(league.getWinsForTeam(poland), is(0));
+		assertThat(league.getLossesForTeam(czech), is(1));
+		assertThat(league.getLossesForTeam(russia), is(1));
+		assertThat(league.getLossesForTeam(greece), is(1));
+		assertThat(league.getLossesForTeam(poland), is(1));
+		assertThat(league.getTiesForTeam(czech), is(0));
+		assertThat(league.getTiesForTeam(russia), is(1));
+		assertThat(league.getTiesForTeam(greece), is(1));
+		assertThat(league.getTiesForTeam(poland), is(2));
 	}
 	
 	@Test
 	public void canGetGoalsScoredAndGoalsScoredAgainstForAGivenTeam() {
-		League league = new League("Fantasy League", new Football());
-		Team team1 = new Team("team1");
-		Team team2 = new Team("team2");
-		Team team3 = new Team("team3");
-		Team team4 = new Team("team4");
-		league.teams = Arrays.asList(new Team[] { team1, team2, team3, team4 } );
+		League league = League.find("byName", "euro-group-a").first();
+		Team czech = Team.find("byLeagueAndName", league, "czech").first();
+		Team russia = Team.find("byLeagueAndName", league, "russia").first();
+		Team greece = Team.find("byLeagueAndName", league, "greece").first();
+		Team poland = Team.find("byLeagueAndName", league, "poland").first();
 		
-		List<Game> newGames = new ArrayList<Game>();
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team2 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team3 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team3 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team2 } )));
-		
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team2 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team3 } )));
-		
-		league.addGames(newGames);
-		assertThat(league.games, is(notNullValue()));
-		league.games.get(0).setScore(Arrays.asList(new Integer[] { 1, 2 } ));
-		league.games.get(1).setScore(Arrays.asList(new Integer[] { 5, 0 } ));
-		league.games.get(2).setScore(Arrays.asList(new Integer[] { 1, 0 } ));
-		league.games.get(3).setScore(Arrays.asList(new Integer[] { 0, 0 } ));
-		league.games.get(4).setScore(Arrays.asList(new Integer[] { 4, 6 } ));
-		league.games.get(5).setScore(Arrays.asList(new Integer[] { 2, 2 } ));
-		league.games.get(6).setScore(Arrays.asList(new Integer[] { 2, 1 } ));
-		league.games.get(7).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
-		
-		assertThat(league.getGoalsScoredByTeam(team1), is(8));
-		assertThat(league.getGoalsScoredAgainstTeam(team1), is(4));
-		assertThat(league.getGoalsScoredByTeam(team2), is(9));
-		assertThat(league.getGoalsScoredAgainstTeam(team2), is(10));
-		assertThat(league.getGoalsScoredByTeam(team3), is(9));
-		assertThat(league.getGoalsScoredAgainstTeam(team3), is(11));
-		assertThat(league.getGoalsScoredByTeam(team4), is(2));
-		assertThat(league.getGoalsScoredAgainstTeam(team4), is(3));
+		assertThat(league.getGoalsScoredByTeam(czech), is(4));
+		assertThat(league.getGoalsScoredAgainstTeam(czech), is(5));
+		assertThat(league.getGoalsScoredByTeam(russia), is(5));
+		assertThat(league.getGoalsScoredAgainstTeam(russia), is(3));
+		assertThat(league.getGoalsScoredByTeam(greece), is(3));
+		assertThat(league.getGoalsScoredAgainstTeam(greece), is(3));
+		assertThat(league.getGoalsScoredByTeam(poland), is(2));
+		assertThat(league.getGoalsScoredAgainstTeam(poland), is(3));
 	}
 	
 	@Test
-	public void canGetTeamsOrderedByPointsWithOnePrioritiy() {
+	public void shouldRankTeamsInLeagueDifferentlyDependingOnSinglePriority() {
 		League league = new League("Fantasy League", new Football());
 		Team team1 = new Team("team1");
 		Team team2 = new Team("team2");
 		Team team3 = new Team("team3");
 		Team team4 = new Team("team4");
-		league.teams = Arrays.asList(new Team[] { team1, team2, team3, team4 } );
+		league.teams = Arrays.asList(team1, team2, team3, team4);
 		team1.league = league;
 		team2.league = league;
 		team3.league = league;
 		team4.league = league;
 		
 		List<Game> newGames = new ArrayList<Game>();
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team2 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team3 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team3 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team2 } )));
-		
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team3, team4 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team2 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team4, team3 } )));
+		newGames.add(new Game(league, Arrays.asList(team1, team2)));
+		newGames.add(new Game(league, Arrays.asList(team1, team3)));
+		newGames.add(new Game(league, Arrays.asList(team1, team4)));
+		newGames.add(new Game(league, Arrays.asList(team2, team1)));
+		newGames.add(new Game(league, Arrays.asList(team2, team3)));
+		newGames.add(new Game(league, Arrays.asList(team2, team4)));
+		newGames.add(new Game(league, Arrays.asList(team3, team1)));
+		newGames.add(new Game(league, Arrays.asList(team3, team2)));
+		newGames.add(new Game(league, Arrays.asList(team3, team4)));
+		newGames.add(new Game(league, Arrays.asList(team4, team1)));
+		newGames.add(new Game(league, Arrays.asList(team4, team2)));
+		newGames.add(new Game(league, Arrays.asList(team4, team3)));
 		
 		league.addGames(newGames);
 		assertThat(league.games, is(notNullValue()));
-		league.games.get(0).setScore(Arrays.asList(new Integer[] { 1, 2 } ));
-		league.games.get(1).setScore(Arrays.asList(new Integer[] { 5, 0 } ));
-		league.games.get(2).setScore(Arrays.asList(new Integer[] { 2, 0 } ));
-		league.games.get(3).setScore(Arrays.asList(new Integer[] { 0, 0 } ));
-		league.games.get(4).setScore(Arrays.asList(new Integer[] { 4, 6 } ));
-		league.games.get(5).setScore(Arrays.asList(new Integer[] { 2, 2 } ));
-		league.games.get(6).setScore(Arrays.asList(new Integer[] { 10, 1 } ));
-		league.games.get(7).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
+		league.games.get(0).setScore(Arrays.asList(1, 2));
+		league.games.get(1).setScore(Arrays.asList(5, 0));
+		league.games.get(2).setScore(Arrays.asList(2, 0));
+		league.games.get(3).setScore(Arrays.asList(0, 0));
+		league.games.get(4).setScore(Arrays.asList(4, 6));
+		league.games.get(5).setScore(Arrays.asList(2, 2));
+		league.games.get(6).setScore(Arrays.asList(10, 1));
+		league.games.get(7).setScore(Arrays.asList(1, 1));
 		
 		assertThat(league.teams.get(0), is(team1));
 		assertThat(league.teams.get(1), is(team2));
 		assertThat(league.teams.get(2), is(team3));
 		assertThat(league.teams.get(3), is(team4));
 
-		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS } );
+		List<StatsPriority> priorities = Arrays.asList(StatsPriority.POINTS);
 		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(team3));
 		assertThat(teamsOrderedByRank.get(1), is(team1));
 		assertThat(teamsOrderedByRank.get(2), is(team2));
 		assertThat(teamsOrderedByRank.get(3), is(team4));
 
-		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.GOALS_SCORED } );
+		priorities = Arrays.asList(StatsPriority.GOALS_SCORED);
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(team3));
 		assertThat(teamsOrderedByRank.get(1), is(team2));
 		assertThat(teamsOrderedByRank.get(2), is(team1));
 		assertThat(teamsOrderedByRank.get(3), is(team4));
 		
-		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.GOAL_DIFFERENCE } );
+		priorities = Arrays.asList(StatsPriority.GOAL_DIFFERENCE);
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(team3));
 		assertThat(teamsOrderedByRank.get(1), is(team2));
@@ -363,103 +233,119 @@ public class LeagueTest extends UnitTest {
 	}
 	
 	@Test
-	public void canGetTeamsOrderedByPointsWithSeveralPriorities() {
+	public void shouldRankTeamsInLeagueDifferentlyDependingOnSeveralPriorities() {
 		League league = new League("Fantasy League", new Football());
 		Team team1 = new Team("team1");
 		Team team2 = new Team("team2");
 		Team team3 = new Team("team3");
-		league.teams = Arrays.asList(new Team[] { team1, team2, team3 } );
+		league.teams = Arrays.asList(team1, team2, team3);
 		team1.league = league;
 		team2.league = league;
 		team3.league = league;
 		
 		List<Game> newGames = new ArrayList<Game>();
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team2 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team1 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team1, team3 } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { team2, team3 } )));
-		
+		newGames.add(new Game(league, Arrays.asList(team1, team2)));
+		newGames.add(new Game(league, Arrays.asList(team2, team1)));
+		newGames.add(new Game(league, Arrays.asList(team1, team3)));
+		newGames.add(new Game(league, Arrays.asList(team2, team3)));
 		league.addGames(newGames);
-		assertThat(league.games, is(notNullValue()));
-		league.games.get(0).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
-		league.games.get(1).setScore(Arrays.asList(new Integer[] { 3, 3 } ));
-		league.games.get(2).setScore(Arrays.asList(new Integer[] { 5, 4 } ));
-		league.games.get(3).setScore(Arrays.asList(new Integer[] { 3, 0 } ));
+
+		league.games.get(0).setScore(Arrays.asList(1, 1));
+		league.games.get(1).setScore(Arrays.asList(3, 3));
+		league.games.get(2).setScore(Arrays.asList(5, 4));
+		league.games.get(3).setScore(Arrays.asList(3, 0));
 		
 		assertThat(league.getGoalsScoredByTeam(team1) - league.getGoalsScoredAgainstTeam(team1), is(1));
 		assertThat(league.getGoalsScoredByTeam(team2) - league.getGoalsScoredAgainstTeam(team2), is(3));
 		assertThat(league.getGoalsScoredByTeam(team3) - league.getGoalsScoredAgainstTeam(team3), is(-4));
 		
-		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.GOAL_DIFFERENCE } );
+		List<StatsPriority> priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.GOAL_DIFFERENCE);
 		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
-		assertThat(teamsOrderedByRank.get(0).getName(), is("team2"));
-		assertThat(teamsOrderedByRank.get(1).getName(), is("team1"));
-		assertThat(teamsOrderedByRank.get(2).getName(), is("team3"));
+		assertThat(teamsOrderedByRank.get(0), is(team2));
+		assertThat(teamsOrderedByRank.get(1), is(team1));
+		assertThat(teamsOrderedByRank.get(2), is(team3));
 		
-		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.GOALS_SCORED } );
+		priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.GOALS_SCORED);
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
-		assertThat(teamsOrderedByRank.get(0).getName(), is("team1"));
-		assertThat(teamsOrderedByRank.get(1).getName(), is("team2"));
-		assertThat(teamsOrderedByRank.get(2).getName(), is("team3"));
+		assertThat(teamsOrderedByRank.get(0), is(team1));
+		assertThat(teamsOrderedByRank.get(1), is(team2));
+		assertThat(teamsOrderedByRank.get(2), is(team3));
 		
-		league.games.add(new Game(league, Arrays.asList(new Team[] { team2, team3 } )));
-		league.games.get(4).setScore(Arrays.asList(new Integer[] { 2, 3 } ));
+		league.games.add(new Game(league, Arrays.asList(team2, team3)));
+		league.games.get(4).setScore(Arrays.asList(2, 3));
 		
-		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.GOALS_SCORED, StatsPriority.GOAL_DIFFERENCE } );
+		priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.GOALS_SCORED, StatsPriority.GOAL_DIFFERENCE);
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
-		assertThat(teamsOrderedByRank.get(0).getName(), is("team2"));
-		assertThat(teamsOrderedByRank.get(1).getName(), is("team1"));
-		assertThat(teamsOrderedByRank.get(2).getName(), is("team3"));
+		assertThat(teamsOrderedByRank.get(0), is(team2));
+		assertThat(teamsOrderedByRank.get(1), is(team1));
+		assertThat(teamsOrderedByRank.get(2), is(team3));
 	}
 	
 	@Test
 	public void canGetTeamsOrderedByIndividualGames() {
-		League league = new League("Euro Cup Group A", new Football());
-		Team poland = new Team("Poland");
-		Team greece = new Team("Greece");
-		Team russia = new Team("Russia");
-		Team czech = new Team("Czech");
-		league.teams = Arrays.asList(new Team[] { poland, greece, russia, czech } );
-		poland.league = league;
-		greece.league = league;
-		russia.league = league;
-		czech.league = league;
+		League league = League.find("byName", "euro-group-a").first();
+		Team czech = Team.find("byLeagueAndName", league, "czech").first();
+		Team russia = Team.find("byLeagueAndName", league, "russia").first();
+		Team greece = Team.find("byLeagueAndName", league, "greece").first();
+		Team poland = Team.find("byLeagueAndName", league, "poland").first();
 		
-		List<Game> newGames = new ArrayList<Game>();
-		newGames.add(new Game(league, Arrays.asList(new Team[] { poland, greece } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { russia, czech } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { greece, czech } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { poland, russia } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { czech, poland } )));
-		newGames.add(new Game(league, Arrays.asList(new Team[] { greece, russia } )));
-		
-		league.addGames(newGames);
-		league.games.get(0).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
-		league.games.get(1).setScore(Arrays.asList(new Integer[] { 4, 1 } ));
-		league.games.get(2).setScore(Arrays.asList(new Integer[] { 1, 2 } ));
-		league.games.get(3).setScore(Arrays.asList(new Integer[] { 1, 1 } ));
-		league.games.get(4).setScore(Arrays.asList(new Integer[] { 1, 0 } ));
-		league.games.get(5).setScore(Arrays.asList(new Integer[] { 1, 0 } ));
-		
-		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS } );
+		List<StatsPriority> priorities = Arrays.asList(StatsPriority.POINTS);
 		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
+		
 		assertThat(teamsOrderedByRank.get(0), is(czech));
 		assertThat(teamsOrderedByRank.get(1), is(russia));
 		assertThat(teamsOrderedByRank.get(2), is(greece));
 		assertThat(teamsOrderedByRank.get(3), is(poland));
 		
-		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS, StatsPriority.GOAL_DIFFERENCE, StatsPriority.GOALS_SCORED } );
+		priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS, StatsPriority.GOAL_DIFFERENCE, StatsPriority.GOALS_SCORED);
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(czech));
 		assertThat(teamsOrderedByRank.get(1), is(greece));
 		assertThat(teamsOrderedByRank.get(2), is(russia));
 		assertThat(teamsOrderedByRank.get(3), is(poland));
 		
-		priorities = Arrays.asList(new StatsPriority[] { StatsPriority.POINTS, StatsPriority.GOAL_DIFFERENCE, StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS, StatsPriority.GOALS_SCORED } );
+		priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.GOAL_DIFFERENCE, StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS, StatsPriority.GOALS_SCORED);
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(czech));
 		assertThat(teamsOrderedByRank.get(1), is(russia));
 		assertThat(teamsOrderedByRank.get(2), is(greece));
 		assertThat(teamsOrderedByRank.get(3), is(poland));
+	}
+	
+	@Test
+	public void canGetAllAndAllFinishedGamesForGivenTeam() {
+		League league = new League("Euro Cup Group A", new Football());
+		Team poland = new Team("Poland");
+		Team greece = new Team("Greece");
+		Team russia = new Team("Russia");
+		Team czech = new Team("Czech");
+		league.teams = Arrays.asList(poland, greece, russia, czech);
+		poland.league = league;
+		greece.league = league;
+		russia.league = league;
+		czech.league = league;
+		
+		List<Game> newGames = new ArrayList<Game>();
+		Game polandGreece = new Game(league, Arrays.asList(new Team[] { poland, greece } ));
+		Game russiaCzech = new Game(league, Arrays.asList(new Team[] { russia, czech } ));
+		Game greeceCzech = new Game(league, Arrays.asList(new Team[] { greece, czech } ));
+		Game polandRussia = new Game(league, Arrays.asList(new Team[] { poland, russia } ));
+		Game czechPoland = new Game(league, Arrays.asList(new Team[] { czech, poland } ));
+		Game greeceRussia = new Game(league, Arrays.asList(new Team[] { greece, russia } ));
+		newGames.addAll(Arrays.asList(polandGreece, russiaCzech, greeceCzech, polandRussia, czechPoland, greeceRussia));
+		
+		league.addGames(newGames);
+		league.games.get(0).setScore(Arrays.asList(1, 1));
+		league.games.get(1).setScore(Arrays.asList(4, 1));
+		league.games.get(2).setScore(Arrays.asList(1, 2));
+		league.games.get(3).setScore(Arrays.asList(1, 1));
+
+		List<Game> russiaFinishedGames = league.getFinishedGamesWithTeam(russia);
+		List<Game> russiaAllGames = league.getAllGamesWithTeam(russia);
+		
+		assertThat(russiaAllGames.size(), is(3));
+		assertThat(russiaAllGames.containsAll(Arrays.asList(russiaCzech, polandRussia, greeceRussia)), is(true));
+		assertThat(russiaFinishedGames.size(), is(2));
+		assertThat(russiaFinishedGames.containsAll(Arrays.asList(russiaCzech, polandRussia)), is(true));
 	}
 }

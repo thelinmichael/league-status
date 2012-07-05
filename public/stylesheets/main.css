@@ -6,12 +6,9 @@ h1 {
 	font-family: 'Arial'
 }
 
-.leagueTable {
-	width: 1000px;
-}
-
-.column {
-	width: 300px;
+#leagueTable>div {
+	min-width:30px;
+	display: inline-block;
 }	
 
 .normalText, p {
@@ -19,3 +16,8 @@ h1 {
 	font-family: 'Arial';
 }	
 
+li {
+	padding-top: 10px;
+	list-style: none;
+	text-align: left;
+}

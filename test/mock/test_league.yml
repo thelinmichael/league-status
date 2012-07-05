@@ -4,6 +4,11 @@ Football(football):
     displayName:     "Football"
     name:            "football"
 
+League(euro-group-a):
+    displayName:     "Eurocup Group A"
+    name:            "euro-group-a"
+    sport:           football
+
 League(allsvenskan):
     displayName:     "Allsvenskan"
     name:            "allsvenskan"
@@ -17,7 +22,27 @@ League(premierleague):
 League(championsleague):
     displayName:      "Champions League"
     name:             "champions_league"
-    sport:           football
+    sport:            football
+
+Team(greece):
+    displayName:      "Greece"
+    name:             "greece" 
+    league:           euro-group-a
+
+Team(russia):
+    displayName:      "Russia"
+    name:             "russia"
+    league:           euro-group-a
+    
+Team(czech):
+    displayName:      "Czech Republic"
+    name:             "czech"
+    league:           euro-group-a
+
+Team(poland):
+    displayName:      "Poland"
+    name:             "poland"
+    league:           euro-group-a
           
 Team(gefle):
     displayName:      "Gefle IF"
@@ -76,6 +101,36 @@ Score(score4):
 
 Score(score5):
     goals:          5
+
+Game(euro_group_a_poland_greece):
+    league:         euro-group-a
+    teams:          [poland,greece]
+    scores:         [score1,score1]
+    
+Game(euro_group_a_russia_czech):
+    league:         euro-group-a
+    teams:          [russia,czech]
+    scores:         [score4,score1]
+
+Game(euro_group_a_greece_czech):
+    league:         euro-group-a
+    teams:          [greece,czech]
+    scores:         [score1,score2]
+    
+Game(euro_group_a_poland_russia):
+    league:         euro-group-a
+    teams:          [poland,russia]
+    scores:         [score1,score1]
+  
+Game(euro_group_a_czech_poland):
+    league:         euro-group-a
+    teams:          [czech,poland]
+    scores:         [score1,score0]
+ 
+Game(euro_group_a_greece_russia):
+    league:         euro-group-a
+    teams:          [greece,russia]
+    scores:         [score1,score0]
                 
 Game(allsvenskan_game1):
     league:         allsvenskan
