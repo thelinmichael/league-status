@@ -151,7 +151,7 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.getWinsForTeam(czech), is(2));
 		assertThat(league.getWinsForTeam(russia), is(1));
 		assertThat(league.getWinsForTeam(greece), is(1));
-		assertThat(league.getWinsForTeam(poland), is(-1));
+		assertThat(league.getWinsForTeam(poland), is(0));
 		assertThat(league.getLossesForTeam(czech), is(1));
 		assertThat(league.getLossesForTeam(russia), is(1));
 		assertThat(league.getLossesForTeam(greece), is(1));
