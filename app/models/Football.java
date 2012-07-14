@@ -5,9 +5,6 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
-import com.sun.org.glassfish.external.statistics.Stats;
-
-import sports.ISport;
 import util.Result;
 import util.StatsPriority;
 

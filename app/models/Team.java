@@ -27,18 +27,6 @@ public class Team extends Model implements Comparable {
 		this.displayName = name.replace(' ', '_').toLowerCase();
 	}
 	
-	public String getDisplayName() {
-		return displayName;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public League getLeague() {
-		return league;
-	}
-	
 	public String toString() {
 		return displayName;
 	}

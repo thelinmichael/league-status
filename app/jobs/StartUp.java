@@ -12,7 +12,7 @@ import play.test.Fixtures;
 public class StartUp extends Job {
 	
 	public void doJob() {
-		if (Play.configuration.getProperty("application.mode").equals("dev")) {
+		if (Play.runingInTestMode()) {
 			System.out.println("Loading fixtures...");
 			Fixtures.deleteAllModels();
 			Fixtures.loadModels("/mock/test_league.yml");

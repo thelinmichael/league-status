@@ -44,7 +44,7 @@ public class GameTest extends UnitTest{
 		Game game = new Game(league, Arrays.asList(team1, team2));
 		league.addGame(game);
 		
-		assertThat(league.getGames().contains(game), is(true));
+		assertThat(league.games.contains(game), is(true));
 	}
 	
 	@Test

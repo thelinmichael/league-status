@@ -30,23 +30,23 @@ public class LeagueTest extends UnitTest {
 		League allsvenskan = League.find("byName", "allsvenskan").first();
 		
 		assertThat(allsvenskan, is(notNullValue()));
-		assertThat(allsvenskan.getTeams().size(), is(5));
-		assertThat(allsvenskan.getGames().size(), is(4));
+		assertThat(allsvenskan.teams.size(), is(5));
+		assertThat(allsvenskan.games.size(), is(4));
 	}
 	
 	@Test
 	public void canAddGamesToLeague() {
 		League league = League.find("byName", "allsvenskan").first();
 
-		int numberOfGamesBeforeAddingAnotherGame = league.getGames().size();
+		int numberOfGamesBeforeAddingAnotherGame = league.games.size();
 		
-		Team team1 = league.getTeams().get(0);
-		Team team2 = league.getTeams().get(1);
+		Team team1 = league.teams.get(0);
+		Team team2 = league.teams.get(1);
 		
 		Game game = new Game(league, Arrays.asList(team1, team2));
 		league.addGame(game);
 		
-		assertThat(league.getGames().size(), is(numberOfGamesBeforeAddingAnotherGame + 1));
+		assertThat(league.games.size(), is(numberOfGamesBeforeAddingAnotherGame + 1));
 	}
 		
 	@Test
@@ -100,7 +100,7 @@ public class LeagueTest extends UnitTest {
 		league.addGame(game3);
 		league.addGame(game4);
 		
-		List<Game> unsortedGames = league.getGames();
+		List<Game> unsortedGames = league.games;
 		assertThat(unsortedGames.get(0), is(game1));
 		assertThat(unsortedGames.get(1), is(game2));
 		assertThat(unsortedGames.get(2), is(game3));

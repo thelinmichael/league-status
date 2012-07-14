@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import play.data.validation.Unique;
 import play.db.jpa.Model;
 import util.Result;
 import util.StatsPriority;
@@ -39,22 +40,6 @@ public class League extends Model {
 		return teamName.replace(' ', '_').toLowerCase();
 	}
 	
-	public String getName() {
-		return this.name;
-	}
-	
-	public String getDisplayName() {
-		return this.displayName;
-	}
-	
-	public List<Team> getTeams() {
-		return this.teams;
-	}
-	
-	public List<Game> getGames() {
-		return this.games;
-	}
-
 	public void addGame(Game game) {
 		if (games == null) {
 			games = new ArrayList<Game>();
@@ -71,7 +56,7 @@ public class League extends Model {
 	
 	public List<Game> getPlayedGames() {
 		List<Game> playedGames = new ArrayList<Game>();
-		for (Game game : getGames()) {
+		for (Game game : games) {
 			if (game.isPlayed()) {
 				playedGames.add(game);
 			}
@@ -81,7 +66,7 @@ public class League extends Model {
 	
 	public List<Game> getRemainingGames() {
 		List<Game> remainingGames = new ArrayList<Game>();
-		for (Game game : getGames()) {
+		for (Game game : games) {
 			if (!game.isPlayed()) {
 				remainingGames.add(game);
 			}

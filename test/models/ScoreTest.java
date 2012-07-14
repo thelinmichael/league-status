@@ -26,8 +26,8 @@ public class ScoreTest extends UnitTest {
 
 		Team gefleIf = Team.find("byName", "gefle_if").first();
 		
-		assertThat(games.get(0).getTeams(), is(notNullValue()));
-		assertThat(games.get(0).getTeams().size(), is(2));
+		assertThat(games.get(0).teams, is(notNullValue()));
+		assertThat(games.get(0).teams.size(), is(2));
 		
 		List<Game> gefleIf_games = gefleIf.games;
 		List<Score> score = gefleIf_games.get(0).scores;

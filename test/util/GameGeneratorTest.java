@@ -27,7 +27,7 @@ public class GameGeneratorTest extends UnitTest {
 	@Test 
 	public void shouldReturnTwoGamesPerTeamInLeague() {
 		League league = League.find("byName", "allsvenskan").first();
-		assertThat(league.getTeams().size(), is(5));
+		assertThat(league.teams.size(), is(5));
 		
 		List<Game> generatedGames = GameGenerator.generateAllVsAll(league);
 		assertThat(generatedGames.size(), is(20));

@@ -30,10 +30,6 @@ public class Game extends Model implements Comparable<Game> {
 		this.teams = teams;
 	}
 	
-	public List<Team> getTeams() {
-		return teams;
-	}
-	
 	public void setScore(List<Integer> intScores) {
 		this.scores = new ArrayList<Score>();
 		for (Integer intScore : intScores) {

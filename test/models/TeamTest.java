@@ -21,13 +21,13 @@ public class TeamTest extends UnitTest {
 		Team gefle = Team.find("byName", "gefle_if").first();
 		
 		assertThat(gefle, is(notNullValue()));
-		assertThat(gefle.getDisplayName(), is("Gefle IF"));
+		assertThat(gefle.displayName, is("Gefle IF"));
 	}
 	
 	@Test
 	public void canGetLeague() {
 		Team gefleIf = Team.find("byName", "gefle_if").first();
 		assertThat(gefleIf, is(notNullValue()));
-		assertThat(gefleIf.getLeague().getDisplayName(), is("Allsvenskan"));
+		assertThat(gefleIf.league.displayName, is("Allsvenskan"));
 	}
 }
