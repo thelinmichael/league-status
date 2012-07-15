@@ -5,17 +5,21 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
+
+import comparators.GoalDifferenceComparator;
+import comparators.GoalsScoredComparator;
+import comparators.IndividualGamesComparator;
+import comparators.PointComparator;
 
 import play.test.Fixtures;
 import play.test.UnitTest;
-import util.Result;
-import util.StatsPriority;
+import util.GameBuilder;
 
 public class LeagueTest extends UnitTest { 
 	
@@ -80,26 +84,20 @@ public class LeagueTest extends UnitTest {
 		league.teams = Arrays.asList(team1, team2);
 		league.save();
 		
-		Game game1 = new Game(league, Arrays.asList(team1, team2)).save();
-		Game game2 = new Game(league, Arrays.asList(team1, team2)).save();
-		Game game3 = new Game(league, Arrays.asList(team2, team1)).save();
-		Game game4 = new Game(league, Arrays.asList(team2, team1)).save();
+		GameBuilder builder = new GameBuilder(league, Arrays.asList(team1, team2));
+		Game game1 = builder.time(new Date(377257800L)).build().save();
+
+		builder = new GameBuilder(league, Arrays.asList(team1, team2));
+		Game game2 = builder.time(new Date(477257800L)).build().save();
+
+		builder = new GameBuilder(league, Arrays.asList(team2, team1));
+		Game game3 = builder.time(new Date(577257800L)).build().save();
 		
-		Date date1 = new Date(377257800L);
-		Date date2 = new Date(477257800L);
-		Date date3 = new Date(577257800L);
-		Date date4 = new Date(677257800L);
+		builder = new GameBuilder(league, Arrays.asList(team2, team1));
+		Game game4 = builder.time(new Date(677257800L)).build().save();
 		
-		game4.time = date1;
-		game3.time = date2;
-		game1.time = date3;
-		game2.time = date4;
-		
-		league.addGame(game1);
-		league.addGame(game2);
-		league.addGame(game3);
-		league.addGame(game4);
-		
+		league.addGames(Arrays.asList(game1, game2, game3, game4));
+
 		List<Game> unsortedGames = league.games;
 		assertThat(unsortedGames.get(0), is(game1));
 		assertThat(unsortedGames.get(1), is(game2));
@@ -110,8 +108,8 @@ public class LeagueTest extends UnitTest {
 		
 		assertThat(sortedGames.get(0), is(game4));
 		assertThat(sortedGames.get(1), is(game3));
-		assertThat(sortedGames.get(2), is(game1));
-		assertThat(sortedGames.get(3), is(game2));
+		assertThat(sortedGames.get(2), is(game2));
+		assertThat(sortedGames.get(3), is(game1));
 	}
 	
 	@Test
@@ -223,22 +221,22 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.teams.get(2), is(team3));
 		assertThat(league.teams.get(3), is(team4));
 
-		List<StatsPriority> priorities = Arrays.asList(StatsPriority.POINTS);
-		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
+		List<Comparator<Team>> comparators = Arrays.asList((Comparator<Team>) new PointComparator(league));
+		List<Team> teamsOrderedByRank = league.getTeamsByRank(comparators);
 		assertThat(teamsOrderedByRank.get(0), is(team3));
 		assertThat(teamsOrderedByRank.get(1), is(team1));
 		assertThat(teamsOrderedByRank.get(2), is(team2));
 		assertThat(teamsOrderedByRank.get(3), is(team4));
 
-		priorities = Arrays.asList(StatsPriority.GOALS_SCORED);
-		teamsOrderedByRank = league.getTeamsByRank(priorities);
+		comparators = Arrays.asList((Comparator<Team>) new GoalsScoredComparator(league));
+		teamsOrderedByRank = league.getTeamsByRank(comparators);
 		assertThat(teamsOrderedByRank.get(0), is(team3));
 		assertThat(teamsOrderedByRank.get(1), is(team2));
 		assertThat(teamsOrderedByRank.get(2), is(team1));
 		assertThat(teamsOrderedByRank.get(3), is(team4));
 		
-		priorities = Arrays.asList(StatsPriority.GOAL_DIFFERENCE);
-		teamsOrderedByRank = league.getTeamsByRank(priorities);
+		comparators = Arrays.asList((Comparator<Team>) new GoalDifferenceComparator(league));
+		teamsOrderedByRank = league.getTeamsByRank(comparators);
 		assertThat(teamsOrderedByRank.get(0), is(team3));
 		assertThat(teamsOrderedByRank.get(1), is(team2));
 		assertThat(teamsOrderedByRank.get(2), is(team4));
@@ -247,7 +245,8 @@ public class LeagueTest extends UnitTest {
 	
 	@Test
 	public void shouldRankTeamsInLeagueDifferentlyDependingOnSeveralPriorities() {
-		League league = new League("Fantasy League", new Football());
+		Sport football = new Football().save();
+		League league = new League("Fantasy League", football).save();
 		Team team1 = new Team("team1");
 		Team team2 = new Team("team2");
 		Team team3 = new Team("team3");
@@ -256,29 +255,35 @@ public class LeagueTest extends UnitTest {
 		team2.league = league;
 		team3.league = league;
 		
-		List<Game> newGames = new ArrayList<Game>();
-		newGames.add(new Game(league, Arrays.asList(team1, team2)));
-		newGames.add(new Game(league, Arrays.asList(team2, team1)));
-		newGames.add(new Game(league, Arrays.asList(team1, team3)));
-		newGames.add(new Game(league, Arrays.asList(team2, team3)));
-		league.addGames(newGames);
+		GameBuilder builder = new GameBuilder(league, Arrays.asList(team1, team2));
+		Game game1 = builder.score(Arrays.asList(1,1)).build();
+		
+		builder = new GameBuilder(league, Arrays.asList(team2, team1));
+		Game game2 = builder.score(Arrays.asList(3,3)).build();
+		
+		builder = new GameBuilder(league, Arrays.asList(team1, team3));
+		Game game3 = builder.score(Arrays.asList(5,4)).build();
+		
+		builder = new GameBuilder(league, Arrays.asList(team2, team3));
+		Game game4 = builder.score(Arrays.asList(3,0)).build();
 
-		league.games.get(0).setScore(Arrays.asList(1, 1));
-		league.games.get(1).setScore(Arrays.asList(3, 3));
-		league.games.get(2).setScore(Arrays.asList(5, 4));
-		league.games.get(3).setScore(Arrays.asList(3, 0));
+		league.addGames(Arrays.asList(game1, game2, game3, game4));
+		
+		assertThat(league.getPointsForTeam(team1), is(5));
+		assertThat(league.getPointsForTeam(team2), is(5));
+		assertThat(league.getPointsForTeam(team3), is(0));
 		
 		assertThat(league.getGoalsScoredByTeam(team1) - league.getGoalsScoredAgainstTeam(team1), is(1));
 		assertThat(league.getGoalsScoredByTeam(team2) - league.getGoalsScoredAgainstTeam(team2), is(3));
 		assertThat(league.getGoalsScoredByTeam(team3) - league.getGoalsScoredAgainstTeam(team3), is(-4));
 		
-		List<StatsPriority> priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.GOAL_DIFFERENCE);
+		List<Comparator<Team>> priorities = Arrays.asList((Comparator<Team>) new PointComparator(league), (Comparator<Team>) new GoalsScoredComparator(league));
 		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
-		assertThat(teamsOrderedByRank.get(0), is(team2));
-		assertThat(teamsOrderedByRank.get(1), is(team1));
+		assertThat(teamsOrderedByRank.get(0), is(team1));
+		assertThat(teamsOrderedByRank.get(1), is(team2));
 		assertThat(teamsOrderedByRank.get(2), is(team3));
 		
-		priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.GOALS_SCORED);
+		priorities = Arrays.asList((Comparator<Team>) new PointComparator(league), (Comparator<Team>) new GoalsScoredComparator(league));
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(team1));
 		assertThat(teamsOrderedByRank.get(1), is(team2));
@@ -287,7 +292,7 @@ public class LeagueTest extends UnitTest {
 		league.games.add(new Game(league, Arrays.asList(team2, team3)));
 		league.games.get(4).setScore(Arrays.asList(2, 3));
 		
-		priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.GOALS_SCORED, StatsPriority.GOAL_DIFFERENCE);
+		priorities = Arrays.asList((Comparator<Team>) new PointComparator(league), (Comparator<Team>) new GoalsScoredComparator(league), (Comparator<Team>) new GoalDifferenceComparator(league));
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(team2));
 		assertThat(teamsOrderedByRank.get(1), is(team1));
@@ -302,7 +307,7 @@ public class LeagueTest extends UnitTest {
 		Team greece = Team.find("byLeagueAndName", league, "greece").first();
 		Team poland = Team.find("byLeagueAndName", league, "poland").first();
 		
-		List<StatsPriority> priorities = Arrays.asList(StatsPriority.POINTS);
+		List<Comparator<Team>> priorities = Arrays.asList((Comparator<Team>) new PointComparator(league));
 		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
 		
 		assertThat(teamsOrderedByRank.get(0), is(czech));
@@ -310,14 +315,14 @@ public class LeagueTest extends UnitTest {
 		assertThat(teamsOrderedByRank.get(2), is(greece));
 		assertThat(teamsOrderedByRank.get(3), is(poland));
 		
-		priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS, StatsPriority.GOAL_DIFFERENCE, StatsPriority.GOALS_SCORED);
+		priorities = Arrays.asList((Comparator<Team>) new PointComparator(league), (Comparator<Team>) new IndividualGamesComparator(league), (Comparator<Team>) new GoalDifferenceComparator(league), (Comparator<Team>) new GoalsScoredComparator(league));
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(czech));
 		assertThat(teamsOrderedByRank.get(1), is(greece));
 		assertThat(teamsOrderedByRank.get(2), is(russia));
 		assertThat(teamsOrderedByRank.get(3), is(poland));
 		
-		priorities = Arrays.asList(StatsPriority.POINTS, StatsPriority.GOAL_DIFFERENCE, StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS, StatsPriority.GOALS_SCORED);
+		priorities = Arrays.asList((Comparator<Team>) new PointComparator(league), (Comparator<Team>) new GoalDifferenceComparator(league), (Comparator<Team>) new IndividualGamesComparator(league), (Comparator<Team>) new GoalsScoredComparator(league));
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
 		assertThat(teamsOrderedByRank.get(0), is(czech));
 		assertThat(teamsOrderedByRank.get(1), is(russia));

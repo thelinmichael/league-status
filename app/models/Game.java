@@ -9,10 +9,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import play.db.jpa.Model;
+import util.HasTime;
 import util.Result;
 
 @Entity
-public class Game extends Model implements Comparable<Game> {
+public class Game extends Model implements HasTime {
  
 	@ManyToOne
 	public League league;
@@ -40,19 +41,6 @@ public class Game extends Model implements Comparable<Game> {
 	
 	public boolean isPlayed() {
 		return (scores != null && scores.size() != 0);
-	}
-	
-	@Override
-	public int compareTo(Game otherGame) {
-		if (time == null && otherGame.time == null) {
-			return 0;
-		} else if (time == null && otherGame.time != null) {
-			return -1;
-		} else if (time != null && otherGame.time == null) {
-			return 1;
-		} else {
-			return time.compareTo(otherGame.time);
-		}
 	}
 	
 	public Team getHomeTeam() {
@@ -141,5 +129,10 @@ public class Game extends Model implements Comparable<Game> {
 		}
 		
 		return goals; 
+	}
+
+	@Override
+	public Date getTime() {
+		return time;
 	}
 }

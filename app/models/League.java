@@ -1,18 +1,21 @@
 package models;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import play.data.validation.Unique;
+import comparators.ChronoComparator;
+
 import play.db.jpa.Model;
+import util.ChainedComparator;
 import util.Result;
-import util.StatsPriority;
-import util.TeamRank;
 
 @Entity
 public class League extends Model {
@@ -79,9 +82,8 @@ public class League extends Model {
 			games = new ArrayList<Game>();
 		}
 		List<Game> sortedGames = new ArrayList<Game>(games);
-		Collections.sort(sortedGames);
-		
-		
+		Collections.sort(sortedGames, new ChronoComparator());
+		Collections.reverse(sortedGames);
 		return sortedGames;
 	}
 	
@@ -96,7 +98,7 @@ public class League extends Model {
 			if (game.isPlayed() && game.teams.contains(team)) {
 				Result result = game.getResultFor(team);
 				points += sport.getPointsFor(result);
-			}
+			} 
 		}
 
 		return points;
@@ -161,25 +163,37 @@ public class League extends Model {
 	}
 	
 	public List<Team> getTeamsByRank() {
-		 return getTeamsByRank(sport.getStatsPriorities());
+		List<Class<? extends Comparator<Team>>> comparatorClasses = sport.getComparators();
+		List<Comparator<Team>> comparators = new ArrayList<Comparator<Team>>();
+		for (Class<? extends Comparator<Team>> comparatorClass : comparatorClasses) {
+			Constructor constructor;
+			try {
+				constructor = comparatorClass.getDeclaredConstructor(League.class);
+				constructor.setAccessible(true);
+				try {
+					comparators.add((Comparator<Team>) constructor.newInstance(this));
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			}
+		}
+		return getTeamsByRank(comparators);
 	}
 
-	public List<Team> getTeamsByRank(List<StatsPriority> priorities) {
-		List<TeamRank> teamRanks;
-		List<Team> sortedTeams = new ArrayList<Team>();
-		
-		teamRanks = new ArrayList<TeamRank>();
-		for (Team team : teams) {
-			teamRanks.add(new TeamRank(team, priorities, this));
-		}
-		Collections.sort(teamRanks);
-		Collections.reverse(teamRanks);
-
-		sortedTeams = new ArrayList<Team>();
-		for (TeamRank teamRank : teamRanks) {
-			sortedTeams.add(teamRank.getTeam());
-		}
-		
+	public List<Team> getTeamsByRank(List<Comparator<Team>> comparators) {
+		List<Team> sortedTeams = new ArrayList<Team>(teams);
+		Collections.sort(sortedTeams, new ChainedComparator(comparators));
+		Collections.reverse(sortedTeams);
 		return sortedTeams;
 	}
 	

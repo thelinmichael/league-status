@@ -1,5 +1,0 @@
-package util;
-
-public enum StatsPriority {
-	POINTS, GOAL_DIFFERENCE, GOALS_SCORED, INDIVIDUAL_GAMES_BETWEEN_TEAMS;
-}

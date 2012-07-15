@@ -1,11 +1,13 @@
 package sports;
 
+import java.util.Comparator;
 import java.util.List;
 
-import util.Result;
-import util.StatsPriority;
+import models.Team;
 
-public interface ISport {
+import util.Result;
+
+public interface ISport<T> {
 	
 	public Integer getPointsForWin();
 	public Integer getPointsForLoss();
@@ -14,6 +16,5 @@ public interface ISport {
 	
 	public String getDisplayName();
 	public String getName();
-	public List<StatsPriority> getStatsPriorities();
-	public void setStatsPriorities(List<StatsPriority> priorities);
+	public List<Class<? extends Comparator<T>>> getComparators();
 }

@@ -1,12 +1,17 @@
 package models;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.Entity;
 
+import comparators.GoalDifferenceComparator;
+import comparators.GoalsScoredComparator;
+import comparators.IndividualGamesComparator;
+import comparators.PointComparator;
+
 import util.Result;
-import util.StatsPriority;
 
 @Entity
 public class Football extends Sport {
@@ -17,7 +22,7 @@ public class Football extends Sport {
 	public String displayName = "Football";
 	public String name = "football";
 	
-	public transient List<StatsPriority> priorities;
+	public transient List<Comparator> comparators;
 	
 	@Override
 	public Integer getPointsForWin() {
@@ -55,19 +60,8 @@ public class Football extends Sport {
 			throw new IllegalArgumentException("Result not available.");
 		}
 	}
-
-	@Override
-	public List<StatsPriority> getStatsPriorities() {
-		List<StatsPriority> priorities = Arrays.asList(new StatsPriority[] { 
-														StatsPriority.POINTS, 
-														StatsPriority.GOAL_DIFFERENCE,
-													    StatsPriority.INDIVIDUAL_GAMES_BETWEEN_TEAMS,
-														StatsPriority.GOALS_SCORED
-		});
-		return priorities;
-	}
 	
-	public void setStatsPriorities(List<StatsPriority> priorities) {
-		this.priorities = priorities;
+	public List<Class<? extends Comparator<Team>>> getComparators() {
+		return Arrays.asList(PointComparator.class, GoalDifferenceComparator.class, GoalsScoredComparator.class, IndividualGamesComparator.class);
 	}
 }
