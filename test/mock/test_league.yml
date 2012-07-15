@@ -3,11 +3,15 @@
 Football(football):
     displayName:     "Football"
     name:            "football"
+    
+EurocupFootball(eurocupfootball):
+    displayName:     "EurocupFootball"
+    name:            "eurocupfootball"
 
 League(euro-group-a):
     displayName:     "Eurocup Group A"
     name:            "euro-group-a"
-    sport:           football
+    sport:           eurocupfootball
 
 League(allsvenskan):
     displayName:     "Allsvenskan"
