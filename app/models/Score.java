@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import play.db.jpa.Model;
-import sports.ISport;
+import util.ISport;
 
 @Entity
 public class Score extends Model implements Comparable {

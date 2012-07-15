@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
+
 import comparators.GoalDifferenceComparator;
 import comparators.GoalsScoredComparator;
 import comparators.IndividualGamesComparator;

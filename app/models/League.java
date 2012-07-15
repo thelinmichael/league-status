@@ -12,8 +12,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.collections.comparators.ComparatorChain;
+
 import play.db.jpa.Model;
-import util.ChainedComparator;
 import util.Result;
 
 import comparators.ChronoComparator;
@@ -199,7 +200,11 @@ public class League extends Model {
 
 	public List<Team> getTeamsByRank(List<Comparator<Team>> comparators) {
 		List<Team> sortedTeams = new ArrayList<Team>(teams);
-		Collections.sort(sortedTeams, new ChainedComparator(comparators));
+		ComparatorChain chainedComparators =  new ComparatorChain();
+		for (Comparator<Team> comparator : comparators) {
+			chainedComparators.addComparator(comparator);
+		}
+		Collections.sort(sortedTeams, chainedComparators);
 		Collections.reverse(sortedTeams);
 		return sortedTeams;
 	}

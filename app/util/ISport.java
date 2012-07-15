@@ -1,14 +1,11 @@
-package sports;
+package util;
 
 import java.util.Comparator;
 import java.util.List;
 
 import models.Team;
 
-import util.Result;
-
 public interface ISport<T> {
-	
 	public Integer getPointsForWin();
 	public Integer getPointsForLoss();
 	public Integer getPointsForTie();
