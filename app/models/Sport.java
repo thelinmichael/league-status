@@ -8,6 +8,4 @@ import play.db.jpa.Model;
 import util.ISport;
 
 @Entity
-public abstract class Sport extends Model implements ISport {
-	
-}
+public abstract class Sport extends Model implements ISport {}
