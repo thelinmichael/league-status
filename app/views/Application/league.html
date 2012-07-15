@@ -42,9 +42,9 @@
 			<ul>
 			#{list items:league.getGames(), as:'game'}
 				<li>
-					${game.getHomeTeam()} - ${game.getAwayTeam()}
+					${game.getTeams().get(0)} - ${game.getTeams().get(1)}
 					#{if game.isPlayed()} 
-						${game.getHomeTeamGoals()} - ${game.getAwayTeamGoals()}
+						${game.getScores().get(0).getGoals()} - ${game.getScores().get(1).getGoals()}
 					#{/if}
 				</li>
 			#{/list}		

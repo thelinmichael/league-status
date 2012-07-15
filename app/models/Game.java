@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 import play.db.jpa.Model;
 import util.HasTime;
 import util.Result;
+import exceptions.GameNotPlayedException;
 
 @Entity
 public class Game extends Model implements HasTime {
@@ -43,30 +45,6 @@ public class Game extends Model implements HasTime {
 		return (scores != null && scores.size() != 0);
 	}
 	
-	public Team getHomeTeam() {
-		return teams.get(0);
-	}
-	
-	public Team getAwayTeam() {
-		return teams.get(1);
-	}
-	
-	public Integer getHomeTeamGoals() {
-		if (isPlayed()) { 
-			return scores.get(0).goals;
-		} else {
-			return null;
-		}
-	}
-	
-	public Integer getAwayTeamGoals() {
-		if (isPlayed()) { 
-			return scores.get(1).goals;
-		} else {
-			return null;
-		}
-	}
-
 	public Result getResultFor(Team team) {
 		final Result result;
 		
@@ -74,61 +52,58 @@ public class Game extends Model implements HasTime {
 			throw new IllegalArgumentException("Team did not play this game.");
 		} else if (!isPlayed()) {
 			result = Result.UNDECIDED; 
-		} else if (team.name == getHomeTeam().name) {
-			if (getHomeTeamGoals() > getAwayTeamGoals()) {
-				result = Result.WIN;
-			} else if (getHomeTeamGoals() == getAwayTeamGoals()) {
-				result = Result.TIE;
-			} else {
-				result = Result.LOSS;
-			}
+		} else if (isTie()) {
+			result = Result.TIE;
+		} else if (getTeamsWithHighestScores().contains(team)) {
+			result = Result.WIN;
 		} else {
-			if (getHomeTeamGoals() > getAwayTeamGoals()) {
-				result = Result.LOSS;
-			} else if (getHomeTeamGoals() == getAwayTeamGoals()) {
-				result = Result.TIE;
-			} else {
-				result = Result.WIN;
-			}
+			result = Result.LOSS;
 		}
 		
 		return result;
 	}
 
-	public int getGoalsForTeam(Team team) {
-		final int goals; 
-		
-		if (!teams.contains(team)) {
-			throw new IllegalArgumentException("Team did not play this game.");
-		} else if (!isPlayed()) {
-			throw new IllegalArgumentException("Game is not played.");
-		}
-		
-		if (team.name == getHomeTeam().name) {
-			goals = getHomeTeamGoals();
-		} else {
-			goals = getAwayTeamGoals();
-		}
-		
-		return goals;
+	public boolean isTie() {
+		Score maxScore = Collections.max(scores);
+		Score minScore = Collections.min(scores);
+		return (maxScore.compareTo(minScore) == 0);
 	}
 
-	public int getGoalsAgainstTeam(Team team) {
-		final int goals; 
+	public List<Team> getTeamsWithHighestScores() {
+		List<Team> winners = new ArrayList<Team>();
+		Score maxScore = Collections.max(scores);
+		for (Team team : teams) {
+			if (scores.get(teams.indexOf(team)).equals(maxScore)) {
+				winners.add(team);
+			}
+		}
+		return winners;
+	}
+	
+	public int getGoalsForTeam(Team team) throws GameNotPlayedException {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team did not play this game.");
+		}
+		if (!isPlayed()) {
+			throw new GameNotPlayedException("Game is not played.");
+		}
 		
+		return scores.get(teams.indexOf(team)).goals;
+	}
+
+	public int getGoalsAgainstTeam(Team team) throws GameNotPlayedException {
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team did not play this game.");
 		} else if (!isPlayed()) {
-			throw new IllegalArgumentException("Game is not played.");
+			throw new GameNotPlayedException("Game is not played.");
 		}
 		
-		if (team.name == getHomeTeam().name) {
-			goals = getAwayTeamGoals();
-		} else {
-			goals = getHomeTeamGoals();
+		int allGoals = 0;
+		for (Score score : scores) {
+			allGoals += score.goals;
 		}
 		
-		return goals; 
+		return allGoals - getGoalsForTeam(team);
 	}
 
 	@Override

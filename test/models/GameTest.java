@@ -1,7 +1,8 @@
 package models;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -84,7 +85,7 @@ public class GameTest extends UnitTest{
 		Team team2 = Team.find("byName", "aik").first();
 		
 		League league = League.find("byName", "allsvenskan").first();
-		Game game = new Game(league, Arrays.asList(team1, team2));
+		NormalGame game = new NormalGame(league, Arrays.asList(team1, team2));
 		
 		assertThat(game.getHomeTeam(), is(team1));
 		assertThat(game.getAwayTeam(), is(team2));
@@ -95,7 +96,7 @@ public class GameTest extends UnitTest{
 		Team team1 = Team.find("byName", "gefle_if").first();
 		Team team2 = Team.find("byName", "aik").first();
 		League league = League.find("byName", "allsvenskan").first();
-		Game game = new Game(league, Arrays.asList(team1, team2));
+		NormalGame game = new NormalGame(league, Arrays.asList(team1, team2));
 		
 		assertThat(game.getHomeTeamGoals(), is(nullValue()));
 		assertThat(game.getAwayTeamGoals(), is(nullValue()));

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import comparators.ChronoComparator;
+import exceptions.GameNotPlayedException;
 
 import play.db.jpa.Model;
 import util.ChainedComparator;
@@ -141,7 +142,9 @@ public class League extends Model {
 		
 		for (Game game : games) {
 			if (game.isPlayed() && game.teams.contains(team)) {
-				goals += game.getGoalsForTeam(team);
+				try {
+					goals += game.getGoalsForTeam(team);
+				} catch (GameNotPlayedException e) {}
 			}
 		}
 		return goals;
@@ -156,7 +159,9 @@ public class League extends Model {
 		
 		for (Game game : games) {
 			if (game.isPlayed() && game.teams.contains(team)) {
-				goals += game.getGoalsAgainstTeam(team);
+				try {
+					goals += game.getGoalsAgainstTeam(team);
+				} catch (GameNotPlayedException e) {}
 			}
 		}
 		return goals;
