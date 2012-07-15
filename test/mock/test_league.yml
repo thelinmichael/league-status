@@ -27,62 +27,62 @@ League(championsleague):
 Team(greece):
     displayName:      "Greece"
     name:             "greece" 
-    league:           euro-group-a
+    leagues:           [euro-group-a]
 
 Team(russia):
     displayName:      "Russia"
     name:             "russia"
-    league:           euro-group-a
+    leagues:           [euro-group-a]
     
 Team(czech):
     displayName:      "Czech Republic"
     name:             "czech"
-    league:           euro-group-a
+    leagues:           [euro-group-a]
 
 Team(poland):
     displayName:      "Poland"
     name:             "poland"
-    league:           euro-group-a
+    leagues:           [euro-group-a]
           
 Team(gefle):
     displayName:      "Gefle IF"
     name:             "gefle_if"
-    league:           allsvenskan
+    leagues:           [allsvenskan]
     
 Team(djurgarden):
     displayName:      "Djurgårdens IF"
     name:             "djurgardens_if"
-    league:           allsvenskan
+    leagues:           [allsvenskan]
 
 Team(mjallby):
     displayName:      "Mjällby"
     name:             "mjallby"
-    league:           allsvenskan 
+    leagues:           [allsvenskan] 
     
 Team(aik):
     displayName:    "AIK"
     name:           "aik"
-    league:         allsvenskan
+    leagues:         [allsvenskan]
        
 Team(atvidaberg):
     displayName:    "Åtvidaberg"
     name:           "atvidaberg"
-    league:         allsvenskan
+    leagues:         [allsvenskan]
     
 Team(chelsea):     
     displayName:    "Chelsea"
     name:           "chelsea"
-    league:         premierleague
+    leagues:         [premierleague,championsleague]
 
 Team(westham):     
     displayName:    "West Ham"
     name:           "westham"
-    league:         premierleague
+    leagues:         [premierleague]
      
 Team(mancity):
     displayName:    "Manchester City"
     name:           "manchester_city"
-    league:         premierleague
+    leagues:         [premierleague,championsleague]
              
 Score(score0):
     goals:          0
@@ -156,5 +156,6 @@ Game(premierleague_game1):
     league:         premierleague
    
 Game(championsleague_game1):
-    teams:          [mancity, chelsea]
+    teams:          [mancity,chelsea]
     league:         championsleague
+    scores:         [score1,score0]

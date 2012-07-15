@@ -8,15 +8,17 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import comparators.ChronoComparator;
-import exceptions.GameNotPlayedException;
 
 import play.db.jpa.Model;
 import util.ChainedComparator;
 import util.Result;
+
+import comparators.ChronoComparator;
+
+import exceptions.GameNotPlayedException;
 
 @Entity
 public class League extends Model {
@@ -31,7 +33,7 @@ public class League extends Model {
 	@OneToMany(mappedBy="league")
 	public List<Game> games;
 	
-	@OneToMany(mappedBy="league")
+	@ManyToMany(mappedBy="leagues")
 	public List<Team> teams;
 	
 	public League(String name, Sport sport) {

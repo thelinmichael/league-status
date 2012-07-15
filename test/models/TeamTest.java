@@ -25,9 +25,9 @@ public class TeamTest extends UnitTest {
 	}
 	
 	@Test
-	public void canGetLeague() {
+	public void canGetLeagues() {
 		Team gefleIf = Team.find("byName", "gefle_if").first();
 		assertThat(gefleIf, is(notNullValue()));
-		assertThat(gefleIf.league.displayName, is("Allsvenskan"));
+		assertThat(gefleIf.leagues.get(0).displayName, is("Allsvenskan"));
 	}
 }

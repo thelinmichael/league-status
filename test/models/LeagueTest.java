@@ -127,10 +127,11 @@ public class LeagueTest extends UnitTest {
 	@Test
 	public void canGetNumberOfPointsForTeam() {
 		League league = League.find("byName", "euro-group-a").first();
-		Team czech = Team.find("byLeagueAndName", league, "czech").first();
-		Team russia = Team.find("byLeagueAndName", league, "russia").first();
-		Team greece = Team.find("byLeagueAndName", league, "greece").first();
-		Team poland = Team.find("byLeagueAndName", league, "poland").first();
+		
+		Team czech = Team.find("byName", "czech").first();
+		Team poland = Team.find("byName", "poland").first();
+		Team greece = Team.find("byName", "greece").first();
+		Team russia = Team.find("byName", "russia").first();
 		
 		assertThat(league.getPointsForTeam(czech), is(6));
 		assertThat(league.getPointsForTeam(russia), is(4));
@@ -141,10 +142,11 @@ public class LeagueTest extends UnitTest {
 	@Test
 	public void canGetWinsTiesAndLossesAndOtherResultsForTeam() {
 		League league = League.find("byName", "euro-group-a").first();
-		Team czech = Team.find("byLeagueAndName", league, "czech").first();
-		Team russia = Team.find("byLeagueAndName", league, "russia").first();
-		Team greece = Team.find("byLeagueAndName", league, "greece").first();
-		Team poland = Team.find("byLeagueAndName", league, "poland").first();
+		
+		Team czech = Team.find("byName", "czech").first();
+		Team poland = Team.find("byName", "poland").first();
+		Team greece = Team.find("byName", "greece").first();
+		Team russia = Team.find("byName", "russia").first();
 		
 		assertThat(league.getWinsForTeam(czech), is(2));
 		assertThat(league.getWinsForTeam(russia), is(1));
@@ -163,10 +165,11 @@ public class LeagueTest extends UnitTest {
 	@Test
 	public void canGetGoalsScoredAndGoalsScoredAgainstForAGivenTeam() {
 		League league = League.find("byName", "euro-group-a").first();
-		Team czech = Team.find("byLeagueAndName", league, "czech").first();
-		Team russia = Team.find("byLeagueAndName", league, "russia").first();
-		Team greece = Team.find("byLeagueAndName", league, "greece").first();
-		Team poland = Team.find("byLeagueAndName", league, "poland").first();
+		
+		Team czech = Team.find("byName", "czech").first();
+		Team poland = Team.find("byName", "poland").first();
+		Team greece = Team.find("byName", "greece").first();
+		Team russia = Team.find("byName", "russia").first();
 		
 		assertThat(league.getGoalsScoredByTeam(czech), is(4));
 		assertThat(league.getGoalsScoredAgainstTeam(czech), is(5));
@@ -186,10 +189,6 @@ public class LeagueTest extends UnitTest {
 		Team team3 = new Team("team3");
 		Team team4 = new Team("team4");
 		league.teams = Arrays.asList(team1, team2, team3, team4);
-		team1.league = league;
-		team2.league = league;
-		team3.league = league;
-		team4.league = league;
 		
 		List<Game> newGames = new ArrayList<Game>();
 		newGames.add(new Game(league, Arrays.asList(team1, team2)));
@@ -251,9 +250,6 @@ public class LeagueTest extends UnitTest {
 		Team team2 = new Team("team2");
 		Team team3 = new Team("team3");
 		league.teams = Arrays.asList(team1, team2, team3);
-		team1.league = league;
-		team2.league = league;
-		team3.league = league;
 		
 		GameBuilder builder = new GameBuilder(league, Arrays.asList(team1, team2));
 		Game game1 = builder.score(Arrays.asList(1,1)).build();
@@ -302,10 +298,11 @@ public class LeagueTest extends UnitTest {
 	@Test
 	public void canGetTeamsOrderedByIndividualGames() {
 		League league = League.find("byName", "euro-group-a").first();
-		Team czech = Team.find("byLeagueAndName", league, "czech").first();
-		Team russia = Team.find("byLeagueAndName", league, "russia").first();
-		Team greece = Team.find("byLeagueAndName", league, "greece").first();
-		Team poland = Team.find("byLeagueAndName", league, "poland").first();
+		
+		Team czech = Team.find("byName", "czech").first();
+		Team poland = Team.find("byName", "poland").first();
+		Team greece = Team.find("byName", "greece").first();
+		Team russia = Team.find("byName", "russia").first();
 		
 		List<Comparator<Team>> priorities = Arrays.asList((Comparator<Team>) new PointComparator(league));
 		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
@@ -338,10 +335,6 @@ public class LeagueTest extends UnitTest {
 		Team russia = new Team("Russia");
 		Team czech = new Team("Czech");
 		league.teams = Arrays.asList(poland, greece, russia, czech);
-		poland.league = league;
-		greece.league = league;
-		russia.league = league;
-		czech.league = league;
 		
 		List<Game> newGames = new ArrayList<Game>();
 		Game polandGreece = new Game(league, Arrays.asList(poland, greece));

@@ -2,8 +2,11 @@ package models;
 
 import java.util.List;
 
+import javax.persistence.Entity;
+
 import util.HomeAndAwayTeams;
 
+@Entity
 public class NormalGame extends Game implements HomeAndAwayTeams {
 
 	public Team homeTeam;
