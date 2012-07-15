@@ -17,17 +17,20 @@
 			<td>GA</td>
 			<td>GD</td>
 			<td>PTS</td>
+			<td>Best possible position</td>
 		</tr>
 		#{list items:league.getTeamsByRank(), as:'team'}
 		<tr>
 			<td>${team.getDisplayName()}</td> 
-			<td>
+			<td>${league.getPointsForTeam(team)}</td>
 			<td>${league.getWinsForTeam(team)}</td>
 			<td>${league.getTiesForTeam(team)}</td>
 			<td>${league.getLossesForTeam(team)}</td>
 			<td>${league.getGoalsScoredByTeam(team)}</td>
-			<td${league.getGoalsScoredAgainstTeam(team)}</span>
+			<td>${league.getGoalsScoredAgainstTeam(team)}</span>
+			<td>${league.getGoalDifferenceForTeam(team)}</span>
 			<td>${league.getPointsForTeam(team)}</span>
+			<td>${league.getBestPossibleRankForTeam(team)}</span>
 		</tr>
 		#{/list}
 	</div>

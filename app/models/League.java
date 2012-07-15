@@ -3,14 +3,18 @@ package models;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import org.apache.commons.collections.comparators.ComparatorChain;
 
@@ -136,6 +140,10 @@ public class League extends Model {
 		return numberOfResult;
 	}
 	
+	public Integer getGoalDifferenceForTeam(Team team) {
+		return (getGoalsScoredByTeam(team) - getGoalsScoredAgainstTeam(team));
+	}
+	
 	public Integer getGoalsScoredByTeam(Team team) {
 		Integer goals = 0;
 		
@@ -238,4 +246,91 @@ public class League extends Model {
 		return returnedGames;
 	}
 
+	public DefaultMutableTreeNode getAllPossibleGameEndCombinations() {
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode();
+		addPossibleCombinations(getRemainingGames(), rootNode);
+		return rootNode;
+	}
+	
+	private void addPossibleCombinations(List<Game> remainingGames, DefaultMutableTreeNode rootNode) {
+		if (remainingGames == null || remainingGames.size() == 0) {
+			return;
+		}
+		
+		Game game = remainingGames.get(0);
+		remainingGames.remove(0);
+		
+		Enumeration enumeration = rootNode.depthFirstEnumeration();
+		List<DefaultMutableTreeNode> leafs = new ArrayList<DefaultMutableTreeNode>();
+		while (enumeration.hasMoreElements()) {
+			DefaultMutableTreeNode node = ((DefaultMutableTreeNode) enumeration.nextElement());
+			if (node.isLeaf()){
+				leafs.add(node);
+			}
+		}
+		
+		for (DefaultMutableTreeNode leaf : leafs) { 
+			Game possibleOutcome1 = new Game(game.league, game.teams);
+			Game possibleOutcome2 = new Game(game.league, game.teams);
+			Game possibleOutcome3 = new Game(game.league, game.teams);
+			possibleOutcome1.setScore(Arrays.asList(0,0));
+			possibleOutcome2.setScore(Arrays.asList(1,0));
+			possibleOutcome3.setScore(Arrays.asList(0,1));
+			DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(possibleOutcome1);
+			DefaultMutableTreeNode node2 = new DefaultMutableTreeNode(possibleOutcome2);
+			DefaultMutableTreeNode node3 = new DefaultMutableTreeNode(possibleOutcome3);
+			
+			leaf.add(node1);
+			leaf.add(node2);
+			leaf.add(node3);
+		}
+		
+		addPossibleCombinations(remainingGames, rootNode);
+	}
+
+	public int getBestPossibleRankForTeam(Team team) {
+		return getBestPossibleRankForTeam(team, getAllPossibleGameEndCombinations());
+	}
+	
+	public int getBestPossibleRankForTeam(Team team, DefaultMutableTreeNode rootNode) {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		Integer bestRank = null;
+		
+		List<List<Game>> possibleOutcomes = new ArrayList<List<Game>>(); 
+		DefaultMutableTreeNode leaf = rootNode.getFirstLeaf();
+		while (leaf != null) {
+			TreeNode[] pathToRoot = leaf.getPath();
+			List<Game> outcome = new ArrayList<Game>();
+			for (TreeNode node : pathToRoot) {
+				if (node == rootNode) {
+					continue;
+				} 
+				Game gameInNode = (Game) ((DefaultMutableTreeNode) node).getUserObject();
+				outcome.add(gameInNode); 
+			}
+			possibleOutcomes.add(outcome);
+			leaf = leaf.getNextLeaf();	
+		}
+		
+		List<Game> oldGames = new ArrayList<Game>(games);
+		for (List<Game> outcome : possibleOutcomes) {
+			for (Game game : outcome) {
+				if (game.teams.contains(team) && game.getTeamsWithHighestScores().contains(team) && !game.isTie()) {
+					game.scores.set(game.teams.indexOf(team), new Score(9999)); 
+				}
+			}
+			List<Game> playedGames = new ArrayList(getPlayedGames());
+			playedGames.addAll(outcome);
+			games = playedGames;
+			List<Team> teams = getTeamsByRank();
+			if (bestRank == null || (teams.indexOf(team) + 1) < bestRank) {
+				bestRank = teams.indexOf(team) + 1;
+			}
+			games = new ArrayList<Game>(oldGames);
+		}
+		
+		return bestRank;
+	}
 }

@@ -21,3 +21,9 @@ li {
 	list-style: none;
 	text-align: left;
 }
+
+td {
+	width: 40px;
+	padding-left: 10px;
+	padding-right: 10px; 
+}

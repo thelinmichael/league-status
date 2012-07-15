@@ -105,6 +105,7 @@ public class Game extends Model implements HasTime {
 		
 		return allGoals - getGoalsForTeam(team);
 	}
+	
 
 	@Override
 	public Date getTime() {

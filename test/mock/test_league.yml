@@ -13,6 +13,11 @@ League(euro-group-a):
     name:            "euro-group-a"
     sport:           eurocupfootball
 
+League(euro-group-d):
+    displayName:     "Eurocup Group D"
+    name:            "euro-group-d"
+    sport:           eurocupfootball
+    
 League(allsvenskan):
     displayName:     "Allsvenskan"
     name:            "allsvenskan"
@@ -47,6 +52,26 @@ Team(poland):
     displayName:      "Poland"
     name:             "poland"
     leagues:           [euro-group-a]
+
+Team(sweden):
+    displayName:      "Sweden"
+    name:             "sweden" 
+    leagues:           [euro-group-d]
+
+Team(england):
+    displayName:      "England"
+    name:             "england"
+    leagues:           [euro-group-d]
+    
+Team(ukraine):
+    displayName:      "Ukraine"
+    name:             "ukraine"
+    leagues:           [euro-group-d]
+
+Team(france):
+    displayName:      "France"
+    name:             "france"
+    leagues:           [euro-group-d]
           
 Team(gefle):
     displayName:      "Gefle IF"
@@ -135,7 +160,35 @@ Game(euro_group_a_greece_russia):
     league:         euro-group-a
     teams:          [greece,russia]
     scores:         [score1,score0]
-                
+          
+Game(euro_group_d_france_england):
+    league:         euro-group-d
+    teams:          [france,england]
+    scores:         [score1,score1]
+                    
+Game(euro_group_d_ukraine_sweden):
+    league:         euro-group-d
+    teams:          [ukraine,sweden]
+    scores:         [score2,score1]
+                        
+Game(euro_group_d_ukraine_france):
+    league:         euro-group-d
+    teams:          [ukraine,france]
+    scores:         [score0,score2]
+
+Game(euro_group_d_sweden_england):
+    league:         euro-group-d
+    teams:          [sweden,england]
+    scores:         [score2,score3]
+
+Game(euro_group_d_england_ukraine):
+    league:         euro-group-d
+    teams:          [england,ukraine]
+
+Game(euro_group_d_sweden_france):
+    league:         euro-group-d
+    teams:          [sweden,france]
+        
 Game(allsvenskan_game1):
     league:         allsvenskan
     teams:          [gefle,djurgarden]

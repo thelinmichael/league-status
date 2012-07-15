@@ -9,18 +9,20 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import play.test.Fixtures;
+import play.test.UnitTest;
+import util.GameBuilder;
 
 import comparators.GoalDifferenceComparator;
 import comparators.GoalsScoredComparator;
 import comparators.IndividualGamesComparator;
 import comparators.PointComparator;
-
-import play.test.Fixtures;
-import play.test.UnitTest;
-import util.GameBuilder;
 
 public class LeagueTest extends UnitTest { 
 	
@@ -372,5 +374,89 @@ public class LeagueTest extends UnitTest {
 		league = new League(teamName, new Football());
 		
 		assertThat(league.makeDisplayName(teamName), is("gefle_if"));
+	}
+	
+	@Ignore
+	@Test
+	public void canGetAllPossibleGameEndingCombinations_ofALeaguesRemainingGames_oneGame() {
+		Football football = new Football();
+		League league = new League("league", football);
+		
+		Team team1 = new Team("team1");
+		Team team2 = new Team("team2");
+		league.teams = Arrays.asList(team1, team2);
+		
+		Game game1 = new Game(league,Arrays.asList(team1, team2));
+		league.games = Arrays.asList(game1);
+		
+		DefaultMutableTreeNode node = league.getAllPossibleGameEndCombinations();
+		assertThat(node.getChildCount(), is(3));
+		
+		DefaultMutableTreeNode firstChild = (DefaultMutableTreeNode) node.getChildAt(0);
+		Game firstChildGame = (Game) firstChild.getUserObject();
+		assertThat(firstChildGame.teams.get(0), is(team1));
+		assertThat(firstChildGame.teams.get(1), is(team2));
+		
+		DefaultMutableTreeNode secondChild = (DefaultMutableTreeNode) node.getChildAt(1);
+		Game secondChildGame = (Game) secondChild.getUserObject();
+		assertThat(secondChildGame.teams.get(0), is(team1));
+		assertThat(secondChildGame.teams.get(1), is(team2));
+		
+		DefaultMutableTreeNode thirdChild = (DefaultMutableTreeNode) node.getChildAt(2);
+		Game thirdChildGame = (Game) thirdChild.getUserObject();
+		assertThat(thirdChildGame.teams.get(0), is(team1));
+		assertThat(thirdChildGame.teams.get(1), is(team2));
+	}
+	
+	@Ignore
+	@Test
+	public void canGetBestPossibleRankForATeam_BasedOnCombinationsOfFutureGameOutcomes_oneGame() {
+		Football football = new Football();
+		League league = new League("league", football);
+		
+		Team team1 = new Team("team1");
+		Team team2 = new Team("team2");
+		league.teams = Arrays.asList(team1, team2);
+		
+		Game game1 = new Game(league,Arrays.asList(team1, team2));
+		league.games = Arrays.asList(game1);
+		
+		DefaultMutableTreeNode node = league.getAllPossibleGameEndCombinations();
+		assertThat(node.getChildCount(), is(3));
+		assertThat(node.getLeafCount(), is(3));
+		
+		DefaultMutableTreeNode firstChild = (DefaultMutableTreeNode) node.getChildAt(0);
+		Game firstChildGame = (Game) firstChild.getUserObject();
+		assertThat(firstChildGame.teams.get(0), is(team1));
+		assertThat(firstChildGame.teams.get(1), is(team2));
+		
+		DefaultMutableTreeNode secondChild = (DefaultMutableTreeNode) node.getChildAt(1);
+		Game secondChildGame = (Game) secondChild.getUserObject();
+		assertThat(secondChildGame.teams.get(0), is(team1));
+		assertThat(secondChildGame.teams.get(1), is(team2));
+		
+		DefaultMutableTreeNode thirdChild = (DefaultMutableTreeNode) node.getChildAt(2);
+		Game thirdChildGame = (Game) thirdChild.getUserObject();
+		assertThat(thirdChildGame.teams.get(0), is(team1));
+		assertThat(thirdChildGame.teams.get(1), is(team2));
+		
+		assertThat(league.getBestPossibleRankForTeam(team1,node), is(1));
+	}
+	
+	@Test
+	public void canGetBestPossibleRankForTeams_BasedOnCombinationsOfFutureGameOutcomes_severalGames() {
+		League league = League.find("byName", "euro-group-d").first();
+		Team sweden = Team.find("byName", "sweden").first();
+		Team england = Team.find("byName", "england").first();
+		Team ukraine = Team.find("byName", "ukraine").first();
+		Team france = Team.find("byName", "france").first();
+		
+		DefaultMutableTreeNode node = league.getAllPossibleGameEndCombinations();
+		assertThat(node.getLeafCount(), is(9));
+		
+		assertThat(league.getBestPossibleRankForTeam(england), is(1));
+		assertThat(league.getBestPossibleRankForTeam(france), is(1));
+		assertThat(league.getBestPossibleRankForTeam(ukraine), is(1));
+		assertThat(league.getBestPossibleRankForTeam(sweden), is(4));
 	}
 }
