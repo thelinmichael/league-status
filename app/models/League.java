@@ -29,8 +29,10 @@ import exceptions.GameNotPlayedException;
 public class League extends Model {
 	
 	public String name;
-	
 	public String displayName;
+	
+	public Integer upperQualificationRank;
+	public Integer lowerQualificationRank;
 
 	@ManyToOne
 	public Sport sport;
@@ -382,5 +384,70 @@ public class League extends Model {
 		}
 		
 		return worstRank;
+	}
+
+	public boolean isInUpperQualification(Team team) {
+		if (upperQualificationRank == null) { 
+			return false;
+		}
+		return isInUpperQualification(getRankForTeam(team));
+	}
+
+	public boolean isBelowUpperQualification(Team team) {
+		if (lowerQualificationRank == null) { 
+			return false;
+		}
+		return isBelowUpperQualification(getRankForTeam(team));
+	}
+
+	public boolean isAboveLowerQualification(Team team) {
+		if (upperQualificationRank == null) { 
+			return false;
+		}
+		return isAboveLowerQualification(getRankForTeam(team));
+	}
+
+	public boolean isInLowerQualification(Team team) {
+		if (lowerQualificationRank == null) { 
+			return false;
+		}
+		return isInLowerQualification(getRankForTeam(team));
+	}
+
+	public boolean isInUpperQualification(int rank) {
+		if (upperQualificationRank == null) { 
+			return false;
+		}
+		return (rank <= upperQualificationRank);
+	}
+
+	public boolean isInLowerQualification(int rank) {
+		if (lowerQualificationRank == null) { 
+			return false;
+		}
+		return (rank >= lowerQualificationRank);
+	}
+
+	public boolean isBelowUpperQualification(int rank) {
+		if (upperQualificationRank == null) { 
+			return false;
+		}
+		return (rank > upperQualificationRank);
+	}
+
+	public boolean isAboveLowerQualification(int rank) {
+		if (upperQualificationRank == null) { 
+			return false;
+		}
+		return (rank < lowerQualificationRank);
+	}
+
+	public Integer getRankForTeam(Team team) {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
+		List<Team> teamsByRank = getTeamsByRank();
+		return teamsByRank.indexOf(team) + 1;
 	}
 }

@@ -23,7 +23,22 @@ li {
 }
 
 td {
-	width: 40px;
+	font-family: Arial;
+	font-size: 12px;
+	text-align: center;
+	width: 30px;
 	padding-left: 10px;
 	padding-right: 10px; 
+}
+
+.upperQualification {
+	border-radius: 10px;
+	background: #C3FF9C;
+	padding:2px 4px;
+}
+
+.belowQualification {
+	border-radius: 5px;
+	background: #FFB5B5;
+	padding:2px 4px;
 }

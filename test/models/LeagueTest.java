@@ -474,4 +474,79 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.getWorstPossibleRankForTeam(england), is(3));
 		assertThat(league.getWorstPossibleRankForTeam(sweden), is(4));
 	}
+	
+	@Test
+	public void canGetHowTeamRelatesToUpperAndLowerQualificationRank() throws Exception {
+		League league = League.find("byName", "euro-group-d").first();
+		Team sweden = Team.find("byName", "sweden").first();
+		Team england = Team.find("byName", "england").first();
+		Team ukraine = Team.find("byName", "ukraine").first();
+		Team france = Team.find("byName", "france").first();
+		
+		assertThat(league.upperQualificationRank, is(2));
+		assertThat(league.lowerQualificationRank, is(3));
+		
+		assertThat(league.isInUpperQualification(sweden), is(false));
+		assertThat(league.isBelowUpperQualification(sweden), is(true));
+		assertThat(league.isAboveLowerQualification(sweden), is(false));
+		assertThat(league.isInLowerQualification(sweden), is(true));
+		assertThat(league.isInUpperQualification(england), is(true));
+		assertThat(league.isBelowUpperQualification(england), is(false));
+		assertThat(league.isAboveLowerQualification(england), is(true));
+		assertThat(league.isInLowerQualification(england), is(false));
+		assertThat(league.isInUpperQualification(ukraine), is(false));
+		assertThat(league.isBelowUpperQualification(ukraine), is(true));
+		assertThat(league.isAboveLowerQualification(ukraine), is(false));
+		assertThat(league.isInLowerQualification(ukraine), is(true));
+		assertThat(league.isInUpperQualification(france), is(true));
+		assertThat(league.isBelowUpperQualification(france), is(false));
+		assertThat(league.isAboveLowerQualification(france), is(true));
+		assertThat(league.isInLowerQualification(france), is(false));
+	}
+	
+	@Test
+	public void canGetIfARankIsInUpperOrLowerQualificationRank() throws Exception {
+		League league = League.find("byName", "euro-group-d").first();
+		
+		assertThat(league.upperQualificationRank, is(2));
+		assertThat(league.lowerQualificationRank, is(3));
+		
+		assertThat(league.isInUpperQualification(1), is(true));
+		assertThat(league.isInUpperQualification(2), is(true));
+		assertThat(league.isInUpperQualification(3), is(false));
+		assertThat(league.isInUpperQualification(4), is(false));
+		assertThat(league.isInLowerQualification(1), is(false));
+		assertThat(league.isInLowerQualification(2), is(false));
+		assertThat(league.isInLowerQualification(3), is(true));
+		assertThat(league.isInLowerQualification(4), is(true));
+		assertThat(league.isBelowUpperQualification(1), is(false));
+		assertThat(league.isBelowUpperQualification(2), is(false));
+		assertThat(league.isBelowUpperQualification(3), is(true));
+		assertThat(league.isBelowUpperQualification(4), is(true));
+		assertThat(league.isAboveLowerQualification(1), is(true));
+		assertThat(league.isAboveLowerQualification(2), is(true));
+		assertThat(league.isAboveLowerQualification(3), is(false));
+		assertThat(league.isAboveLowerQualification(4), is(false));
+	}
+	
+	@Test
+	public void canGetRankForTeam() throws Exception {
+		League league = League.find("byName", "euro-group-d").first();
+		
+		Team sweden = Team.find("byName", "sweden").first();
+		Team england = Team.find("byName", "england").first();
+		Team ukraine = Team.find("byName", "ukraine").first();
+		Team france = Team.find("byName", "france").first();
+		
+		assertThat(league.getRankForTeam(france), is(1));
+		assertThat(league.getRankForTeam(england), is(2));
+		assertThat(league.getRankForTeam(ukraine), is(3));
+		assertThat(league.getRankForTeam(sweden), is(4));
+		
+		Team team = new Team("Team not in league");
+		try {
+			league.getRankForTeam(team);
+			fail();
+		} catch (IllegalArgumentException e) {}
+	}
 }

@@ -31,8 +31,8 @@
 			<td>${league.getGoalsScoredAgainstTeam(team)}</span>
 			<td>${league.getGoalDifferenceForTeam(team)}</span>
 			<td>${league.getPointsForTeam(team)}</span>
-			<td>${league.getBestPossibleRankForTeam(team)}</span>
-			<td>${league.getWorstPossibleRankForTeam(team)}</span>
+			<td><span #{if league.isInLowerQualification(league.getBestPossibleRankForTeam(team))} class="belowQualification"#{/if}#{elseif league.isInUpperQualification(league.getBestPossibleRankForTeam(team))} class="upperQualification"#{/elseif}>${league.getBestPossibleRankForTeam(team)}</span></td>
+			<td><span #{if league.isInLowerQualification(league.getWorstPossibleRankForTeam(team))} class="belowQualification"#{/if}#{elseif league.isInUpperQualification(league.getWorstPossibleRankForTeam(team))} class="upperQualification"#{/elseif}>${league.getWorstPossibleRankForTeam(team)}</span></td>
 		</tr>
 		#{/list}
 	</div>
@@ -57,7 +57,6 @@
 			
 		#{/if}
 	</div>
-	
 #{/if}
 #{else}
 	<p class="errorMessage">League not found.</p>

@@ -12,15 +12,24 @@ League(euro-group-a):
     displayName:     "Eurocup Group A"
     name:            "euro-group-a"
     sport:           eurocupfootball
+    upperQualificationRank: 2
+    lowerQualificationRank: 3
 
 League(euro-group-d):
     displayName:     "Eurocup Group D"
     name:            "euro-group-d"
     sport:           eurocupfootball
-    
+    upperQualificationRank: 2
+    lowerQualificationRank: 3
+        
 League(allsvenskan):
     displayName:     "Allsvenskan"
     name:            "allsvenskan"
+    sport:           football
+
+League(allsvenskan2012):
+    displayName:     "Allsvenskan 2012"
+    name:            "allsvenskan2012"
     sport:           football
     
 League(premierleague):
@@ -76,28 +85,78 @@ Team(france):
 Team(gefle):
     displayName:      "Gefle IF"
     name:             "gefle_if"
-    leagues:           [allsvenskan]
-    
+    leagues:           [allsvenskan,allsvenskan2012]
+
 Team(djurgarden):
     displayName:      "Djurgårdens IF"
     name:             "djurgardens_if"
-    leagues:           [allsvenskan]
+    leagues:           [allsvenskan,allsvenskan2012]
 
 Team(mjallby):
     displayName:      "Mjällby"
     name:             "mjallby"
-    leagues:           [allsvenskan] 
+    leagues:           [allsvenskan,allsvenskan2012] 
     
 Team(aik):
     displayName:    "AIK"
     name:           "aik"
-    leagues:         [allsvenskan]
+    leagues:         [allsvenskan,allsvenskan2012]
        
 Team(atvidaberg):
     displayName:    "Åtvidaberg"
     name:           "atvidaberg"
-    leagues:         [allsvenskan]
-    
+    leagues:         [allsvenskan,allsvenskan2012]
+
+Team(bkhacken):
+    displayName:    "BK Häcken"
+    name:           "bkhacken"
+    leagues:         [allsvenskan2012]
+
+Team(gif_sundsvall):
+    displayName:    "GIF Sundsvall"
+    name:           "gif_sundsvall"
+    leagues:         [allsvenskan2012]
+
+Team(kalmar_ff):
+    displayName:    "Kalmar FF"
+    name:           "kalmar_ff"
+    leagues:         [allsvenskan2012]
+
+Team(if_elfsborg):
+    displayName:    "IF Elfsborg"
+    name:           "if_elfsborg"
+    leagues:         [allsvenskan2012]
+
+Team(syrianska_fc):
+    displayName:    "Syrianska FC"
+    name:           "syrianska_fc"
+    leagues:         [allsvenskan2012]
+
+Team(ifk_goteborg):
+    displayName:    "IFK Göteborg"
+    name:           "ifk_goteborg"
+    leagues:         [allsvenskan2012]
+
+Team(malmo_ff):
+    displayName:    "Malmö FF"
+    name:           "malmo_ff"
+    leagues:         [allsvenskan2012]
+
+Team(orebro_sk):
+    displayName:    "Örebro SK"
+    name:           "orebro_sk"
+    leagues:         [allsvenskan2012]
+
+Team(ifk_norrkoping):
+    displayName:    "IFK Norrköping"
+    name:           "ifk_norrkoping"
+    leagues:         [allsvenskan2012]
+
+Team(helsingborgs_if):
+    displayName:    "Helsingborgs IF"
+    name:           "helsingborgs_if"
+    leagues:         [allsvenskan2012]
+                                        
 Team(chelsea):     
     displayName:    "Chelsea"
     name:           "chelsea"
