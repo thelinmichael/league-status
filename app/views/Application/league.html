@@ -1,5 +1,6 @@
 #{extends 'main.html'/}
 
+%{ System.out.println(new Date()); }%
 <p> #{a @Application.index()}Home#{/a}</p>
 
 #{if league != null} 
@@ -8,7 +9,7 @@
 		
 	<table id="leagueTable">
 		<tr>
-			<td>Team</td>
+			<td class="team">Team</td>
 			<td>P</td>
 			<td>W</td>
 			<td>D</td>
@@ -22,8 +23,8 @@
 		</tr>
 		#{list items:league.getTeamsByRank(), as:'team'}
 		<tr>
-			<td>${team.getDisplayName()}</td> 
-			<td>${league.getPointsForTeam(team)}</td>
+			<td class="team">${team.getDisplayName()}</td> 
+			<td>${league.getNumberOfFinishedGamesWithTeam(team)}</td>
 			<td>${league.getWinsForTeam(team)}</td>
 			<td>${league.getTiesForTeam(team)}</td>
 			<td>${league.getLossesForTeam(team)}</td>
@@ -61,3 +62,5 @@
 #{else}
 	<p class="errorMessage">League not found.</p>
 #{/else}
+
+%{ System.out.println(new Date()); }%

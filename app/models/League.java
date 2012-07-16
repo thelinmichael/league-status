@@ -434,6 +434,10 @@ public class League extends Model {
 		}
 		return (rank > upperQualificationRank);
 	}
+	
+	public int getNumberOfFinishedGamesWithTeam(Team team) {
+		return getFinishedGamesWithTeam(team).size();
+	}
 
 	public boolean isAboveLowerQualification(int rank) {
 		if (upperQualificationRank == null) { 
