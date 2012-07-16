@@ -292,6 +292,10 @@ public class League extends Model {
 		return getBestPossibleRankForTeam(team, getAllPossibleGameEndCombinations());
 	}
 	
+	public int getWorstPossibleRankForTeam(Team team) {
+		return getWorstPossibleRankForTeam(team, getAllPossibleGameEndCombinations());
+	}
+	
 	public int getBestPossibleRankForTeam(Team team, DefaultMutableTreeNode rootNode) {
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
@@ -317,7 +321,7 @@ public class League extends Model {
 		List<Game> oldGames = new ArrayList<Game>(games);
 		for (List<Game> outcome : possibleOutcomes) {
 			for (Game game : outcome) {
-				if (game.teams.contains(team) && game.getTeamsWithHighestScores().contains(team) && !game.isTie()) {
+				if (game.teams.contains(team) && game.getResultFor(team) == Result.WIN) {
 					game.scores.set(game.teams.indexOf(team), new Score(9999)); 
 				}
 			}
@@ -332,5 +336,51 @@ public class League extends Model {
 		}
 		
 		return bestRank;
+	}
+
+	public Integer getWorstPossibleRankForTeam(Team team, DefaultMutableTreeNode rootNode) {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		Integer worstRank = null;
+		
+		List<List<Game>> possibleOutcomes = new ArrayList<List<Game>>(); 
+		DefaultMutableTreeNode leaf = rootNode.getFirstLeaf();
+		while (leaf != null) {
+			TreeNode[] pathToRoot = leaf.getPath();
+			List<Game> outcome = new ArrayList<Game>();
+			for (TreeNode node : pathToRoot) {
+				if (node == rootNode) {
+					continue;
+				} 
+				Game gameInNode = (Game) ((DefaultMutableTreeNode) node).getUserObject();
+				outcome.add(gameInNode); 
+			}
+			possibleOutcomes.add(outcome);
+			leaf = leaf.getNextLeaf();	
+		}
+		
+		List<Game> oldGames = new ArrayList<Game>(games);
+		for (List<Game> outcome : possibleOutcomes) {
+			for (Game game : outcome) {
+				if (game.teams.contains(team) && game.getResultFor(team) == Result.LOSS) {
+					for (Team teamInGame : game.teams) {
+						if (!teamInGame.equals(team)) { 
+							game.scores.set(game.teams.indexOf(teamInGame), new Score(9999)); 
+						}
+					}
+				}
+			}
+			List<Game> playedGames = new ArrayList(getPlayedGames());
+			playedGames.addAll(outcome);
+			games = playedGames;
+			List<Team> teams = getTeamsByRank();
+			if (worstRank == null || (teams.indexOf(team) + 1) > worstRank) {
+				worstRank = teams.indexOf(team) + 1;
+			}
+			games = new ArrayList<Game>(oldGames);
+		}
+		
+		return worstRank;
 	}
 }

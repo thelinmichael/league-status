@@ -18,6 +18,7 @@
 			<td>GD</td>
 			<td>PTS</td>
 			<td>Best possible position</td>
+			<td>Worst possible position</td>
 		</tr>
 		#{list items:league.getTeamsByRank(), as:'team'}
 		<tr>
@@ -31,6 +32,7 @@
 			<td>${league.getGoalDifferenceForTeam(team)}</span>
 			<td>${league.getPointsForTeam(team)}</span>
 			<td>${league.getBestPossibleRankForTeam(team)}</span>
+			<td>${league.getWorstPossibleRankForTeam(team)}</span>
 		</tr>
 		#{/list}
 	</div>

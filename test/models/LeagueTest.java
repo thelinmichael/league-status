@@ -2,6 +2,7 @@ package models;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -458,5 +459,19 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.getBestPossibleRankForTeam(france), is(1));
 		assertThat(league.getBestPossibleRankForTeam(ukraine), is(1));
 		assertThat(league.getBestPossibleRankForTeam(sweden), is(4));
+	}
+	
+	@Test
+	public void canGetWorstPossibleRankForTeams_BasedOnCombinationOfFutureGameOutcomes_severalGames() throws Exception {
+		League league = League.find("byName", "euro-group-d").first();
+		Team sweden = Team.find("byName", "sweden").first();
+		Team england = Team.find("byName", "england").first();
+		Team ukraine = Team.find("byName", "ukraine").first();
+		Team france = Team.find("byName", "france").first();
+		
+		assertThat(league.getWorstPossibleRankForTeam(france), is(3));
+		assertThat(league.getWorstPossibleRankForTeam(ukraine), is(3));
+		assertThat(league.getWorstPossibleRankForTeam(england), is(3));
+		assertThat(league.getWorstPossibleRankForTeam(sweden), is(4));
 	}
 }
