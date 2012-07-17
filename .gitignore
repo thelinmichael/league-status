@@ -9,3 +9,4 @@ test-result
 tmp
 logs
 *.log
+test/mock/test_league.yml~

@@ -24,24 +24,11 @@ public class ScoreTest extends UnitTest {
 		League allsvenskan = League.find("byName", "allsvenskan").first();
 		List<Game> games = Game.find("byLeague", allsvenskan).fetch();
 
-		Team gefleIf = Team.find("byName", "gefle_if").first();
-		
 		assertThat(games.get(0).teams, is(notNullValue()));
 		assertThat(games.get(0).teams.size(), is(2));
 		
-		List<Game> gefleIf_games = gefleIf.games;
-		List<Score> score = gefleIf_games.get(0).scores;
-		assertThat(score, is(notNullValue()));
-		assertThat(score.get(0).goals, is(1));
-		assertThat(score.get(1).goals, is(0));
-		
-		Team team = Team.find("byName", "djurgardens_if").first();
-		
-		List<Game> djurgarden_games = team.games;
-		Game dif_aik = djurgarden_games.get(0);
-		
-		List<Score> dif_aik_scores = dif_aik.scores;
-		assertThat(dif_aik_scores.get(0).goals, is(1));
-		assertThat(dif_aik_scores.get(1).goals, is(0));
+		assertThat(games.get(0).isPlayed(), is(true));
+		assertThat(games.get(0).scores.get(0).goals, is(1));
+		assertThat(games.get(0).scores.get(1).goals, is(0));
 	}
 }
