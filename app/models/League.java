@@ -43,6 +43,8 @@ public class League extends Model {
 	@ManyToMany(mappedBy="leagues")
 	public List<Team> teams;
 	
+	private transient List<Team> teamsByRank;
+	
 	public League(String name, Sport sport) {
 		this.sport = sport;
 		this.name = name;
@@ -181,6 +183,9 @@ public class League extends Model {
 	}
 	
 	public List<Team> getTeamsByRank() {
+		if (teamsByRank != null) {
+			return teamsByRank;
+		}
 		List<Class<? extends Comparator<Team>>> comparatorClasses = sport.getComparators();
 		List<Comparator<Team>> comparators = new ArrayList<Comparator<Team>>();
 		for (Class<? extends Comparator<Team>> comparatorClass : comparatorClasses) {
@@ -205,7 +210,8 @@ public class League extends Model {
 				e.printStackTrace();
 			}
 		}
-		return getTeamsByRank(comparators);
+		teamsByRank = getTeamsByRank(comparators);
+		return teamsByRank;
 	}
 
 	public List<Team> getTeamsByRank(List<Comparator<Team>> comparators) {
@@ -330,6 +336,7 @@ public class League extends Model {
 			List<Game> playedGames = new ArrayList(getPlayedGames());
 			playedGames.addAll(outcome);
 			games = playedGames;
+			clearTeamRank();
 			List<Team> teams = getTeamsByRank();
 			if (bestRank == null || (teams.indexOf(team) + 1) < bestRank) {
 				bestRank = teams.indexOf(team) + 1;
@@ -376,6 +383,7 @@ public class League extends Model {
 			List<Game> playedGames = new ArrayList(getPlayedGames());
 			playedGames.addAll(outcome);
 			games = playedGames;
+			clearTeamRank();
 			List<Team> teams = getTeamsByRank();
 			if (worstRank == null || (teams.indexOf(team) + 1) > worstRank) {
 				worstRank = teams.indexOf(team) + 1;
@@ -453,5 +461,9 @@ public class League extends Model {
 		
 		List<Team> teamsByRank = getTeamsByRank();
 		return teamsByRank.indexOf(team) + 1;
+	}
+	
+	public void clearTeamRank() {
+		teamsByRank = null;
 	}
 }

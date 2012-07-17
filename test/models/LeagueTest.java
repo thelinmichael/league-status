@@ -377,7 +377,6 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.makeDisplayName(teamName), is("gefle_if"));
 	}
 	
-	@Ignore
 	@Test
 	public void canGetAllPossibleGameEndingCombinations_ofALeaguesRemainingGames_oneGame() {
 		Football football = new Football();
@@ -409,7 +408,6 @@ public class LeagueTest extends UnitTest {
 		assertThat(thirdChildGame.teams.get(1), is(team2));
 	}
 	
-	@Ignore
 	@Test
 	public void canGetBestPossibleRankForATeam_BasedOnCombinationsOfFutureGameOutcomes_oneGame() {
 		Football football = new Football();

@@ -34,6 +34,7 @@ public class Game extends Model implements HasTime {
 	}
 	
 	public void setScore(List<Integer> intScores) {
+		league.clearTeamRank();
 		this.scores = new ArrayList<Score>();
 		for (Integer intScore : intScores) {
 			Score score = new Score(intScore);
