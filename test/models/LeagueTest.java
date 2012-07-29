@@ -63,9 +63,9 @@ public class LeagueTest extends UnitTest {
 	
 		Team gefleIf = Team.find("byName", "gefle_if").first();
 		Team djurgardensIf = Team.find("byName", "djurgardens_if").first();
-		Team mjallby = Team.find("byName", "mjallby").first();
+		Team mjallby = Team.find("byName", "mjallby_aif").first();
 		Team aik = Team.find("byName", "aik").first();
-		Team atvidaberg = Team.find("byName", "atvidaberg").first();
+		Team atvidaberg = Team.find("byName", "atvidabergs_ff").first();
 				
 		assertThat(league.teams.size(), is(5));
 		assertThat(league.teams.containsAll(Arrays.asList(gefleIf, djurgardensIf, mjallby, aik, atvidaberg)), is(true));

@@ -87,14 +87,14 @@ Team(gefle_if):
     name:             "gefle_if"
     leagues:           [allsvenskan,allsvenskan2012]
 
-Team(djurgarden):
+Team(djurgardens_if):
     displayName:      "Djurgårdens IF"
     name:             "djurgardens_if"
     leagues:           [allsvenskan,allsvenskan2012]
 
-Team(mjallby):
+Team(mjallby_aif):
     displayName:      "Mjällby"
-    name:             "mjallby"
+    name:             "mjallby_aif"
     leagues:           [allsvenskan,allsvenskan2012] 
     
 Team(aik):
@@ -102,9 +102,9 @@ Team(aik):
     name:           "aik"
     leagues:         [allsvenskan,allsvenskan2012]
        
-Team(atvidaberg):
+Team(atvidabergs_ff):
     displayName:    "Åtvidaberg"
-    name:           "atvidaberg"
+    name:           "atvidabergs_ff"
     leagues:         [allsvenskan,allsvenskan2012]
 
 Team(bk_hacken):
@@ -161,7 +161,7 @@ Team(gais):
     displayName:    "GAIS"
     name:           "gais"
     leagues:         [allsvenskan2012]
-                                            
+    
 Team(chelsea):     
     displayName:    "Chelsea"
     name:           "chelsea"
@@ -208,14 +208,14 @@ Game(gifsundsvall_kalmarff):
     teams:          [gif_sundsvall,kalmar_ff]
     scores:         [score0,score1]
     
-Game(ifelfsborg_djurgardensif):
+Game(ifelfsborg_djurgardens_if):
     league:         allsvenskan2012
-    teams:          [if_elfsborg,djurgarden]
+    teams:          [if_elfsborg,djurgardens_if]
     scores:         [score2,score1]
 
-Game(aik_mjallby):
+Game(aik_mjallby_aif):
     league:         allsvenskan2012
-    teams:          [aik,mjallby]
+    teams:          [aik,mjallby_aif]
     scores:         [score0,score0]
 
 Game(syrianskafc_ifkgoteborg):
@@ -228,9 +228,9 @@ Game(malmoff_gefleif):
     teams:          [malmo_ff,gefle_if]
     scores:         [score0,score0]
     
-Game(orebrosk_atvidabergsff):
+Game(orebrosk_atvidabergs_ffsff):
     league:         allsvenskan2012
-    teams:          [orebro_sk,atvidaberg]
+    teams:          [orebro_sk,atvidabergs_ff]
     scores:         [score3,score4]
     
 Game(ifknorrkoping_helsingborgsif):
@@ -238,9 +238,9 @@ Game(ifknorrkoping_helsingborgsif):
     teams:          [ifk_norrkoping,helsingborgs_if]
     scores:         [score1,score0]    
 
-Game(atvidaberg_gais):
+Game(atvidabergs_ff_gais):
     league:         allsvenskan2012
-    teams:          [atvidaberg,gais]
+    teams:          [atvidabergs_ff,gais]
     scores:         [score2,score1]   
 
 Game(gefleif_syrianska):
@@ -253,14 +253,14 @@ Game(bkhacken_malmoff):
     teams:          [bk_hacken,malmo_ff]
     scores:         [score5,score0]           
 
-Game(mjallby_orebrosk):
+Game(mjallby_aif_orebrosk):
     league:         allsvenskan2012
-    teams:          [mjallby,orebro_sk]
+    teams:          [mjallby_aif,orebro_sk]
     scores:         [score0,score0]   
 
-Game(djurgardensif_gifsundsvall):
+Game(djurgardens_if_gifsundsvall):
     league:         allsvenskan2012
-    teams:          [djurgarden,gif_sundsvall]
+    teams:          [djurgardens_if,gif_sundsvall]
     scores:         [score1,score0]   
 
 Game(helsingborgsif_ifelfsborg):
@@ -278,14 +278,14 @@ Game(kalmarff_aik):
     teams:          [kalmar_ff,aik]
     scores:         [score1,score2]   
     
-Game(atvidaberg_gefleif):
+Game(atvidabergs_ff_gefleif):
     league:         allsvenskan2012
-    teams:          [atvidaberg,gefle_if]
+    teams:          [atvidabergs_ff,gefle_if]
     scores:         [score6,score1]   
 
-Game(gais_djurgarden):
+Game(gais_djurgardens_if):
     league:         allsvenskan2012
-    teams:          [gais,djurgarden]
+    teams:          [gais,djurgardens_if]
     scores:         [score0,score0]   
 
 Game(orebrosk_helsingborgsif):
@@ -293,9 +293,9 @@ Game(orebrosk_helsingborgsif):
     teams:          [orebro_sk,helsingborgs_if]
     scores:         [score0,score0]   
 
-Game(bkhacken_mjallby):
+Game(bkhacken_mjallby_aif):
     league:         allsvenskan2012
-    teams:          [bk_hacken,mjallby]
+    teams:          [bk_hacken,mjallby_aif]
     scores:         [score4,score2]   
 
 Game(gifsundsvall_syrianskafc):
@@ -328,9 +328,9 @@ Game(ifkgoteborg_orebrosk):
     teams:          [ifk_goteborg,orebro_sk]
     scores:         [score2,score2]   
 
-Game(mjallby_atvidaberg):
+Game(mjallby_aif_atvidabergs_ff):
     league:         allsvenskan2012
-    teams:          [mjallby,atvidaberg]
+    teams:          [mjallby_aif,atvidabergs_ff]
     scores:         [score2,score0]   
 
 Game(gefleif_ifelfsborg):
@@ -353,19 +353,19 @@ Game(kalmarff_bkhacken):
     teams:          [kalmar_ff,bk_hacken]
     scores:         [score3,score1]   
 
-Game(djurgarden_malmoff):
+Game(djurgardens_if_malmoff):
     league:         allsvenskan2012
-    teams:          [djurgarden,malmo_ff]
+    teams:          [djurgardens_if,malmo_ff]
     scores:         [score2,score3]   
     
-Game(mjallby_djurgarden):
+Game(mjallby_aif_djurgardens_if):
     league:         allsvenskan2012
-    teams:          [mjallby,djurgarden]
+    teams:          [mjallby_aif,djurgardens_if]
     scores:         [score4,score3]   
 
-Game(atvidaberg_helsingborgsif):
+Game(atvidabergs_ff_helsingborgsif):
     league:         allsvenskan2012
-    teams:          [atvidaberg,helsingborgs_if]
+    teams:          [atvidabergs_ff,helsingborgs_if]
     scores:         [score1,score2]   
 
 Game(kalmarff_gefleif):
@@ -408,9 +408,9 @@ Game(ifelfsborg_gais):
     teams:          [if_elfsborg,gais]
     scores:         [score2,score1]   
 
-Game(helsingborgsif_mjallby):
+Game(helsingborgsif_mjallby_aif):
     league:         allsvenskan2012
-    teams:          [helsingborgs_if,mjallby]
+    teams:          [helsingborgs_if,mjallby_aif]
     scores:         [score1,score1]   
 
 Game(syrianska_bkhacken):
@@ -418,14 +418,14 @@ Game(syrianska_bkhacken):
     teams:          [syrianska_fc,bk_hacken]
     scores:         [score1,score2]   
 
-Game(ifkgoteborg_atvidaberg):
+Game(ifkgoteborg_atvidabergs_ff):
     league:         allsvenskan2012
-    teams:          [ifk_goteborg,atvidaberg]
+    teams:          [ifk_goteborg,atvidabergs_ff]
     scores:         [score2,score1]
     
-Game(djurgarden_kalmarff):
+Game(djurgardens_if_kalmarff):
     league:         allsvenskan2012
-    teams:          [djurgarden,kalmar_ff]
+    teams:          [djurgardens_if,kalmar_ff]
     scores:         [score1,score1]   
 
 Game(gifsundsvall_orebrosk):
@@ -438,9 +438,9 @@ Game(ifknorrkoping_malmoff):
     teams:          [ifk_norrkoping,malmo_ff]
     scores:         [score3,score2]   
 
-Game(atvidaberg_bkhacken):
+Game(atvidabergs_ff_bkhacken):
     league:         allsvenskan2012
-    teams:          [atvidaberg,bk_hacken]
+    teams:          [atvidabergs_ff,bk_hacken]
     scores:         [score0,score3]   
 
 Game(ifkgoteborg_gifsundsvall):
@@ -448,14 +448,19 @@ Game(ifkgoteborg_gifsundsvall):
     teams:          [ifk_goteborg,gif_sundsvall]
     scores:         [score2,score0]   
 
+Game(syrianska_fc_if_elfsborg):
+    league:     allsvenskan2012
+    teams:     [syrianska_fc,if_elfsborg]
+    scores:     [score1,score4]
+
 Game(helsingborgsif_aik):
     league:         allsvenskan2012
     teams:          [helsingborgs_if,aik]
     scores:         [score0,score0]   
 
-Game(djurgarden_orebrosk):
+Game(djurgardens_if_orebrosk):
     league:         allsvenskan2012
-    teams:          [djurgarden,orebro_sk]
+    teams:          [djurgardens_if,orebro_sk]
     scores:         [score2,score1]   
 
 Game(gefleif_ifknorrkoping):
@@ -463,9 +468,9 @@ Game(gefleif_ifknorrkoping):
     teams:          [gefle_if,ifk_norrkoping]
     scores:         [score0,score2]   
 
-Game(mjallby_malmoff):
+Game(mjallby_aif_malmoff):
     league:         allsvenskan2012
-    teams:          [mjallby,malmo_ff]
+    teams:          [mjallby_aif,malmo_ff]
     scores:         [score2,score2]   
 
 Game(kalmarff_gais):
@@ -473,16 +478,364 @@ Game(kalmarff_gais):
     teams:          [kalmar_ff,gais]
     scores:         [score2,score2]   
 
-Game(syrianskafc_ifelfsborg):
+Game(gifsundsvall_helsingborgsif):
     league:         allsvenskan2012
-    teams:          [syrianska_fc,if_elfsborg]
-    scores:         [score1,score4]   
-                                       
+    teams:          [gif_sundsvall,helsingborgs_if]
+    scores:         [score0,score1]
+    
+Game(ifknorrkoping_syrianskafc):
+    league:         allsvenskan2012
+    teams:          [ifk_norrkoping,syrianska_fc]
+    scores:         [score1,score4]
+                
+Game(malmoff_atvidabergs_ff):
+    league:         allsvenskan2012
+    teams:          [malmo_ff,atvidabergs_ff]
+    scores:         [score2,score1]   
+
+Game(gais_mjallby_aif):
+    league:         allsvenskan2012
+    teams:          [gais,mjallby_aif]
+    scores:         [score2,score2]   
+
+Game(orebrosk_kalmarff):
+    league:         allsvenskan2012
+    teams:          [orebro_sk,kalmar_ff]
+    scores:         [score0,score1]   
+
+Game(ifelfsborg_ifkgoteborg):
+    league:         allsvenskan2012
+    teams:          [if_elfsborg,ifk_goteborg]
+    scores:         [score1,score0]   
+
+Game(aik_djurgardens_if2):
+    league:         allsvenskan2012
+    teams:          [aik,djurgardens_if]
+    scores:         [score1,score1]                                                         
+     
+Game(bkhacken_gefleif):
+    league:         allsvenskan2012
+    teams:          [bk_hacken,gefle_if]
+    scores:         [score3,score0]   
+
+Game(syrianskafc_gais):
+    league:         allsvenskan2012
+    teams:          [syrianska_fc,gais]
+    scores:         [score2,score0]
+    
+Game(djurgardens_if_atvidabergs_ff):
+    league:     allsvenskan2012
+    teams:     [djurgardens_if,atvidabergs_ff]
+    scores:     [score1,score1]       
+
+Game(kalmar_ff_mjallby_aif):
+    league:     allsvenskan2012
+    teams:     [kalmar_ff,mjallby_aif]
+    scores:     [score1,score2]
+
+Game(ifk_norrkoping_orebro_sk):
+    league:     allsvenskan2012
+    teams:     [ifk_norrkoping,orebro_sk]
+    scores:     [score3,score0]
+    
+Game(helsingborgs_if_bk_hacken):
+    league:     allsvenskan2012
+    teams:     [helsingborgs_if,bk_hacken]
+    scores:     [score3,score2]
+    
+Game(if_elfsborg_aik):
+    league:     allsvenskan2012
+    teams:     [if_elfsborg,aik]
+    scores:     [score1,score0]
+
+Game(gefle_if_gif_sundsvall):
+    league:     allsvenskan2012
+    teams:     [gefle_if,gif_sundsvall]
+    scores:     [score0,score0]
+
+Game(ifk-goteborg_malmo_ff):
+    league:     allsvenskan2012
+    teams:     [ifk_goteborg,malmo_ff]
+    scores:     [score2,score2]
+
+Game(atvidabergs_ff_syrianska_fc):
+    league:     allsvenskan2012
+    teams:     [atvidabergs_ff,syrianska_fc]
+    scores:     [score1,score0]
+
+Game(bk_hacken_ifk_norrkoping):
+    league:     allsvenskan2012
+    teams:     [bk_hacken,ifk_norrkoping]
+    scores:     [score6,score0]
+
+Game(kalmar_ff_helsingborgs_if):
+    league:     allsvenskan2012
+    teams:     [kalmar_ff,helsingborgs_if]
+    scores:     [score1,score1]
+
+Game(orebro_sk_aik):
+    league:     allsvenskan2012
+    teams:     [orebro_sk,aik]
+    scores:     [score2,score2]
+
+Game(gais_gif_sundsvall):
+    league:     allsvenskan2012
+    teams:     [gais,gif_sundsvall]
+    scores:     [score1,score2]            
+    
+Game(mjallby_aif_ifk_goteborg):
+    league:     allsvenskan2012
+    teams:     [mjallby_aif,ifk_goteborg]
+    scores:     [score1,score1]    
+    
+Game(djurgardens_if_gefle_if):
+    league:     allsvenskan2012
+    teams:     [djurgardens_if,gefle_if]
+    scores:     [score1,score1]    
+    
+Game(malmo_ff_if_elfsborg):
+    league:     allsvenskan2012
+    teams:     [malmo_ff,if_elfsborg]
+    scores:     [score1,score0]                
+    
+Game(malmo_ff_helsingborgs_if):
+    league:     allsvenskan2012
+    teams:     [malmo_ff,helsingborgs_if]
+    scores:     [score3,score0]
+
+Game(atvidabergs_ffs_ff_kalmar_ff):
+    league:     allsvenskan2012
+    teams:     [atvidabergs_ff,kalmar_ff]
+    scores:     [score3,score0]
+    
+Game(bk_hacken_djurgardens_if):
+    league:     allsvenskan2012
+    teams:     [bk_hacken,djurgardens_if]
+    scores:     [score1,score1]
+    
+Game(aik_ifk_norrkoping):
+    league:     allsvenskan2012
+    teams:     [aik,ifk_norrkoping]
+    scores:     [score5,score2]
+
+Game(mjallby_aif_gefle_if):
+    league:     allsvenskan2012
+    teams:     [mjallby_aif,gefle_if]
+    scores:     [score0,score0]
+
+Game(orebro_sk_syrianska_fc):
+    league:     allsvenskan2012
+    teams:     [orebro_sk,syrianska_fc]
+    scores:     [score0,score1]
+
+Game(gif_sundsvall_if_elfsborg):
+    league:     allsvenskan2012
+    teams:     [gif_sundsvall,if_elfsborg]
+    scores:     [score0,score3]
+
+Game(gais_ifk_goteborg):
+    league:     allsvenskan2012
+    teams:     [gais,ifk_goteborg]
+    scores:     [score1,score1]
+
+Game(gefle_if_orebro_sk):
+    league:     allsvenskan2012
+    teams:     [gefle_if,orebro_sk]
+    scores:     [score2,score1]
+
+Game(helsingborgs_if_djurgardens_if):
+    league:     allsvenskan2012
+    teams:     [helsingborgs_if,djurgardens_if]
+    scores:     [score1,score1]
+
+Game(ifk_norrkoping_atvidabergs_ffs_ff):
+    league:     allsvenskan2012
+    teams:     [ifk_norrkoping,atvidabergs_ff]
+    scores:     [score2,score2]
+
+Game(syrianska_fc_mjallby_aif):
+    league:     allsvenskan2012
+    teams:     [syrianska_fc,mjallby_aif]
+    scores:     [score2,score1]
+
+Game(aik_gais):
+    league:     allsvenskan2012
+    teams:     [aik,gais]
+    scores:     [score1,score0]
+
+Game(gif_sundsvall_malmo_ff):
+    league:     allsvenskan2012
+    teams:     [gif_sundsvall,malmo_ff]
+    scores:     [score1,score1]
+
+Game(if_elfsborg_bk_hacken):
+    league:     allsvenskan2012
+    teams:     [if_elfsborg,bk_hacken]
+    scores:     [score2,score0]
+
+Game(ifk_goteborg_kalmar_ff):
+    league:     allsvenskan2012
+    teams:     [ifk_goteborg,kalmar_ff]
+    scores:     [score1,score1]
+
+Game(atvidabergs_ff_if_elfsborg):
+    league:     allsvenskan2012
+    teams:     [atvidabergs_ff,if_elfsborg]
+    scores:     [score5,score1]
+
+Game(bk_hacken_gif_sundsvall):
+    league:     allsvenskan2012
+    teams:     [bk_hacken,gif_sundsvall]
+    scores:     [score1,score2]
+
+Game(kalmar_ff_syrianska_fc):
+    league:     allsvenskan2012
+    teams:     [kalmar_ff,syrianska_fc]
+    scores:     [score3,score0]
+
+Game(mjallby_aif_ifk_norrkoping):
+    league:     allsvenskan2012
+    teams:     [mjallby_aif,ifk_norrkoping]
+    scores:     [score0,score2]
+
+Game(helsingborgs_if_gefle_if):
+    league:     allsvenskan2012
+    teams:     [helsingborgs_if,gefle_if]
+    scores:     [score4,score1]
+
+Game(malmo_ff_aik):
+    league:     allsvenskan2012
+    teams:     [malmo_ff,aik]
+    scores:     [score4,score0]
+
+Game(djurgardens_if_ifk_goteborg):
+    league:     allsvenskan2012
+    teams:     [djurgardens_if,ifk_goteborg]
+    scores:     [score3,score2]
+
+Game(gais_orebro_sk):
+    league:     allsvenskan2012
+    teams:     [gais,orebro_sk]
+    scores:     [score0,score1]
+
+Game(gif_sundsvall_atvidabergs_ff):
+    league:     allsvenskan2012
+    teams:     [gif_sundsvall,atvidabergs_ff]
+    scores:     [score3,score3]
+
+Game(syrianska_fc_djurgardens_if):
+    league:     allsvenskan2012
+    teams:     [syrianska_fc,djurgardens_if]
+    scores:     [score1,score1]
+
+Game(aik_bk_hacken):
+    league:     allsvenskan2012
+    teams:     [aik,bk_hacken]
+    scores:     [score3,score1]
+
+Game(gefle_if_gais):
+    league:     allsvenskan2012
+    teams:     [gefle_if,gais]
+    scores:     [score0,score0]
+
+Game(if_elfsborg_mjallby_aif):
+    league:     allsvenskan2012
+    teams:     [if_elfsborg,mjallby_aif]
+    scores:     [score0,score0]
+
+Game(ifk_norrkoping_kalmar_ff):
+    league:     allsvenskan2012
+    teams:     [ifk_norrkoping,kalmar_ff]
+    scores:     [score2,score1]
+
+Game(orebro_sk_malmo_ff):
+    league:     allsvenskan2012
+    teams:     [orebro_sk,malmo_ff]
+    scores:     [score2,score1]
+
+Game(ifk_goteborg_helsingborgs_if):
+    league:     allsvenskan2012
+    teams:     [ifk_goteborg,helsingborgs_if]
+    scores:     [score1,score1]
+
+Game(atvidabergs_ff_aik):
+    league:     allsvenskan2012
+    teams:     [atvidabergs_ff,aik]
+    scores:     [score2,score0]
+
+Game(helsingborgs_if_syrianska_fc):
+    league:     allsvenskan2012
+    teams:     [helsingborgs_if,syrianska_fc]
+    scores:     [score1,score0]
+
+Game(ifk_goteborg_gefle_if):
+    league:     allsvenskan2012
+    teams:     [ifk_goteborg,gefle_if]
+    scores:     [score1,score1]
+
+Game(mjallby_aif_gif_sundsvall):
+    league:     allsvenskan2012
+    teams:     [mjallby_aif,gif_sundsvall]
+    scores:     [score1,score0]
+
+Game(orebro_sk_bk_hacken):
+    league:     allsvenskan2012
+    teams:     [orebro_sk,bk_hacken]
+    scores:     [score1,score2]
+
+Game(kalmar_ff_if_elfsborg):
+    league:     allsvenskan2012
+    teams:     [kalmar_ff,if_elfsborg]
+    scores:     [score2,score1]
+
+Game(djurgardens_if_ifk_norrkoping):
+    league:     allsvenskan2012
+    teams:     [djurgardens_if,ifk_norrkoping]
+    scores:     [score1,score1]
+
+Game(malmo_ff_gais):
+    league:     allsvenskan2012
+    teams:     [malmo_ff,gais]
+    scores:     [score2,score0]
+
+Game(bk_hacken_orebro_sk):
+    league:     allsvenskan2012
+    teams:     [bk_hacken,orebro_sk]    
+
+Game(gefle_if_ifk_goteborg):
+    league:     allsvenskan2012
+    teams:     [gefle_if,ifk_goteborg]
+
+Game(gif_sundsvall_mjallby_aif):
+    league:     allsvenskan2012
+    teams:     [gif_sundsvall,mjallby_aif]
+    
+Game(syrianska_fc_helsingborgs_if):
+    league:     allsvenskan2012
+    teams:     [syrianska_fc,helsingborgs_if]
+
+Game(if_elfsborg_kalmar_ff):
+    league:     allsvenskan2012
+    teams:     [if_elfsborg,kalmar_ff]
+
+Game(aik_atvidabergs_ff):
+    league:     allsvenskan2012
+    teams:     [aik,atvidabergs_ff]
+
+Game(gais_malmo_ff):
+    league:     allsvenskan2012
+    teams:     [gais,malmo_ff]
+
+Game(ifk_norrkoping_djurgardens_if):
+    league:     allsvenskan2012
+    teams:     [ifk_norrkoping,djurgardens_if]
+
+
 Game(euro_group_a_poland_greece):
     league:         euro-group-a
     teams:          [poland,greece]
     scores:         [score1,score1]
-    
+
 Game(euro_group_a_russia_czech):
     league:         euro-group-a
     teams:          [russia,czech]
@@ -538,21 +891,21 @@ Game(euro_group_d_sweden_france):
         
 Game(allsvenskan_game1):
     league:         allsvenskan
-    teams:          [gefle_if,djurgarden]
+    teams:          [gefle_if,djurgardens_if]
     scores:         [score1,score0]
 
 Game(allsvenskan_game2):
-    teams:          [aik,djurgarden]
+    teams:          [aik,djurgardens_if]
     league:         allsvenskan
     scores:         [score0,score1]
         
 Game(allsvenskan_game3):
-    teams:          [aik,djurgarden]
+    teams:          [aik,djurgardens_if]
     league:         allsvenskan   
     scores:         [score0,score1]   
 
 Game(allsvenskan_game4):
-    teams:          [aik,djurgarden]
+    teams:          [aik,djurgardens_if]
     league:         allsvenskan      
     
 Game(premierleague_game1):
