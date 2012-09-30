@@ -1,0 +1,5 @@
+This project is currently in the proverbial freezer until I have more time.
+
+The aim of League Status is a web application which can present any league table given a set of match fixtures, and calculate the scenarios in which any given team would reach a certain position in the table when all fixtures were completed. 
+
+Use case: 10 games are left of the Premier League season, and Liverpool is currently at rank 7. Is it still possible for them to win the league? If not, what is the best possible position? 
