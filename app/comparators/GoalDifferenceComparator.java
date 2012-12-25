@@ -15,8 +15,9 @@ public class GoalDifferenceComparator implements Comparator<Team> {
 	
 	@Override
 	public int compare(Team team1, Team team2) {
-		Integer team1GoalDifference = league.getGoalsScoredByTeam(team1) - league.getGoalsScoredAgainstTeam(team1);
-		Integer team2GoalDifference = league.getGoalsScoredByTeam(team2) - league.getGoalsScoredAgainstTeam(team2);
+		Integer team1GoalDifference = league.getGoalsScoredBy(team1) - league.getGoalsConcededBy(team1);
+		Integer team2GoalDifference = league.getGoalsScoredBy(team2) - league.getGoalsConcededBy(team2);
+		
 		return team1GoalDifference.compareTo(team2GoalDifference);
 	}
 

@@ -175,14 +175,14 @@ public class LeagueTest extends UnitTest {
 		Team greece = Team.find("byName", "greece").first();
 		Team russia = Team.find("byName", "russia").first();
 		
-		assertThat(league.getGoalsScoredByTeam(czech), is(4));
-		assertThat(league.getGoalsScoredAgainstTeam(czech), is(5));
-		assertThat(league.getGoalsScoredByTeam(russia), is(5));
-		assertThat(league.getGoalsScoredAgainstTeam(russia), is(3));
-		assertThat(league.getGoalsScoredByTeam(greece), is(3));
-		assertThat(league.getGoalsScoredAgainstTeam(greece), is(3));
-		assertThat(league.getGoalsScoredByTeam(poland), is(2));
-		assertThat(league.getGoalsScoredAgainstTeam(poland), is(3));
+		assertThat(league.getGoalsScoredBy(czech), is(4));
+		assertThat(league.getGoalsConcededBy(czech), is(5));
+		assertThat(league.getGoalsScoredBy(russia), is(5));
+		assertThat(league.getGoalsConcededBy(russia), is(3));
+		assertThat(league.getGoalsScoredBy(greece), is(3));
+		assertThat(league.getGoalsConcededBy(greece), is(3));
+		assertThat(league.getGoalsScoredBy(poland), is(2));
+		assertThat(league.getGoalsConcededBy(poland), is(3));
 	}
 	
 	@Test
@@ -273,9 +273,9 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.getPointsForTeam(team2), is(5));
 		assertThat(league.getPointsForTeam(team3), is(0));
 		
-		assertThat(league.getGoalsScoredByTeam(team1) - league.getGoalsScoredAgainstTeam(team1), is(1));
-		assertThat(league.getGoalsScoredByTeam(team2) - league.getGoalsScoredAgainstTeam(team2), is(3));
-		assertThat(league.getGoalsScoredByTeam(team3) - league.getGoalsScoredAgainstTeam(team3), is(-4));
+		assertThat(league.getGoalsScoredBy(team1) - league.getGoalsConcededBy(team1), is(1));
+		assertThat(league.getGoalsScoredBy(team2) - league.getGoalsConcededBy(team2), is(3));
+		assertThat(league.getGoalsScoredBy(team3) - league.getGoalsConcededBy(team3), is(-4));
 		
 		List<Comparator<Team>> priorities = Arrays.asList((Comparator<Team>) new PointComparator(league), (Comparator<Team>) new GoalsScoredComparator(league));
 		List<Team> teamsOrderedByRank = league.getTeamsByRank(priorities);
@@ -356,7 +356,7 @@ public class LeagueTest extends UnitTest {
 		league.games.get(3).setScore(Arrays.asList(1, 1));
 
 		List<Game> russiaFinishedGames = league.getFinishedGamesWithTeam(russia);
-		List<Game> russiaAllGames = league.getAllGamesWithTeam(russia);
+		List<Game> russiaAllGames = league.getAllGamesPlayedBy(russia);
 		
 		assertThat(russiaAllGames.size(), is(3));
 		assertThat(russiaAllGames.containsAll(Arrays.asList(russiaCzech, polandRussia, greeceRussia)), is(true));

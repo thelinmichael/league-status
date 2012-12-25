@@ -9,7 +9,7 @@ import play.jobs.OnApplicationStart;
 import play.test.Fixtures;
 
 @OnApplicationStart
-public class StartUp extends Job {
+public class LoadFixturesJob extends Job {
 	
 	public void doJob() {
 		if (Play.runingInTestMode()) {

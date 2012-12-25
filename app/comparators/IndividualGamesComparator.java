@@ -1,13 +1,16 @@
 package comparators;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import util.Result;
+import com.google.common.collect.Sets;
 
 import models.Game;
 import models.League;
 import models.Team;
+import util.Result;
 
 public class IndividualGamesComparator implements Comparator<Team> {
 
@@ -19,15 +22,15 @@ public class IndividualGamesComparator implements Comparator<Team> {
 
 	@Override
 	public int compare(Team team1, Team team2) {
-		List<Game> team1Games = league.getAllGamesWithTeam(team1);
-		List<Game> team2Games = league.getAllGamesWithTeam(team2);
-		
-		team1Games.retainAll(team2Games);
+		List<Game> team1Games = league.getAllGamesPlayedBy(team1);
+		List<Game> team2Games = league.getAllGamesPlayedBy(team2);
+				
+		Set<Game> games = Sets.intersection(new HashSet(team1Games), new HashSet(team2Games));
 
 		Integer team1Points = 0;
 		Integer team2Points = 0;
 		
-		for (Game game : team1Games) {
+		for (Game game : games) {
 			if (game.getResultFor(team1) == Result.WIN) {
 				team1Points += league.sport.getPointsForWin();
 				team2Points += league.sport.getPointsForLoss();

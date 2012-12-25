@@ -17,46 +17,48 @@ import util.Result;
 @Entity
 public class Football extends Sport {
 
-	public Integer win = 3;
-	public Integer tie = 1;
-	public Integer loss = 0;
-	public String displayName = "Football";
-	public String name = "football";
+	public final static Integer POINTS_FOR_WIN = 3;
+	public final static Integer POINTS_FOR_TIE = 1;
+	public final static Integer POINTS_FOR_LOSS = 0;
+	public final static Integer SEASON_START_POINTS = 0;
+	
+	public final static String DISPLAY_NAME = "Football";
+	public final static String NAME = "football";
 	
 	public transient List<Comparator> comparators;
 	
 	@Override
 	public Integer getPointsForWin() {
-		return win;
+		return POINTS_FOR_WIN;
 	}
 
 	@Override
 	public Integer getPointsForLoss() {
-		return loss;
+		return POINTS_FOR_LOSS;
 	}
 
 	@Override
 	public Integer getPointsForTie() {
-		return tie;
+		return POINTS_FOR_TIE;
 	}
 	
 	@Override
 	public String getDisplayName() {
-		return displayName;
+		return DISPLAY_NAME;
 	}
 	
 	@Override
 	public String getName() {
-		return name;
+		return NAME;
 	}
 	
 	public Integer getPointsFor(Result result) {
 		if (result == Result.WIN) {
-			return win;
+			return POINTS_FOR_WIN;
 		} else if (result == Result.TIE) {
-			return tie;
+			return POINTS_FOR_TIE;
 		} else if (result == Result.LOSS) { 
-			return loss;
+			return POINTS_FOR_LOSS;
 		} else {
 			throw new IllegalArgumentException("Result not available.");
 		}

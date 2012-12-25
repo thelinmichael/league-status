@@ -6,7 +6,7 @@ import util.HasTime;
 
 import models.Game;
 
-public class ChronoComparator implements Comparator<HasTime> {
+public class DateComparator implements Comparator<HasTime> {
 
 	@Override
 	public int compare(HasTime o1, HasTime o2) {

@@ -28,8 +28,8 @@
 			<td>${league.getWinsForTeam(team)}</td>
 			<td>${league.getTiesForTeam(team)}</td>
 			<td>${league.getLossesForTeam(team)}</td>
-			<td>${league.getGoalsScoredByTeam(team)}</td>
-			<td>${league.getGoalsScoredAgainstTeam(team)}</span>
+			<td>${league.getGoalsScoredBy(team)}</td>
+			<td>${league.getGoalsConcededBy(team)}</span>
 			<td>${league.getGoalDifferenceForTeam(team)}</span>
 			<td>${league.getPointsForTeam(team)}</span>
 			<td><span #{if league.isInLowerQualification(league.getBestPossibleRankForTeam(team))} class="belowQualification"#{/if}#{elseif league.isInUpperQualification(league.getBestPossibleRankForTeam(team))} class="upperQualification"#{/elseif}>${league.getBestPossibleRankForTeam(team)}</span></td>

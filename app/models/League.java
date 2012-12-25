@@ -21,7 +21,7 @@ import org.apache.commons.collections.comparators.ComparatorChain;
 import play.db.jpa.Model;
 import util.Result;
 
-import comparators.ChronoComparator;
+import comparators.DateComparator;
 
 import exceptions.GameNotPlayedException;
 
@@ -94,7 +94,7 @@ public class League extends Model {
 			games = new ArrayList<Game>();
 		}
 		List<Game> sortedGames = new ArrayList<Game>(games);
-		Collections.sort(sortedGames, new ChronoComparator());
+		Collections.sort(sortedGames, new DateComparator());
 		Collections.reverse(sortedGames);
 		return sortedGames;
 	}
@@ -145,10 +145,10 @@ public class League extends Model {
 	}
 	
 	public Integer getGoalDifferenceForTeam(Team team) {
-		return (getGoalsScoredByTeam(team) - getGoalsScoredAgainstTeam(team));
+		return (getGoalsScoredBy(team) - getGoalsConcededBy(team));
 	}
 	
-	public Integer getGoalsScoredByTeam(Team team) {
+	public Integer getGoalsScoredBy(Team team) {
 		Integer goals = 0;
 		
 		if (!teams.contains(team)) {
@@ -165,7 +165,7 @@ public class League extends Model {
 		return goals;
 	}
 
-	public Integer getGoalsScoredAgainstTeam(Team team) {
+	public Integer getGoalsConcededBy(Team team) {
 		Integer goals = 0;
 		
 		if (!teams.contains(team)) {
@@ -239,7 +239,7 @@ public class League extends Model {
 		return returnedGames;
  	}
 	
-	public List<Game> getAllGamesWithTeam(Team team) {
+	public List<Game> getAllGamesPlayedBy(Team team) {
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
 		}
