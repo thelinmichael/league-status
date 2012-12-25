@@ -51,7 +51,7 @@ public class LeagueTest extends UnitTest {
 		Team team1 = league.teams.get(0);
 		Team team2 = league.teams.get(1);
 		
-		Game game = new Game(league, Arrays.asList(team1, team2));
+		Game game = new Game(league, team1, team2);
 		league.addGame(game);
 		
 		assertThat(league.games.size(), is(numberOfGamesBeforeAddingAnotherGame + 1));
@@ -88,16 +88,16 @@ public class LeagueTest extends UnitTest {
 		league.teams = Arrays.asList(team1, team2);
 		league.save();
 		
-		GameBuilder builder = new GameBuilder(league, Arrays.asList(team1, team2));
+		GameBuilder builder = new GameBuilder(league, team1, team2);
 		Game game1 = builder.time(new Date(377257800L)).build().save();
 
-		builder = new GameBuilder(league, Arrays.asList(team1, team2));
+		builder = new GameBuilder(league, team1, team2);
 		Game game2 = builder.time(new Date(477257800L)).build().save();
 
-		builder = new GameBuilder(league, Arrays.asList(team2, team1));
+		builder = new GameBuilder(league, team2, team1);
 		Game game3 = builder.time(new Date(577257800L)).build().save();
 		
-		builder = new GameBuilder(league, Arrays.asList(team2, team1));
+		builder = new GameBuilder(league, team2, team1);
 		Game game4 = builder.time(new Date(677257800L)).build().save();
 		
 		league.addGames(Arrays.asList(game1, game2, game3, game4));
@@ -195,18 +195,18 @@ public class LeagueTest extends UnitTest {
 		league.teams = Arrays.asList(team1, team2, team3, team4);
 		
 		List<Game> newGames = new ArrayList<Game>();
-		newGames.add(new Game(league, Arrays.asList(team1, team2)));
-		newGames.add(new Game(league, Arrays.asList(team1, team3)));
-		newGames.add(new Game(league, Arrays.asList(team1, team4)));
-		newGames.add(new Game(league, Arrays.asList(team2, team1)));
-		newGames.add(new Game(league, Arrays.asList(team2, team3)));
-		newGames.add(new Game(league, Arrays.asList(team2, team4)));
-		newGames.add(new Game(league, Arrays.asList(team3, team1)));
-		newGames.add(new Game(league, Arrays.asList(team3, team2)));
-		newGames.add(new Game(league, Arrays.asList(team3, team4)));
-		newGames.add(new Game(league, Arrays.asList(team4, team1)));
-		newGames.add(new Game(league, Arrays.asList(team4, team2)));
-		newGames.add(new Game(league, Arrays.asList(team4, team3)));
+		newGames.add(new Game(league, team1, team2));
+		newGames.add(new Game(league, team1, team3));
+		newGames.add(new Game(league, team1, team4));
+		newGames.add(new Game(league, team2, team1));
+		newGames.add(new Game(league, team2, team3));
+		newGames.add(new Game(league, team2, team4));
+		newGames.add(new Game(league, team3, team1));
+		newGames.add(new Game(league, team3, team2));
+		newGames.add(new Game(league, team3, team4));
+		newGames.add(new Game(league, team4, team1));
+		newGames.add(new Game(league, team4, team2));
+		newGames.add(new Game(league, team4, team3));
 		
 		league.addGames(newGames);
 		assertThat(league.games, is(notNullValue()));
@@ -253,18 +253,19 @@ public class LeagueTest extends UnitTest {
 		Team team1 = new Team("team1");
 		Team team2 = new Team("team2");
 		Team team3 = new Team("team3");
+		
 		league.teams = Arrays.asList(team1, team2, team3);
 		
-		GameBuilder builder = new GameBuilder(league, Arrays.asList(team1, team2));
+		GameBuilder builder = new GameBuilder(league, team1, team2);
 		Game game1 = builder.score(Arrays.asList(1,1)).build();
 		
-		builder = new GameBuilder(league, Arrays.asList(team2, team1));
+		builder = new GameBuilder(league, team2, team1);
 		Game game2 = builder.score(Arrays.asList(3,3)).build();
 		
-		builder = new GameBuilder(league, Arrays.asList(team1, team3));
+		builder = new GameBuilder(league, team1, team3);
 		Game game3 = builder.score(Arrays.asList(5,4)).build();
 		
-		builder = new GameBuilder(league, Arrays.asList(team2, team3));
+		builder = new GameBuilder(league, team2, team3);
 		Game game4 = builder.score(Arrays.asList(3,0)).build();
 
 		league.addGames(Arrays.asList(game1, game2, game3, game4));
@@ -289,7 +290,7 @@ public class LeagueTest extends UnitTest {
 		assertThat(teamsOrderedByRank.get(1), is(team2));
 		assertThat(teamsOrderedByRank.get(2), is(team3));
 		
-		league.games.add(new Game(league, Arrays.asList(team2, team3)));
+		league.games.add(new Game(league, team2, team3));
 		league.games.get(4).setScore(Arrays.asList(2, 3));
 		
 		priorities = Arrays.asList((Comparator<Team>) new PointComparator(league), (Comparator<Team>) new GoalsScoredComparator(league), (Comparator<Team>) new GoalDifferenceComparator(league));
@@ -341,12 +342,12 @@ public class LeagueTest extends UnitTest {
 		league.teams = Arrays.asList(poland, greece, russia, czech);
 		
 		List<Game> newGames = new ArrayList<Game>();
-		Game polandGreece = new Game(league, Arrays.asList(poland, greece));
-		Game russiaCzech = new Game(league, Arrays.asList(russia, czech));
-		Game greeceCzech = new Game(league, Arrays.asList(greece, czech));
-		Game polandRussia = new Game(league, Arrays.asList(poland, russia));
-		Game czechPoland = new Game(league, Arrays.asList(czech, poland));
-		Game greeceRussia = new Game(league, Arrays.asList(greece, russia));
+		Game polandGreece = new Game(league, poland, greece);
+		Game russiaCzech = new Game(league, russia, czech);
+		Game greeceCzech = new Game(league, greece, czech);
+		Game polandRussia = new Game(league, poland, russia);
+		Game czechPoland = new Game(league, czech, poland);
+		Game greeceRussia = new Game(league, greece, russia);
 		newGames.addAll(Arrays.asList(polandGreece, russiaCzech, greeceCzech, polandRussia, czechPoland, greeceRussia));
 		
 		league.addGames(newGames);
@@ -386,7 +387,7 @@ public class LeagueTest extends UnitTest {
 		Team team2 = new Team("team2");
 		league.teams = Arrays.asList(team1, team2);
 		
-		Game game1 = new Game(league,Arrays.asList(team1, team2));
+		Game game1 = new Game(league, team1, team2);
 		league.games = Arrays.asList(game1);
 		
 		DefaultMutableTreeNode node = league.getAllPossibleGameEndCombinations();
@@ -394,18 +395,18 @@ public class LeagueTest extends UnitTest {
 		
 		DefaultMutableTreeNode firstChild = (DefaultMutableTreeNode) node.getChildAt(0);
 		Game firstChildGame = (Game) firstChild.getUserObject();
-		assertThat(firstChildGame.teams.get(0), is(team1));
-		assertThat(firstChildGame.teams.get(1), is(team2));
+		assertThat(firstChildGame.homeTeam, is(team1));
+		assertThat(firstChildGame.awayTeam, is(team2));
 		
 		DefaultMutableTreeNode secondChild = (DefaultMutableTreeNode) node.getChildAt(1);
 		Game secondChildGame = (Game) secondChild.getUserObject();
-		assertThat(secondChildGame.teams.get(0), is(team1));
-		assertThat(secondChildGame.teams.get(1), is(team2));
+		assertThat(secondChildGame.homeTeam, is(team1));
+		assertThat(secondChildGame.awayTeam, is(team2));
 		
 		DefaultMutableTreeNode thirdChild = (DefaultMutableTreeNode) node.getChildAt(2);
 		Game thirdChildGame = (Game) thirdChild.getUserObject();
-		assertThat(thirdChildGame.teams.get(0), is(team1));
-		assertThat(thirdChildGame.teams.get(1), is(team2));
+		assertThat(thirdChildGame.homeTeam, is(team1));
+		assertThat(thirdChildGame.awayTeam, is(team2));
 	}
 	
 	@Test
@@ -417,7 +418,7 @@ public class LeagueTest extends UnitTest {
 		Team team2 = new Team("team2");
 		league.teams = Arrays.asList(team1, team2);
 		
-		Game game1 = new Game(league,Arrays.asList(team1, team2));
+		Game game1 = new Game(league, team1, team2);
 		league.games = Arrays.asList(game1);
 		
 		DefaultMutableTreeNode node = league.getAllPossibleGameEndCombinations();
@@ -426,18 +427,18 @@ public class LeagueTest extends UnitTest {
 		
 		DefaultMutableTreeNode firstChild = (DefaultMutableTreeNode) node.getChildAt(0);
 		Game firstChildGame = (Game) firstChild.getUserObject();
-		assertThat(firstChildGame.teams.get(0), is(team1));
-		assertThat(firstChildGame.teams.get(1), is(team2));
+		assertThat(firstChildGame.homeTeam, is(team1));
+		assertThat(firstChildGame.awayTeam, is(team2));
 		
 		DefaultMutableTreeNode secondChild = (DefaultMutableTreeNode) node.getChildAt(1);
 		Game secondChildGame = (Game) secondChild.getUserObject();
-		assertThat(secondChildGame.teams.get(0), is(team1));
-		assertThat(secondChildGame.teams.get(1), is(team2));
+		assertThat(secondChildGame.homeTeam, is(team1));
+		assertThat(secondChildGame.awayTeam, is(team2));
 		
 		DefaultMutableTreeNode thirdChild = (DefaultMutableTreeNode) node.getChildAt(2);
 		Game thirdChildGame = (Game) thirdChild.getUserObject();
-		assertThat(thirdChildGame.teams.get(0), is(team1));
-		assertThat(thirdChildGame.teams.get(1), is(team2));
+		assertThat(thirdChildGame.homeTeam, is(team1));
+		assertThat(thirdChildGame.awayTeam, is(team2));
 		
 		assertThat(league.getBestPossibleRankForTeam(team1,node), is(1));
 	}
@@ -460,16 +461,26 @@ public class LeagueTest extends UnitTest {
 	}
 	
 	@Test
-	public void canGetWorstPossibleRankForTeams_BasedOnCombinationOfFutureGameOutcomes_severalGames() throws Exception {
+	public void canGetWorstAndBestPossibleRankForTeams_BasedOnCombinationOfFutureGameOutcomes_severalGames() throws Exception {
 		League league = League.find("byName", "euro-group-d").first();
 		Team sweden = Team.find("byName", "sweden").first();
 		Team england = Team.find("byName", "england").first();
 		Team ukraine = Team.find("byName", "ukraine").first();
 		Team france = Team.find("byName", "france").first();
 		
+		System.out.println("France: " + league.getGoalDifferenceForTeam(france) + " " + league.getPointsForTeam(france));
+		System.out.println("England: " + league.getGoalDifferenceForTeam(england) + " " + league.getPointsForTeam(england));
+		System.out.println("Ukraine: " + league.getGoalDifferenceForTeam(ukraine) + " " + league.getPointsForTeam(ukraine));
+		System.out.println("Sweden: " + league.getGoalDifferenceForTeam(sweden) + " " + league.getPointsForTeam(sweden));
+		
+		assertThat(league.getBestPossibleRankForTeam(france), is(1));
+		assertThat(league.getBestPossibleRankForTeam(england), is(1));
+		assertThat(league.getBestPossibleRankForTeam(ukraine), is(1));
+		assertThat(league.getBestPossibleRankForTeam(sweden), is(4));
+		
 		assertThat(league.getWorstPossibleRankForTeam(france), is(3));
-		assertThat(league.getWorstPossibleRankForTeam(ukraine), is(3));
 		assertThat(league.getWorstPossibleRankForTeam(england), is(3));
+		assertThat(league.getWorstPossibleRankForTeam(ukraine), is(3));
 		assertThat(league.getWorstPossibleRankForTeam(sweden), is(4));
 	}
 	

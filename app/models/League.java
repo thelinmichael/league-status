@@ -107,7 +107,7 @@ public class League extends Model {
 		}
 		
 		for (Game game : games) {
-			if (game.isPlayed() && game.teams.contains(team)) {
+			if (game.isPlayed() && game.wasPlayedBy(team)) {
 				Result result = game.getResultFor(team);
 				points += sport.getPointsFor(result);
 			} 
@@ -136,7 +136,7 @@ public class League extends Model {
 		}
 		
 		for (Game game : games) {
-			if (game.isPlayed() && game.teams.contains(team) && game.getResultFor(team) == result) {
+			if (game.isPlayed() && game.wasPlayedBy(team) && game.getResultFor(team) == result) {
 				numberOfResult++;
 			}
 		}
@@ -156,7 +156,7 @@ public class League extends Model {
 		}
 		
 		for (Game game : games) {
-			if (game.isPlayed() && game.teams.contains(team)) {
+			if (game.isPlayed() && game.wasPlayedBy(team)) {
 				try {
 					goals += game.getGoalsForTeam(team);
 				} catch (GameNotPlayedException e) {}
@@ -173,7 +173,7 @@ public class League extends Model {
 		}
 		
 		for (Game game : games) {
-			if (game.isPlayed() && game.teams.contains(team)) {
+			if (game.isPlayed() && game.wasPlayedBy(team)) {
 				try {
 					goals += game.getGoalsAgainstTeam(team);
 				} catch (GameNotPlayedException e) {}
@@ -232,7 +232,7 @@ public class League extends Model {
 		
 		List<Game> returnedGames = new ArrayList<Game>();
 		for (Game game : games) {
-			if (game.teams.contains(team) && game.isPlayed()) {
+			if (game.wasPlayedBy(team) && game.isPlayed()) {
 				returnedGames.add(game);
 			}
 		}
@@ -247,7 +247,7 @@ public class League extends Model {
 		List<Game> returnedGames = new ArrayList<Game>();
 		
 		for (Game game : games) {
-			if (game.teams.contains(team)) {
+			if (game.wasPlayedBy(team)) {
 				returnedGames.add(game);
 			}
 		}
@@ -278,9 +278,9 @@ public class League extends Model {
 		}
 		
 		for (DefaultMutableTreeNode leaf : leafs) { 
-			Game possibleOutcome1 = new Game(game.league, game.teams);
-			Game possibleOutcome2 = new Game(game.league, game.teams);
-			Game possibleOutcome3 = new Game(game.league, game.teams);
+			Game possibleOutcome1 = new Game(game.league, game.homeTeam, game.awayTeam);
+			Game possibleOutcome2 = new Game(game.league, game.homeTeam, game.awayTeam);
+			Game possibleOutcome3 = new Game(game.league, game.homeTeam, game.awayTeam);
 			possibleOutcome1.setScore(Arrays.asList(0,0));
 			possibleOutcome2.setScore(Arrays.asList(1,0));
 			possibleOutcome3.setScore(Arrays.asList(0,1));
@@ -329,8 +329,14 @@ public class League extends Model {
 		List<Game> oldGames = new ArrayList<Game>(games);
 		for (List<Game> outcome : possibleOutcomes) {
 			for (Game game : outcome) {
-				if (game.teams.contains(team) && game.getResultFor(team) == Result.WIN) {
-					game.scores.set(game.teams.indexOf(team), new Score(9999)); 
+				if (game.wasPlayedBy(team) && game.getResultFor(team) == Result.WIN) {
+					int scoreIndex;
+					if (game.homeTeam.equals(team)) {
+						scoreIndex = 0;
+					} else {
+						scoreIndex = 1;
+					}
+					game.scores.set(scoreIndex, new Score(9999)); 
 				}
 			}
 			List<Game> playedGames = new ArrayList(getPlayedGames());
@@ -372,14 +378,15 @@ public class League extends Model {
 		List<Game> oldGames = new ArrayList<Game>(games);
 		for (List<Game> outcome : possibleOutcomes) {
 			for (Game game : outcome) {
-				if (game.teams.contains(team) && game.getResultFor(team) == Result.LOSS) {
-					for (Team teamInGame : game.teams) {
-						if (!teamInGame.equals(team)) { 
-							game.scores.set(game.teams.indexOf(teamInGame), new Score(9999)); 
-						}
+				if (game.wasPlayedBy(team) && game.getResultFor(team) == Result.LOSS) {
+					if (game.homeTeam.equals(team)) {
+						game.scores.set(1, new Score(9999));
+					} else {
+						game.scores.set(0, new Score(9999));
 					}
 				}
 			}
+			
 			List<Game> playedGames = new ArrayList(getPlayedGames());
 			playedGames.addAll(outcome);
 			games = playedGames;

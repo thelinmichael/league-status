@@ -34,7 +34,8 @@ public class GameTest extends UnitTest{
 		Game game = games.get(0);
 		assertThat(game.league.name, is(notNullValue()));
 		assertThat(game.scores, is(notNullValue()));
-		assertThat(game.teams, is(notNullValue()));
+		assertThat(game.homeTeam, is(notNullValue()));
+		assertThat(game.awayTeam, is(notNullValue()));
 	}
 	
 	@Test
@@ -43,7 +44,7 @@ public class GameTest extends UnitTest{
 		Team team2 = new Team("Djurgårdens IF");
 		League league = new League("Allsvenskan", new Football());
 		
-		Game game = new Game(league, Arrays.asList(team1, team2));
+		Game game = new Game(league, team1, team2);
 		league.addGame(game);
 		
 		assertThat(league.games.contains(game), is(true));
@@ -55,7 +56,7 @@ public class GameTest extends UnitTest{
 		Team team2 = Team.find("byName", "aik").first();
 		League league = League.find("byName", "allsvenskan").first();
 		
-		Game game = new Game(league, Arrays.asList(team1, team2));
+		Game game = new Game(league, team1, team2);
 		assertThat(game.isPlayed(), is(false));
 		
 		game.setScore(Arrays.asList(1,2));
@@ -68,7 +69,7 @@ public class GameTest extends UnitTest{
 		Team team2 = Team.find("byName", "aik").first();
 		League league = League.find("byName", "allsvenskan").first();
 
-		Game game = new Game(league, Arrays.asList(team1, team2));
+		Game game = new Game(league, team1, team2);
 		Date time = new Date(0);
 		game.time = time;
 		game.save();
@@ -84,10 +85,9 @@ public class GameTest extends UnitTest{
 		League league = new League("league", football);
 		Team team1 = new Team("team1");
 		Team team2 = new Team("team2");
-		league.teams = Arrays.asList(team1, team2);
 		
-		Game game1 = new Game(league, Arrays.asList(team1, team2));
-		Game game2 = new Game(league, Arrays.asList(team2, team1));
+		Game game1 = new Game(league, team1, team2);
+		Game game2 = new Game(league, team2, team1);
 		
 		assertThat(game1.getResultFor(team1), is(Result.UNDECIDED));
 		

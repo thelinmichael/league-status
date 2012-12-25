@@ -10,8 +10,8 @@ import models.Team;
 public class GameBuilder {
 	Game game;
 	
-	public GameBuilder(League league, List<Team> teams) {
-		game = new Game(league, teams);
+	public GameBuilder(League league, Team homeTeam, Team awayTeam) {
+		game = new Game(league, homeTeam, awayTeam);
 	}
 	
 	public GameBuilder score(List<Integer> scores) {

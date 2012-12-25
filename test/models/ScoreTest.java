@@ -24,8 +24,8 @@ public class ScoreTest extends UnitTest {
 		League allsvenskan = League.find("byName", "allsvenskan").first();
 		List<Game> games = Game.find("byLeague", allsvenskan).fetch();
 
-		assertThat(games.get(0).teams, is(notNullValue()));
-		assertThat(games.get(0).teams.size(), is(2));
+		assertThat(games.get(0).homeTeam, is(notNullValue()));
+		assertThat(games.get(0).awayTeam, is(notNullValue()));
 		
 		assertThat(games.get(0).isPlayed(), is(true));
 		assertThat(games.get(0).scores.get(0).goals, is(1));

@@ -48,7 +48,7 @@
 			<ul>
 			#{list items:league.getGames(), as:'game'}
 				<li>
-					${game.getTeams().get(0)} - ${game.getTeams().get(1)}
+					${game.homeTeam} - ${game.awayTeam}
 					#{if game.isPlayed()} 
 						${game.getScores().get(0).getGoals()} - ${game.getScores().get(1).getGoals()}
 					#{/if}

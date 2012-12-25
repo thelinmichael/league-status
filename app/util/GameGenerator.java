@@ -16,8 +16,8 @@ public class GameGenerator {
 		int i, j;
 		for (i = 0; i < league.teams.size() - 1; i++) {
 			for (j = i+1; j < league.teams.size(); j++) {
-				games.add(new Game(league, Arrays.asList(league.teams.get(i), league.teams.get(j))));
-				games.add(new Game(league, Arrays.asList(league.teams.get(j), league.teams.get(i))));
+				games.add(new Game(league, league.teams.get(i), league.teams.get(j)));
+				games.add(new Game(league, league.teams.get(j), league.teams.get(i)));
 			}
 		}
 		
