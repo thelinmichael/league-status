@@ -11,6 +11,8 @@ public interface ISport<T> {
 	public Integer getPointsForTie();
 	public Integer getPointsFor(Result result);
 	
+	public Integer getPointsAtSeasonStart();
+	
 	public String getDisplayName();
 	public String getName();
 	public List<Class<? extends Comparator<T>>> getComparators();

@@ -9,6 +9,7 @@ import models.League;
 import models.Team;
 
 public class GameGenerator {
+
 	public static List<Game> generateAllVsAll(League league) {
 		List<Game> games = new ArrayList<Game>();
 		
@@ -22,4 +23,5 @@ public class GameGenerator {
 		
 		return games;
 	}
+	
 }

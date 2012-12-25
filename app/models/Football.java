@@ -60,11 +60,17 @@ public class Football extends Sport {
 		} else if (result == Result.LOSS) { 
 			return POINTS_FOR_LOSS;
 		} else {
-			throw new IllegalArgumentException("Result not available.");
+			throw new IllegalArgumentException("Result is yet to be decided, cannot return resulting points.");
 		}
+	}
+	
+	@Override
+	public Integer getPointsAtSeasonStart() {
+		return SEASON_START_POINTS;
 	}
 	
 	public List<Class<? extends Comparator<Team>>> getComparators() {
 		return Arrays.asList(PointComparator.class, GoalDifferenceComparator.class, GoalsScoredComparator.class, IndividualGamesComparator.class);
 	}
+
 }

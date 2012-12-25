@@ -27,8 +27,8 @@ public class IndividualGamesComparator implements Comparator<Team> {
 				
 		Set<Game> games = Sets.intersection(new HashSet(team1Games), new HashSet(team2Games));
 
-		Integer team1Points = 0;
-		Integer team2Points = 0;
+		Integer team1Points = league.sport.getPointsAtSeasonStart();
+		Integer team2Points = league.sport.getPointsAtSeasonStart();
 		
 		for (Game game : games) {
 			if (game.getResultFor(team1) == Result.WIN) {
