@@ -2,7 +2,6 @@ package models;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,12 +12,12 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import play.test.Fixtures;
 import play.test.UnitTest;
 import util.GameBuilder;
+import util.RankCalculator;
 
 import comparators.GoalDifferenceComparator;
 import comparators.GoalsScoredComparator;
@@ -391,87 +390,6 @@ public class LeagueTest extends UnitTest {
 		assertThat(league.makeDisplayName(teamName), is("gefle_if"));
 	}
 	
-	@Test
-	public void canGetAllPossibleGameEndingCombinations_ofALeaguesRemainingGames_oneGame() {
-		Football football = new Football();
-		League league = new League("league", football);
-		
-		Team team1 = new Team("team1");
-		Team team2 = new Team("team2");
-		league.teams = Arrays.asList(team1, team2);
-		
-		Game game1 = new Game(league, team1, team2);
-		league.games = Arrays.asList(game1);
-		
-		DefaultMutableTreeNode node = league.getAllPossibleGameEndCombinations();
-		assertThat(node.getChildCount(), is(3));
-		
-		DefaultMutableTreeNode firstChild = (DefaultMutableTreeNode) node.getChildAt(0);
-		Game firstChildGame = (Game) firstChild.getUserObject();
-		assertThat(firstChildGame.homeTeam, is(team1));
-		assertThat(firstChildGame.awayTeam, is(team2));
-		
-		DefaultMutableTreeNode secondChild = (DefaultMutableTreeNode) node.getChildAt(1);
-		Game secondChildGame = (Game) secondChild.getUserObject();
-		assertThat(secondChildGame.homeTeam, is(team1));
-		assertThat(secondChildGame.awayTeam, is(team2));
-		
-		DefaultMutableTreeNode thirdChild = (DefaultMutableTreeNode) node.getChildAt(2);
-		Game thirdChildGame = (Game) thirdChild.getUserObject();
-		assertThat(thirdChildGame.homeTeam, is(team1));
-		assertThat(thirdChildGame.awayTeam, is(team2));
-	}
-	
-	@Test
-	public void canGetBestPossibleRankForATeam_BasedOnCombinationsOfFutureGameOutcomes_oneGame() {
-		Football football = new Football();
-		League league = new League("league", football);
-		
-		Team team1 = new Team("team1");
-		Team team2 = new Team("team2");
-		league.teams = Arrays.asList(team1, team2);
-		
-		Game game1 = new Game(league, team1, team2);
-		league.games = Arrays.asList(game1);
-		
-		DefaultMutableTreeNode node = league.getAllPossibleGameEndCombinations();
-		assertThat(node.getChildCount(), is(3));
-		assertThat(node.getLeafCount(), is(3));
-		
-		DefaultMutableTreeNode firstChild = (DefaultMutableTreeNode) node.getChildAt(0);
-		Game firstChildGame = (Game) firstChild.getUserObject();
-		assertThat(firstChildGame.homeTeam, is(team1));
-		assertThat(firstChildGame.awayTeam, is(team2));
-		
-		DefaultMutableTreeNode secondChild = (DefaultMutableTreeNode) node.getChildAt(1);
-		Game secondChildGame = (Game) secondChild.getUserObject();
-		assertThat(secondChildGame.homeTeam, is(team1));
-		assertThat(secondChildGame.awayTeam, is(team2));
-		
-		DefaultMutableTreeNode thirdChild = (DefaultMutableTreeNode) node.getChildAt(2);
-		Game thirdChildGame = (Game) thirdChild.getUserObject();
-		assertThat(thirdChildGame.homeTeam, is(team1));
-		assertThat(thirdChildGame.awayTeam, is(team2));
-		
-		assertThat(league.getBestPossibleRankFor(team1,node), is(1));
-	}
-	
-	@Test
-	public void canGetBestPossibleRankForTeams_BasedOnCombinationsOfFutureGameOutcomes_severalGames() {
-		League league = League.find("byName", "euro-group-d").first();
-		Team sweden = Team.find("byName", "sweden").first();
-		Team england = Team.find("byName", "england").first();
-		Team ukraine = Team.find("byName", "ukraine").first();
-		Team france = Team.find("byName", "france").first();
-		
-		DefaultMutableTreeNode node = league.getAllPossibleGameEndCombinations();
-		assertThat(node.getLeafCount(), is(9));
-		
-		assertThat(league.getBestPossibleRankFor(england), is(1));
-		assertThat(league.getBestPossibleRankFor(france), is(1));
-		assertThat(league.getBestPossibleRankFor(ukraine), is(1));
-		assertThat(league.getBestPossibleRankFor(sweden), is(4));
-	}
 	
 	@Test
 	public void canGetWorstAndBestPossibleRankForTeams_BasedOnCombinationOfFutureGameOutcomes_severalGames() throws Exception {
