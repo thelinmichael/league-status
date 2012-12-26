@@ -44,7 +44,7 @@ public class League extends Model {
 	@ManyToMany(mappedBy="leagues")
 	public List<Team> teams;
 	
-	private transient RankCache rankCache = new RankCache();
+	public transient RankCache rankCache = new RankCache();
 	
 	public League(String name, Sport sport) {
 		this.sport = sport;
@@ -205,9 +205,21 @@ public class League extends Model {
 	}
 	
 	public int getBestPossibleRankFor(Team team) {
-		return FutureRankCalculator.getBestPossibleRankFor(this, team);
+		if (rankCache == null) {
+			this.rankCache = new RankCache();
+		}
+		
+		if (rankCache.getBestRankFor(team) != null) {
+			return rankCache.getBestRankFor(team);
+		} else {
+			int bestRank = FutureRankCalculator.getBestPossibleRankFor(this, team);
+			rankCache.cacheBestRank(team, bestRank);
+			
+			return bestRank;
+		}
 	}
 	
+	/* Cache */
 	public int getWorstPossibleRankFor(Team team) {
 		return FutureRankCalculator.getWorstPossibleRankFor(this, team);
 	}
@@ -277,12 +289,13 @@ public class League extends Model {
 		return teamsByRank.indexOf(team) + 1;
 	}
 	
+	/* Caching -- Is it even necessary? */
 	public List<Team> getTeamsByRank() {
 		if (rankCache == null) {
 			rankCache = new RankCache();
 		}
 		
-		/* Cached rank */
+		/* Checking cached rank */
 		if (rankCache.getTeamsByRank() != null) {
 			return rankCache.getTeamsByRank();
 		}
@@ -296,14 +309,14 @@ public class League extends Model {
 		return teamsByRank;
 	}
 
-	public List<Team> getTeamsByRank(List<Comparator<Team>> comparators) {
-		return getTeamsByRankForGames(games, comparators);
-	}
-
 	public List<Team> getTeamsByRankForGames(List<Game> games) {
 		return getTeamsByRankForGames(games, getTeamComparators());
 	}
 	
+	public List<Team> getTeamsByRank(List<Comparator<Team>> comparators) {
+		return getTeamsByRankForGames(games, comparators);
+	}
+
 	private List<Team> getTeamsByRankForGames(List<Game> games, List<Comparator<Team>> comparators) {
 		List<Team> sortedTeams = new ArrayList<Team>(teams);
 		

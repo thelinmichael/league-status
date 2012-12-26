@@ -1,20 +1,16 @@
 package util;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.collections.comparators.ComparatorChain;
-
-import models.League;
 import models.Team;
 
 public class RankCache {
 
 	private List<Team> teamsByRank;
+	
+	private Map<Team, Integer> bestRanks = new HashMap<Team, Integer>();
 	
 	public List<Team> getTeamsByRank() {
 		return teamsByRank;
@@ -26,6 +22,14 @@ public class RankCache {
 	
 	public void clearCache() {
 		teamsByRank = null;
+	}
+
+	public Integer getBestRankFor(Team team) {
+		return bestRanks.get(team);
+	}
+
+	public void cacheBestRank(Team team, int bestRank) {
+		this.bestRanks.put(team, bestRank);
 	}
 
 }
