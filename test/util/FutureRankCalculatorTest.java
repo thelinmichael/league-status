@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import play.test.UnitTest;
 
-public class RankCalculatorTest extends UnitTest {
+public class FutureRankCalculatorTest extends UnitTest {
 
 	@Test
 	public void canGetAllPossibleGameEndingCombinations_ofALeaguesRemainingGames_oneGame() {
@@ -29,7 +29,7 @@ public class RankCalculatorTest extends UnitTest {
 		Game game1 = new Game(league, team1, team2);
 		league.games = Arrays.asList(game1);
 		
-		DefaultMutableTreeNode node = RankCalculator.getAllPossibleGameEndCombinations(league);
+		DefaultMutableTreeNode node = FutureRankCalculator.getAllPossibleGameEndCombinations(league);
 		assertThat(node.getChildCount(), is(3));
 		
 		DefaultMutableTreeNode firstChild = (DefaultMutableTreeNode) node.getChildAt(0);
@@ -60,7 +60,7 @@ public class RankCalculatorTest extends UnitTest {
 		Game game1 = new Game(league, team1, team2);
 		league.games = Arrays.asList(game1);
 		
-		DefaultMutableTreeNode node = RankCalculator.getAllPossibleGameEndCombinations(league);
+		DefaultMutableTreeNode node = FutureRankCalculator.getAllPossibleGameEndCombinations(league);
 		assertThat(node.getChildCount(), is(3));
 		assertThat(node.getLeafCount(), is(3));
 		
@@ -79,7 +79,7 @@ public class RankCalculatorTest extends UnitTest {
 		assertThat(thirdChildGame.homeTeam, is(team1));
 		assertThat(thirdChildGame.awayTeam, is(team2));
 		
-		assertThat(RankCalculator.getBestPossibleRankFor(league, team1,node), is(1));
+		assertThat(FutureRankCalculator.getBestPossibleRankFor(league, team1), is(1));
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ public class RankCalculatorTest extends UnitTest {
 		Team ukraine = Team.find("byName", "ukraine").first();
 		Team france = Team.find("byName", "france").first();
 		
-		DefaultMutableTreeNode node = RankCalculator.getAllPossibleGameEndCombinations(league);
+		DefaultMutableTreeNode node = FutureRankCalculator.getAllPossibleGameEndCombinations(league);
 		assertThat(node.getLeafCount(), is(9));
 		
 		assertThat(league.getBestPossibleRankFor(england), is(1));

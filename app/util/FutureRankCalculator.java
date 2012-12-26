@@ -11,61 +11,30 @@ import models.Game;
 import models.League;
 import models.Team;
 
-public class RankCalculator {
-
-	public static int getBestPossibleRankFor(League league, Team team, DefaultMutableTreeNode rootNode) {
+public class FutureRankCalculator {
+	
+	public static int getBestPossibleRankFor(League league, Team team) {
 		if (!league.teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
 		}
 		
-		Integer bestRank = null;
-		
-		List<List<Game>> possibleOutcomes = new ArrayList<List<Game>>(); 
-		DefaultMutableTreeNode leaf = rootNode.getFirstLeaf();
-		while (leaf != null) {
-			TreeNode[] pathToRoot = leaf.getPath();
-			List<Game> outcome = new ArrayList<Game>();
-			for (TreeNode node : pathToRoot) {
-				if (node == rootNode) {
-					continue;
-				} 
-				Game gameInNode = (Game) ((DefaultMutableTreeNode) node).getUserObject();
-				outcome.add(gameInNode); 
-			}
-			possibleOutcomes.add(outcome);
-			leaf = leaf.getNextLeaf();	
-		}
-		
-		List<Game> oldGames = new ArrayList<Game>(league.games);
-		for (List<Game> outcome : possibleOutcomes) {
-			for (Game game : outcome) {
-				if (game.isPlayedBy(team) && game.getResultFor(team) == Result.WIN) {
-					if (game.homeTeam.equals(team)) {
-						game.homeTeamScore = 9999;
-					} else {
-						game.awayTeamScore = 9999;
-					}
-				}
-			}
-			List<Game> playedGames = new ArrayList(league.getPlayedGames());
-			playedGames.addAll(outcome);
-			league.games = playedGames;
-			league.clearRankCache();
-			List<Team> teams = league.getTeamsByRank();
-			if (bestRank == null || (teams.indexOf(team) + 1) < bestRank) {
-				bestRank = teams.indexOf(team) + 1;
-			}
-			league.games = new ArrayList<Game>(oldGames);
-		}
-		
-		return bestRank;
+		return getBestPossibleRankFor(league, team, getAllPossibleGameEndCombinations(league));
 	}
 
-	public static int getWorstPossibleRankFor(League league, Team team, DefaultMutableTreeNode rootNode) {
-		if (!league.teams.contains(team)) {
-			throw new IllegalArgumentException("Team not in league.");
-		}
-		Integer worstRank = null;
+	private static int getBestPossibleRankFor(League league, Team team, DefaultMutableTreeNode rootNode) {
+		return getPossibleRankFor(league, team, rootNode, true);
+	}
+	
+	public static int getWorstPossibleRankFor(League league, Team team) {
+		return getWorstPossibleRankFor(league, team, getAllPossibleGameEndCombinations(league));
+	}
+	
+	private static int getWorstPossibleRankFor(League league, Team team, DefaultMutableTreeNode rootNode) {
+		return getPossibleRankFor(league, team, rootNode, false);
+	}
+	
+	private static int getPossibleRankFor(League league, Team team, DefaultMutableTreeNode rootNode, boolean isForBestRank) {
+		Integer possibleRank = null;
 		
 		List<List<Game>> possibleOutcomes = new ArrayList<List<Game>>(); 
 		DefaultMutableTreeNode leaf = rootNode.getFirstLeaf();
@@ -83,30 +52,52 @@ public class RankCalculator {
 			leaf = leaf.getNextLeaf();	
 		}
 		
-		List<Game> oldGames = new ArrayList<Game>(league.games);
 		for (List<Game> outcome : possibleOutcomes) {
+			
+			/* Go through every game for this list of possible outcomes,
+			 * and set the scores to a ridiculously large number. This is
+			 * done to prevent goal difference to affect the team's best 
+			 * or worst possible rank.
+			 */
 			for (Game game : outcome) {
-				if (game.isPlayedBy(team) && game.getResultFor(team) == Result.LOSS) {
-					if (game.homeTeam.equals(team)) {
-						game.awayTeamScore = 9999;
-					} else {
-						game.homeTeamScore = 9999;
+				if (isForBestRank) {
+					if (game.isPlayedBy(team) && game.getResultFor(team) == Result.WIN) {
+						if (game.homeTeam.equals(team)) {
+							game.homeTeamScore = 9999;
+						} else {
+							game.awayTeamScore = 9999;
+						}
+					}
+				} else {
+					if (game.isPlayedBy(team) && game.getResultFor(team) == Result.LOSS) {
+						if (game.homeTeam.equals(team)) {
+							game.awayTeamScore = 9999;
+						} else {
+							game.homeTeamScore = 9999;
+						}
 					}
 				}
 			}
 			
+			/* Merge the already played games with the possible outcomes. */
 			List<Game> playedGames = new ArrayList(league.getPlayedGames());
 			playedGames.addAll(outcome);
-			league.games = playedGames;
-			league.clearRankCache();
-			List<Team> teams = league.getTeamsByRank();
-			if (worstRank == null || (teams.indexOf(team) + 1) > worstRank) {
-				worstRank = teams.indexOf(team) + 1;
+			
+			List<Team> teams = league.getTeamsByRankForGames(playedGames);
+			
+			if (isForBestRank) {
+				if (possibleRank == null || (teams.indexOf(team) + 1) < possibleRank) {
+					possibleRank = teams.indexOf(team) + 1;
+				}
+			} else {
+				if (possibleRank == null || (teams.indexOf(team) + 1) > possibleRank) {
+					possibleRank = teams.indexOf(team) + 1;
+				}
 			}
-			league.games = new ArrayList<Game>(oldGames);
 		}
 		
-		return worstRank;
+		return possibleRank;
+		
 	}
 	
 	/* A tree structure where every node represents a finished game, 

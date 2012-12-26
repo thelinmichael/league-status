@@ -4,8 +4,8 @@
 <p> #{a @Application.index()}Home#{/a}</p>
 
 #{if league != null} 
-	#{set title: league.getDisplayName() /}
-	<h1>${league.getDisplayName()}</h1>
+	#{set title: league.displayName /}
+	<h1>${league.displayName}</h1>
 		
 	<table id="leagueTable">
 		<tr>
@@ -62,5 +62,3 @@
 #{else}
 	<p class="errorMessage">League not found.</p>
 #{/else}
-
-%{ System.out.println(new Date()); }%

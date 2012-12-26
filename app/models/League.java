@@ -15,7 +15,8 @@ import javax.persistence.OneToMany;
 import org.apache.commons.collections.comparators.ComparatorChain;
 
 import play.db.jpa.Model;
-import util.RankCalculator;
+import util.FutureRankCalculator;
+import util.RankCache;
 import util.Result;
 
 import comparators.DateComparator;
@@ -43,7 +44,7 @@ public class League extends Model {
 	@ManyToMany(mappedBy="leagues")
 	public List<Team> teams;
 	
-	private transient List<Team> teamsByRank;
+	private transient RankCache rankCache = new RankCache();
 	
 	public League(String name, Sport sport) {
 		this.sport = sport;
@@ -203,69 +204,12 @@ public class League extends Model {
 		return gamesPlayedByTeam;
 	}
 	
-	public List<Team> getTeamsByRank() {
-		/* Cached rank */
-		if (teamsByRank != null) {
-			return teamsByRank;
-		}
-		
-		/* Get comparators for this league. 
-		 * The comparators decide how teams are ranked, e.g.
-		 * if points are more valuable than goal difference, 
-		 * or goal difference being more valuable than goals scored.
-		 */
-		sport.getComparators();
-		List<Class<? extends Comparator<Team>>> comparatorClasses = sport.getComparators();
-		List<Comparator<Team>> comparators = new ArrayList<Comparator<Team>>();
-		for (Class<? extends Comparator<Team>> comparatorClass : comparatorClasses) {
-			Constructor constructor;
-			try {
-				constructor = comparatorClass.getDeclaredConstructor(League.class);
-				constructor.setAccessible(true);
-				try {
-					comparators.add((Comparator<Team>) constructor.newInstance(this));
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		/* Caching ranks */
-		teamsByRank = getTeamsByRank(comparators);
-		
-		return teamsByRank;
-	}
-
-	public List<Team> getTeamsByRank(List<Comparator<Team>> comparators) {
-		List<Team> sortedTeams = new ArrayList<Team>(teams);
-		
-		ComparatorChain chainedComparators =  new ComparatorChain();
-		for (Comparator<Team> comparator : comparators) {
-			chainedComparators.addComparator(comparator);
-		}
-		
-		Collections.sort(sortedTeams, chainedComparators);
-		Collections.reverse(sortedTeams);
-		
-		return sortedTeams;
-	}
-	
 	public int getBestPossibleRankFor(Team team) {
-		return RankCalculator.getBestPossibleRankFor(this, team, RankCalculator.getAllPossibleGameEndCombinations(this));
+		return FutureRankCalculator.getBestPossibleRankFor(this, team);
 	}
 	
 	public int getWorstPossibleRankFor(Team team) {
-		return RankCalculator.getWorstPossibleRankFor(this, team, RankCalculator.getAllPossibleGameEndCombinations(this));
+		return FutureRankCalculator.getWorstPossibleRankFor(this, team);
 	}
 
 	public boolean isInUpperQualification(Team team) {
@@ -333,7 +277,84 @@ public class League extends Model {
 		return teamsByRank.indexOf(team) + 1;
 	}
 	
-	public void clearRankCache() {
-		teamsByRank = null;
+	public List<Team> getTeamsByRank() {
+		if (rankCache == null) {
+			rankCache = new RankCache();
+		}
+		
+		/* Cached rank */
+		if (rankCache.getTeamsByRank() != null) {
+			return rankCache.getTeamsByRank();
+		}
+		
+		List<Comparator<Team>> comparators = getTeamComparators(); 
+		
+		/* Caching ranks */
+		List<Team> teamsByRank = getTeamsByRank(comparators);
+		rankCache.cacheTeamRank(teamsByRank);
+		
+		return teamsByRank;
+	}
+
+	public List<Team> getTeamsByRank(List<Comparator<Team>> comparators) {
+		return getTeamsByRankForGames(games, comparators);
+	}
+
+	public List<Team> getTeamsByRankForGames(List<Game> games) {
+		return getTeamsByRankForGames(games, getTeamComparators());
+	}
+	
+	private List<Team> getTeamsByRankForGames(List<Game> games, List<Comparator<Team>> comparators) {
+		List<Team> sortedTeams = new ArrayList<Team>(teams);
+		
+		// Temporarily change the games in this league so that teams are ranked accordingly.
+		List<Game> originalGames = new ArrayList<Game>(this.games);
+		this.games = games;
+		
+		ComparatorChain chainedComparators = new ComparatorChain();
+		for (Comparator<Team> comparator : comparators) {
+			chainedComparators.addComparator(comparator);
+		}
+
+		Collections.sort(sortedTeams, chainedComparators);
+		Collections.reverse(sortedTeams);
+		
+		// Change the games back.
+		this.games = originalGames;
+		
+		return sortedTeams;
+	}
+
+	/* Get comparators for this league. 
+	 * The comparators decide how teams are ranked, e.g.
+	 * if points are more valuable than goal difference, 
+	 * or goal difference being more valuable than goals scored.
+	 */
+	private List<Comparator<Team>> getTeamComparators() {
+		List<Comparator<Team>> comparators = new ArrayList<Comparator<Team>>();
+		List<Class<? extends Comparator<Team>>> comparatorClasses = sport.getComparators();
+		for (Class<? extends Comparator<Team>> comparatorClass : comparatorClasses) {
+			Constructor constructor;
+			try {
+				constructor = comparatorClass.getDeclaredConstructor(League.class);
+				constructor.setAccessible(true);
+				try {
+					comparators.add((Comparator<Team>) constructor.newInstance(this));
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			}
+		}
+		return comparators;
 	}
 }

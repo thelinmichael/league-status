@@ -17,7 +17,7 @@ import org.junit.Test;
 import play.test.Fixtures;
 import play.test.UnitTest;
 import util.GameBuilder;
-import util.RankCalculator;
+import util.FutureRankCalculator;
 
 import comparators.GoalDifferenceComparator;
 import comparators.GoalsScoredComparator;
@@ -398,11 +398,6 @@ public class LeagueTest extends UnitTest {
 		Team england = Team.find("byName", "england").first();
 		Team ukraine = Team.find("byName", "ukraine").first();
 		Team france = Team.find("byName", "france").first();
-		
-		System.out.println("France: " + league.getGoalDifferenceFor(france) + " " + league.getPointsFor(france));
-		System.out.println("England: " + league.getGoalDifferenceFor(england) + " " + league.getPointsFor(england));
-		System.out.println("Ukraine: " + league.getGoalDifferenceFor(ukraine) + " " + league.getPointsFor(ukraine));
-		System.out.println("Sweden: " + league.getGoalDifferenceFor(sweden) + " " + league.getPointsFor(sweden));
 		
 		assertThat(league.getBestPossibleRankFor(france), is(1));
 		assertThat(league.getBestPossibleRankFor(england), is(1));
