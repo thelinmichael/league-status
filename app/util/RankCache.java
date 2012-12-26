@@ -11,6 +11,8 @@ public class RankCache {
 	private List<Team> teamsByRank;
 	
 	private Map<Team, Integer> bestRanks = new HashMap<Team, Integer>();
+
+	private Map<Team, Integer> worstRanks = new HashMap<Team, Integer>();
 	
 	public List<Team> getTeamsByRank() {
 		return teamsByRank;
@@ -21,15 +23,24 @@ public class RankCache {
 	}
 	
 	public void clearCache() {
-		teamsByRank = null;
+		this.teamsByRank = null;
+		this.worstRanks.clear();
+		this.bestRanks.clear();
 	}
 
 	public Integer getBestRankFor(Team team) {
 		return bestRanks.get(team);
+	}
+	
+	public Integer getWorstRankFor(Team team) {
+		return worstRanks.get(team);
 	}
 
 	public void cacheBestRank(Team team, int bestRank) {
 		this.bestRanks.put(team, bestRank);
 	}
 
+	public void cacheWorstRank(Team team, int worstRank) {
+		this.worstRanks.put(team, worstRank);
+	}
 }

@@ -56,6 +56,15 @@ public class League extends Model {
 		return teamName.replace(' ', '_').toLowerCase();
 	}
 	
+	public void addGame(Game game) {
+		if (this.rankCache == null) {
+			this.rankCache = new RankCache();
+		} else {
+			this.rankCache.clearCache();
+		}
+		this.games.add(game);
+	}
+	
 	public List<Game> getPlayedGames() {
 		List<Game> playedGames = new ArrayList<Game>();
 		for (Game game : games) {
@@ -219,9 +228,19 @@ public class League extends Model {
 		}
 	}
 	
-	/* Cache */
 	public int getWorstPossibleRankFor(Team team) {
-		return FutureRankCalculator.getWorstPossibleRankFor(this, team);
+		if (rankCache == null) {
+			this.rankCache = new RankCache();
+		}
+		
+		if (rankCache.getWorstRankFor(team) != null) {
+			return rankCache.getWorstRankFor(team);
+		} else {
+			int worstRank = FutureRankCalculator.getWorstPossibleRankFor(this, team);
+			rankCache.cacheWorstRank(team, worstRank);
+			
+			return worstRank;
+		}
 	}
 
 	public boolean isInUpperQualification(Team team) {
@@ -369,5 +388,13 @@ public class League extends Model {
 			}
 		}
 		return comparators;
+	}
+
+	public void clearCache() {
+		if (this.rankCache == null) {
+			this.rankCache = new RankCache();
+		} else {
+			this.rankCache.clearCache();
+		}
 	}
 }

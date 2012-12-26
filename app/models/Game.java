@@ -38,9 +38,22 @@ public class Game extends Model implements HasTime {
 		this.awayTeam = awayTeam;
 	}
 	
+	public void setHomeTeamScore(Integer homeTeamScore) {
+		this.homeTeamScore = homeTeamScore;
+	}
+	
+	public void setAwayTeamScore(Integer awayTeamScore) {
+		this.awayTeamScore = awayTeamScore;
+	}
+	
 	public void setScore(Integer homeTeamScore, Integer awayTeamScore) {
 		this.homeTeamScore = homeTeamScore;
 		this.awayTeamScore = awayTeamScore;
+	}
+	
+	/* TODO: More work to be done here! */
+	public void publishChangesToLeague() {
+		league.clearCache();
 	}
 	
 	public boolean isPlayed() {
