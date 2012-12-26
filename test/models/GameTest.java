@@ -33,7 +33,8 @@ public class GameTest extends UnitTest{
 		
 		Game game = games.get(0);
 		assertThat(game.league.name, is(notNullValue()));
-		assertThat(game.scores, is(notNullValue()));
+		assertThat(game.homeTeamScore, is(notNullValue()));
+		assertThat(game.awayTeamScore, is(notNullValue()));
 		assertThat(game.homeTeam, is(notNullValue()));
 		assertThat(game.awayTeam, is(notNullValue()));
 	}
@@ -59,7 +60,8 @@ public class GameTest extends UnitTest{
 		Game game = new Game(league, team1, team2);
 		assertThat(game.isPlayed(), is(false));
 		
-		game.setScore(Arrays.asList(1,2));
+		game.homeTeamScore = 1;
+		game.awayTeamScore = 2;
 		assertThat(game.isPlayed(), is(true));
 	}
 	
@@ -91,22 +93,28 @@ public class GameTest extends UnitTest{
 		
 		assertThat(game1.getResultFor(team1), is(Result.UNDECIDED));
 		
-		game1.setScore(Arrays.asList(0, 0));
+		game1.homeTeamScore = 0;
+		game1.awayTeamScore = 0;
 		assertThat(game1.getResultFor(team1), is(Result.TIE));
 
-		game1.setScore(Arrays.asList(1, 0));
+		game1.homeTeamScore = 1;
+		game1.awayTeamScore = 0;
 		assertThat(game1.getResultFor(team1), is(Result.WIN));
 
-		game1.setScore(Arrays.asList(0, 1));
+		game1.homeTeamScore = 0;
+		game1.awayTeamScore = 1;
 		assertThat(game1.getResultFor(team1), is(Result.LOSS));
 		
-		game2.setScore(Arrays.asList(0, 0));
+		game2.homeTeamScore = 0; 
+		game2.awayTeamScore = 0;
 		assertThat(game2.getResultFor(team1), is(Result.TIE));
 		
-		game2.setScore(Arrays.asList(1, 0));
+		game2.homeTeamScore = 1; 
+		game2.awayTeamScore = 0;
 		assertThat(game2.getResultFor(team1), is(Result.LOSS));
 		
-		game2.setScore(Arrays.asList(0, 1));
+		game2.homeTeamScore = 0; 
+		game2.awayTeamScore = 1;
 		assertThat(game2.getResultFor(team1), is(Result.WIN));
 	}
 }

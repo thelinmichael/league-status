@@ -26,8 +26,9 @@ public class Game extends Model implements HasTime {
 	@ManyToOne
 	public Team awayTeam;
 	
-	@ManyToMany
-	public List<Score> scores;
+	public Integer homeTeamScore;
+	
+	public Integer awayTeamScore;
 	
 	public Date time;
 	
@@ -37,16 +38,13 @@ public class Game extends Model implements HasTime {
 		this.awayTeam = awayTeam;
 	}
 	
-	public void setScore(List<Integer> intScores) {
-		this.scores = new ArrayList<Score>();
-		for (Integer intScore : intScores) {
-			Score score = new Score(intScore);
-			this.scores.add(score);
-		}
+	public void setScore(Integer homeTeamScore, Integer awayTeamScore) {
+		this.homeTeamScore = homeTeamScore;
+		this.awayTeamScore = awayTeamScore;
 	}
 	
 	public boolean isPlayed() {
-		return (scores != null && scores.size() != 0);
+		return (homeTeamScore != null && awayTeamScore != null);
 	}
 	
 	public Result getResultFor(Team team) {
@@ -70,30 +68,17 @@ public class Game extends Model implements HasTime {
 	}
 
 	private boolean isWinFor(Team team) {
-		final int thisTeam;
-		final int otherTeam;
-		
 		if (team.equals(homeTeam)) {
-			thisTeam = 0;
-			otherTeam = 1;
+			return (homeTeamScore > awayTeamScore);
 		} else if (team.equals(awayTeam)) {
-			thisTeam = 1;
-			otherTeam = 0;
+			return (awayTeamScore > homeTeamScore);
 		} else {
 			throw new IllegalArgumentException("Team didn't play this game.");
-		}
-		
-		if (scores.get(thisTeam).compareTo(scores.get(otherTeam)) == 1) {
-			return true;
-		} else {
-			return false;
 		}
 	}
 
 	public boolean isTie() {
-		Score maxScore = Collections.max(scores);
-		Score minScore = Collections.min(scores);
-		return (maxScore.compareTo(minScore) == 0);
+		return (homeTeamScore == awayTeamScore);
 	}
 
 	public int getGoalsForTeam(Team team) throws GameNotPlayedException {
@@ -104,14 +89,11 @@ public class Game extends Model implements HasTime {
 			throw new GameNotPlayedException("Game is not played.");
 		}
 		
-		final int thisTeam;
 		if (homeTeam.equals(team)) {
-			thisTeam = 0;
+			return homeTeamScore;
 		} else {
-			thisTeam = 1;
+			return awayTeamScore;
 		}
-		
-		return scores.get(thisTeam).goals;
 	}
 
 	public int getGoalsAgainstTeam(Team team) throws GameNotPlayedException {
@@ -122,12 +104,11 @@ public class Game extends Model implements HasTime {
 			throw new GameNotPlayedException("Game is not played.");
 		}
 		
-		int allGoals = 0;
-		for (Score score : scores) {
-			allGoals += score.goals;
+		if (team.equals(homeTeam)) {
+			return awayTeamScore;
+		} else {
+			return homeTeamScore;
 		}
-		
-		return allGoals - getGoalsForTeam(team);
 	}
 	
 	public boolean wasPlayedBy(Team team) {
@@ -137,7 +118,6 @@ public class Game extends Model implements HasTime {
 			return false;
 		}
 	}
-	
 
 	@Override
 	public Date getTime() {

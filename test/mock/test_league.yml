@@ -177,86 +177,75 @@ Team(mancity):
     name:           "manchester_city"
     leagues:         [premierleague,championsleague]
              
-Score(score0):
-    goals:          0
-    
-Score(score1):
-    goals:          1
-
-Score(score2):
-    goals:          2
-  
-Score(score3):
-    goals:          3
-        
-Score(score4):
-    goals:          4
-
-Score(score5):
-    goals:          5
- 
-Score(score6):
-    goals:          6
-    
 Game(euro_group_a_poland_greece):
     league:         euro-group-a
     homeTeam:       poland
     awayTeam:       greece
-    scores:         [score1,score1]
+    homeTeamScore:  1
+    awayTeamScore:  1
 
 Game(euro_group_a_russia_czech):
     league:         euro-group-a
     homeTeam:       russia
     awayTeam:       czech    
-    scores:         [score4,score1]
+    homeTeamScore:  4
+    awayTeamScore:  1
 
 Game(euro_group_a_greece_czech):
     league:         euro-group-a
     homeTeam:       greece
     awayTeam:       czech
-    scores:         [score1,score2]
+    homeTeamScore:  1
+    awayTeamScore:  2
     
 Game(euro_group_a_poland_russia):
     league:         euro-group-a
     homeTeam:       poland
     awayTeam:       russia
-    scores:         [score1,score1]
+    homeTeamScore:  1
+    awayTeamScore:  1
   
 Game(euro_group_a_czech_poland):
     league:         euro-group-a
     homeTeam:       czech
     awayTeam:       poland
-    scores:         [score1,score0]
+    homeTeamScore:  1
+    awayTeamScore:  0
  
 Game(euro_group_a_greece_russia):
     league:         euro-group-a
     homeTeam:       greece
     awayTeam:       russia
-    scores:         [score1,score0]
+    homeTeamScore:  1
+    awayTeamScore:  0
           
 Game(euro_group_d_france_england):
     league:         euro-group-d
     homeTeam:       france
     awayTeam:       england
-    scores:         [score1,score1]
+    homeTeamScore:  1
+    awayTeamScore:  1
                     
 Game(euro_group_d_ukraine_sweden):
     league:         euro-group-d
     homeTeam:       ukraine
     awayTeam:       sweden
-    scores:         [score2,score1]
+    homeTeamScore:  2
+    awayTeamScore:  1
                         
 Game(euro_group_d_ukraine_france):
     league:         euro-group-d
     homeTeam:       ukraine
     awayTeam:       france
-    scores:         [score0,score2]
+    homeTeamScore:  0
+    awayTeamScore:  2
 
 Game(euro_group_d_sweden_england):
     league:         euro-group-d
     homeTeam:       sweden
     awayTeam:       england
-    scores:         [score2,score3]
+    homeTeamScore:  2
+    awayTeamScore:  3
 
 Game(euro_group_d_england_ukraine):
     league:         euro-group-d
@@ -273,20 +262,23 @@ Game(allsvenskan_game1):
     league:         allsvenskan
     homeTeam:       gefle_if
     awayTeam:       djurgardens_if
-    scores:         [score1,score0]
+    homeTeamScore:  1
+    awayTeamScore:  0
 
 Game(allsvenskan_game2):
     homeTeam:       aik
     awayTeam:       djurgardens_if
     league:         allsvenskan
-    scores:         [score0,score1]
+    homeTeamScore:  0
+    awayTeamScore:  1
         
 Game(allsvenskan_game3):
     homeTeam:       aik
     awayTeam:       djurgardens_if
     league:         allsvenskan   
-    scores:         [score0,score1]   
-
+    homeTeamScore:  0
+    awayTeamScore:  1
+    
 Game(allsvenskan_game4):
     homeTeam:       aik
     awayTeam:       djurgardens_if
@@ -301,4 +293,5 @@ Game(championsleague_game1):
     homeTeam:       mancity
     awayTeam:       chelsea
     league:         championsleague
-    scores:         [score1,score0]
+    homeTeamScore:  1
+    awayTeamScore:  0

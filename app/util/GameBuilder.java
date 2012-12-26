@@ -14,8 +14,9 @@ public class GameBuilder {
 		game = new Game(league, homeTeam, awayTeam);
 	}
 	
-	public GameBuilder score(List<Integer> scores) {
-		game.setScore(scores);
+	public GameBuilder score(Integer homeTeamScore, Integer awayTeamScore) {
+		game.homeTeamScore = homeTeamScore;
+		game.awayTeamScore = awayTeamScore;
 		return this;
 	}
 	

@@ -210,14 +210,22 @@ public class LeagueTest extends UnitTest {
 		
 		league.addGames(newGames);
 		assertThat(league.games, is(notNullValue()));
-		league.games.get(0).setScore(Arrays.asList(1, 2));
-		league.games.get(1).setScore(Arrays.asList(5, 0));
-		league.games.get(2).setScore(Arrays.asList(2, 0));
-		league.games.get(3).setScore(Arrays.asList(0, 0));
-		league.games.get(4).setScore(Arrays.asList(4, 6));
-		league.games.get(5).setScore(Arrays.asList(2, 2));
-		league.games.get(6).setScore(Arrays.asList(10, 1));
-		league.games.get(7).setScore(Arrays.asList(1, 1));
+		league.games.get(0).homeTeamScore = 1;
+		league.games.get(0).awayTeamScore = 2;
+		league.games.get(1).homeTeamScore = 5;
+		league.games.get(1).awayTeamScore = 0;
+		league.games.get(2).homeTeamScore = 2;
+		league.games.get(2).awayTeamScore = 0;
+		league.games.get(3).homeTeamScore = 0;
+		league.games.get(3).awayTeamScore = 0;
+		league.games.get(4).homeTeamScore = 4;
+		league.games.get(4).awayTeamScore = 6;
+		league.games.get(5).homeTeamScore = 2;
+		league.games.get(5).awayTeamScore = 2;
+		league.games.get(6).homeTeamScore = 10;
+		league.games.get(6).awayTeamScore = 1;
+		league.games.get(7).homeTeamScore = 1;
+		league.games.get(7).awayTeamScore = 1;
 		
 		assertThat(league.teams.get(0), is(team1));
 		assertThat(league.teams.get(1), is(team2));
@@ -257,16 +265,16 @@ public class LeagueTest extends UnitTest {
 		league.teams = Arrays.asList(team1, team2, team3);
 		
 		GameBuilder builder = new GameBuilder(league, team1, team2);
-		Game game1 = builder.score(Arrays.asList(1,1)).build();
+		Game game1 = builder.score(1,1).build();
 		
 		builder = new GameBuilder(league, team2, team1);
-		Game game2 = builder.score(Arrays.asList(3,3)).build();
+		Game game2 = builder.score(3,3).build();
 		
 		builder = new GameBuilder(league, team1, team3);
-		Game game3 = builder.score(Arrays.asList(5,4)).build();
+		Game game3 = builder.score(5,4).build();
 		
 		builder = new GameBuilder(league, team2, team3);
-		Game game4 = builder.score(Arrays.asList(3,0)).build();
+		Game game4 = builder.score(3,0).build();
 
 		league.addGames(Arrays.asList(game1, game2, game3, game4));
 		
@@ -291,7 +299,8 @@ public class LeagueTest extends UnitTest {
 		assertThat(teamsOrderedByRank.get(2), is(team3));
 		
 		league.games.add(new Game(league, team2, team3));
-		league.games.get(4).setScore(Arrays.asList(2, 3));
+		league.games.get(4).homeTeamScore = 2;
+		league.games.get(4).awayTeamScore = 3;
 		
 		priorities = Arrays.asList((Comparator<Team>) new PointComparator(league), (Comparator<Team>) new GoalsScoredComparator(league), (Comparator<Team>) new GoalDifferenceComparator(league));
 		teamsOrderedByRank = league.getTeamsByRank(priorities);
@@ -351,11 +360,15 @@ public class LeagueTest extends UnitTest {
 		newGames.addAll(Arrays.asList(polandGreece, russiaCzech, greeceCzech, polandRussia, czechPoland, greeceRussia));
 		
 		league.addGames(newGames);
-		league.games.get(0).setScore(Arrays.asList(1, 1));
-		league.games.get(1).setScore(Arrays.asList(4, 1));
-		league.games.get(2).setScore(Arrays.asList(1, 2));
-		league.games.get(3).setScore(Arrays.asList(1, 1));
-
+		league.games.get(0).homeTeamScore = 1;
+		league.games.get(0).awayTeamScore = 1;
+		league.games.get(1).homeTeamScore = 4;
+		league.games.get(1).awayTeamScore = 1;
+		league.games.get(2).homeTeamScore = 1;
+		league.games.get(2).awayTeamScore = 2;
+		league.games.get(3).homeTeamScore = 1;
+		league.games.get(3).awayTeamScore = 1;
+		
 		List<Game> russiaFinishedGames = league.getFinishedGamesWithTeam(russia);
 		List<Game> russiaAllGames = league.getAllGamesPlayedBy(russia);
 		

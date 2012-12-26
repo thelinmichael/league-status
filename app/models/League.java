@@ -281,9 +281,12 @@ public class League extends Model {
 			Game possibleOutcome1 = new Game(game.league, game.homeTeam, game.awayTeam);
 			Game possibleOutcome2 = new Game(game.league, game.homeTeam, game.awayTeam);
 			Game possibleOutcome3 = new Game(game.league, game.homeTeam, game.awayTeam);
-			possibleOutcome1.setScore(Arrays.asList(0,0));
-			possibleOutcome2.setScore(Arrays.asList(1,0));
-			possibleOutcome3.setScore(Arrays.asList(0,1));
+			possibleOutcome1.homeTeamScore = 0;
+			possibleOutcome1.awayTeamScore = 0;
+			possibleOutcome2.homeTeamScore = 1;
+			possibleOutcome2.awayTeamScore = 0;
+			possibleOutcome3.homeTeamScore = 0;
+			possibleOutcome3.awayTeamScore = 1;
 			DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(possibleOutcome1);
 			DefaultMutableTreeNode node2 = new DefaultMutableTreeNode(possibleOutcome2);
 			DefaultMutableTreeNode node3 = new DefaultMutableTreeNode(possibleOutcome3);
@@ -330,13 +333,11 @@ public class League extends Model {
 		for (List<Game> outcome : possibleOutcomes) {
 			for (Game game : outcome) {
 				if (game.wasPlayedBy(team) && game.getResultFor(team) == Result.WIN) {
-					int scoreIndex;
 					if (game.homeTeam.equals(team)) {
-						scoreIndex = 0;
+						game.homeTeamScore = 9999;
 					} else {
-						scoreIndex = 1;
+						game.awayTeamScore = 9999;
 					}
-					game.scores.set(scoreIndex, new Score(9999)); 
 				}
 			}
 			List<Game> playedGames = new ArrayList(getPlayedGames());
@@ -380,9 +381,9 @@ public class League extends Model {
 			for (Game game : outcome) {
 				if (game.wasPlayedBy(team) && game.getResultFor(team) == Result.LOSS) {
 					if (game.homeTeam.equals(team)) {
-						game.scores.set(1, new Score(9999));
+						game.awayTeamScore = 9999;
 					} else {
-						game.scores.set(0, new Score(9999));
+						game.homeTeamScore = 9999;
 					}
 				}
 			}
