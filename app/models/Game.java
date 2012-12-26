@@ -50,7 +50,7 @@ public class Game extends Model implements HasTime {
 	public Result getResultFor(Team team) {
 		final Result result;
 		
-		if (!wasPlayedBy(team)) {
+		if (!isPlayedBy(team)) {
 			throw new IllegalArgumentException("Team did not play this game.");
 		} 
 		
@@ -82,7 +82,7 @@ public class Game extends Model implements HasTime {
 	}
 
 	public int getGoalsForTeam(Team team) throws GameNotPlayedException {
-		if (!wasPlayedBy(team)) {
+		if (!isPlayedBy(team)) {
 			throw new IllegalArgumentException("Team did not play this game.");
 		} 
 		if (!isPlayed()) {
@@ -97,7 +97,7 @@ public class Game extends Model implements HasTime {
 	}
 
 	public int getGoalsAgainstTeam(Team team) throws GameNotPlayedException {
-		if (!wasPlayedBy(team)) {
+		if (!isPlayedBy(team)) {
 			throw new IllegalArgumentException("Team did not play this game.");
 		} 
 		if (!isPlayed()) {
@@ -111,12 +111,8 @@ public class Game extends Model implements HasTime {
 		}
 	}
 	
-	public boolean wasPlayedBy(Team team) {
-		if (homeTeam.equals(team) || awayTeam.equals(team)) {
-			return true;
-		} else {
-			return false;
-		}
+	public boolean isPlayedBy(Team team) {
+		return (homeTeam.equals(team) || awayTeam.equals(team));
 	}
 
 	@Override

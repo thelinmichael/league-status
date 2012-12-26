@@ -31,6 +31,9 @@ public class League extends Model {
 	public String name;
 	public String displayName;
 	
+	/* Upper and lower qualification rank represents the 
+	 * rank in the table that separates teams to promotion or relegation. 
+	 */
 	public Integer upperQualificationRank;
 	public Integer lowerQualificationRank;
 
@@ -38,7 +41,7 @@ public class League extends Model {
 	public Sport sport;
 	
 	@OneToMany(mappedBy="league")
-	public List<Game> games;
+	public List<Game> games = new ArrayList<Game>();
 	
 	@ManyToMany(mappedBy="leagues")
 	public List<Team> teams;
@@ -53,20 +56,6 @@ public class League extends Model {
 	
 	public String makeDisplayName(String teamName) {
 		return teamName.replace(' ', '_').toLowerCase();
-	}
-	
-	public void addGame(Game game) {
-		if (games == null) {
-			games = new ArrayList<Game>();
-		}
-		games.add(game);
-	}
-	
-	public void addGames(List<Game> games) {
-		if (this.games == null) {
-			this.games = new ArrayList<Game>();
-		}
-		this.games.addAll(games);
 	}
 	
 	public List<Game> getPlayedGames() {
@@ -89,54 +78,54 @@ public class League extends Model {
 		return remainingGames;
 	}
 	
+	/* Returns games in order by date, 
+	 * most recent game first. 
+	 */
 	public List<Game> getGamesInChronologicalOrder() {
-		if (games == null) {
-			games = new ArrayList<Game>();
-		}
 		List<Game> sortedGames = new ArrayList<Game>(games);
 		Collections.sort(sortedGames, new DateComparator());
 		Collections.reverse(sortedGames);
 		return sortedGames;
 	}
 	
-	public Integer getPointsForTeam(Team team) {
-		Integer points = 0;
-		
+	public Integer getPointsFor(Team team) {
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
 		}
 		
+		Integer totalPoints = sport.getPointsAtSeasonStart();
+		
 		for (Game game : games) {
-			if (game.isPlayed() && game.wasPlayedBy(team)) {
+			if (game.isPlayed() && game.isPlayedBy(team)) {
 				Result result = game.getResultFor(team);
-				points += sport.getPointsFor(result);
+				totalPoints += sport.getPointsFor(result);
 			} 
 		}
 
-		return points;
+		return totalPoints;
 	}
 	
-	public Integer getWinsForTeam(Team team) {
-		return getResultForTeam(team, Result.WIN);
+	public Integer getNumberOfWinsFor(Team team) {
+		return getNumberOfResultFor(team, Result.WIN);
 	}
 
-	public Integer getLossesForTeam(Team team) {
-		return getResultForTeam(team, Result.LOSS);
+	public Integer getNumberOfLossesFor(Team team) {
+		return getNumberOfResultFor(team, Result.LOSS);
 	}
 
-	public Integer getTiesForTeam(Team team) {
-		return getResultForTeam(team, Result.TIE);
+	public Integer getNumberOfTiesFor(Team team) {
+		return getNumberOfResultFor(team, Result.TIE);
 	}
 	
-	private Integer getResultForTeam(Team team, Result result) {
-		Integer numberOfResult = 0;
-		
+	private Integer getNumberOfResultFor(Team team, Result result) {
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
 		}
 		
+		Integer numberOfResult = 0;
+		
 		for (Game game : games) {
-			if (game.isPlayed() && game.wasPlayedBy(team) && game.getResultFor(team) == result) {
+			if (game.isPlayed() && game.isPlayedBy(team) && game.getResultFor(team) == result) {
 				numberOfResult++;
 			}
 		}
@@ -144,48 +133,91 @@ public class League extends Model {
 		return numberOfResult;
 	}
 	
-	public Integer getGoalDifferenceForTeam(Team team) {
+	public Integer getGoalDifferenceFor(Team team) {
 		return (getGoalsScoredBy(team) - getGoalsConcededBy(team));
 	}
 	
 	public Integer getGoalsScoredBy(Team team) {
-		Integer goals = 0;
-		
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
 		}
 		
+		Integer totalGoals = 0;
+		
 		for (Game game : games) {
-			if (game.isPlayed() && game.wasPlayedBy(team)) {
+			if (game.isPlayedBy(team)) {
 				try {
-					goals += game.getGoalsForTeam(team);
-				} catch (GameNotPlayedException e) {}
+					totalGoals += game.getGoalsForTeam(team);
+				} catch (GameNotPlayedException e) {
+					continue;
+				}
 			}
 		}
-		return goals;
+		return totalGoals;
 	}
 
 	public Integer getGoalsConcededBy(Team team) {
-		Integer goals = 0;
-		
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
 		}
 		
+		Integer totalGoals = 0;
+		
 		for (Game game : games) {
-			if (game.isPlayed() && game.wasPlayedBy(team)) {
+			if (game.isPlayedBy(team)) {
 				try {
-					goals += game.getGoalsAgainstTeam(team);
-				} catch (GameNotPlayedException e) {}
+					totalGoals += game.getGoalsAgainstTeam(team);
+				} catch (GameNotPlayedException e) {
+					continue;
+				}
 			}
 		}
-		return goals;
+		return totalGoals;
+	}
+	
+	public List<Game> getFinishedGamesPlayedBy(Team team) {
+		List<Game> gamesPlayedByTeam = getGamesPlayedBy(team);
+		
+		List<Game> finishedGamesPlayedByTeam = new ArrayList<Game>();
+		for (Game game : gamesPlayedByTeam) {
+			if (game.isPlayed()) {
+				finishedGamesPlayedByTeam.add(game);
+			}
+		}
+		return finishedGamesPlayedByTeam;
+ 	}
+	
+	public int getNumberOfFinishedGamesBy(Team team) {
+		return getFinishedGamesPlayedBy(team).size();
+	}
+	
+	public List<Game> getGamesPlayedBy(Team team) {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
+		List<Game> gamesPlayedByTeam = new ArrayList<Game>();
+		
+		for (Game game : games) {
+			if (game.isPlayedBy(team)) {
+				gamesPlayedByTeam.add(game);
+			}
+		}
+		return gamesPlayedByTeam;
 	}
 	
 	public List<Team> getTeamsByRank() {
+		/* Cached rank */
 		if (teamsByRank != null) {
 			return teamsByRank;
 		}
+		
+		/* Get comparators for this league. 
+		 * The comparators decide how teams are ranked, e.g.
+		 * if points are more valuable than goal difference, 
+		 * or goal difference being more valuable than goals scored.
+		 */
+		sport.getComparators();
 		List<Class<? extends Comparator<Team>>> comparatorClasses = sport.getComparators();
 		List<Comparator<Team>> comparators = new ArrayList<Comparator<Team>>();
 		for (Class<? extends Comparator<Team>> comparatorClass : comparatorClasses) {
@@ -210,56 +242,140 @@ public class League extends Model {
 				e.printStackTrace();
 			}
 		}
+		
+		/* Caching ranks */
 		teamsByRank = getTeamsByRank(comparators);
+		
 		return teamsByRank;
 	}
 
 	public List<Team> getTeamsByRank(List<Comparator<Team>> comparators) {
 		List<Team> sortedTeams = new ArrayList<Team>(teams);
+		
 		ComparatorChain chainedComparators =  new ComparatorChain();
 		for (Comparator<Team> comparator : comparators) {
 			chainedComparators.addComparator(comparator);
 		}
+		
 		Collections.sort(sortedTeams, chainedComparators);
 		Collections.reverse(sortedTeams);
+		
 		return sortedTeams;
 	}
 	
-	public List<Game> getFinishedGamesWithTeam(Team team) {
-		if (!teams.contains(team)) {
-			throw new IllegalArgumentException("Team not in league.");
-		}
-		
-		List<Game> returnedGames = new ArrayList<Game>();
-		for (Game game : games) {
-			if (game.wasPlayedBy(team) && game.isPlayed()) {
-				returnedGames.add(game);
-			}
-		}
-		return returnedGames;
- 	}
+	public int getBestPossibleRankFor(Team team) {
+		return getBestPossibleRankFor(team, getAllPossibleGameEndCombinations());
+	}
 	
-	public List<Game> getAllGamesPlayedBy(Team team) {
+	public int getWorstPossibleRankFor(Team team) {
+		return getWorstPossibleRankFor(team, getAllPossibleGameEndCombinations());
+	}
+	
+	public int getBestPossibleRankFor(Team team, DefaultMutableTreeNode rootNode) {
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
 		}
 		
-		List<Game> returnedGames = new ArrayList<Game>();
+		Integer bestRank = null;
 		
-		for (Game game : games) {
-			if (game.wasPlayedBy(team)) {
-				returnedGames.add(game);
+		List<List<Game>> possibleOutcomes = new ArrayList<List<Game>>(); 
+		DefaultMutableTreeNode leaf = rootNode.getFirstLeaf();
+		while (leaf != null) {
+			TreeNode[] pathToRoot = leaf.getPath();
+			List<Game> outcome = new ArrayList<Game>();
+			for (TreeNode node : pathToRoot) {
+				if (node == rootNode) {
+					continue;
+				} 
+				Game gameInNode = (Game) ((DefaultMutableTreeNode) node).getUserObject();
+				outcome.add(gameInNode); 
 			}
+			possibleOutcomes.add(outcome);
+			leaf = leaf.getNextLeaf();	
 		}
-		return returnedGames;
+		
+		List<Game> oldGames = new ArrayList<Game>(games);
+		for (List<Game> outcome : possibleOutcomes) {
+			for (Game game : outcome) {
+				if (game.isPlayedBy(team) && game.getResultFor(team) == Result.WIN) {
+					if (game.homeTeam.equals(team)) {
+						game.homeTeamScore = 9999;
+					} else {
+						game.awayTeamScore = 9999;
+					}
+				}
+			}
+			List<Game> playedGames = new ArrayList(getPlayedGames());
+			playedGames.addAll(outcome);
+			games = playedGames;
+			clearRankCache();
+			List<Team> teams = getTeamsByRank();
+			if (bestRank == null || (teams.indexOf(team) + 1) < bestRank) {
+				bestRank = teams.indexOf(team) + 1;
+			}
+			games = new ArrayList<Game>(oldGames);
+		}
+		
+		return bestRank;
 	}
 
+	public Integer getWorstPossibleRankFor(Team team, DefaultMutableTreeNode rootNode) {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		Integer worstRank = null;
+		
+		List<List<Game>> possibleOutcomes = new ArrayList<List<Game>>(); 
+		DefaultMutableTreeNode leaf = rootNode.getFirstLeaf();
+		while (leaf != null) {
+			TreeNode[] pathToRoot = leaf.getPath();
+			List<Game> outcome = new ArrayList<Game>();
+			for (TreeNode node : pathToRoot) {
+				if (node == rootNode) {
+					continue;
+				} 
+				Game gameInNode = (Game) ((DefaultMutableTreeNode) node).getUserObject();
+				outcome.add(gameInNode); 
+			}
+			possibleOutcomes.add(outcome);
+			leaf = leaf.getNextLeaf();	
+		}
+		
+		List<Game> oldGames = new ArrayList<Game>(games);
+		for (List<Game> outcome : possibleOutcomes) {
+			for (Game game : outcome) {
+				if (game.isPlayedBy(team) && game.getResultFor(team) == Result.LOSS) {
+					if (game.homeTeam.equals(team)) {
+						game.awayTeamScore = 9999;
+					} else {
+						game.homeTeamScore = 9999;
+					}
+				}
+			}
+			
+			List<Game> playedGames = new ArrayList(getPlayedGames());
+			playedGames.addAll(outcome);
+			games = playedGames;
+			clearRankCache();
+			List<Team> teams = getTeamsByRank();
+			if (worstRank == null || (teams.indexOf(team) + 1) > worstRank) {
+				worstRank = teams.indexOf(team) + 1;
+			}
+			games = new ArrayList<Game>(oldGames);
+		}
+		
+		return worstRank;
+	}
+	
+	/* A tree structure where every node represents a finished game, 
+	 * except for the root node which is empty. 
+	 */
 	public DefaultMutableTreeNode getAllPossibleGameEndCombinations() {
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode();
 		addPossibleCombinations(getRemainingGames(), rootNode);
 		return rootNode;
 	}
-	
+
 	private void addPossibleCombinations(List<Game> remainingGames, DefaultMutableTreeNode rootNode) {
 		if (remainingGames == null || remainingGames.size() == 0) {
 			return;
@@ -299,135 +415,32 @@ public class League extends Model {
 		addPossibleCombinations(remainingGames, rootNode);
 	}
 
-	public int getBestPossibleRankForTeam(Team team) {
-		return getBestPossibleRankForTeam(team, getAllPossibleGameEndCombinations());
-	}
-	
-	public int getWorstPossibleRankForTeam(Team team) {
-		return getWorstPossibleRankForTeam(team, getAllPossibleGameEndCombinations());
-	}
-	
-	public int getBestPossibleRankForTeam(Team team, DefaultMutableTreeNode rootNode) {
-		if (!teams.contains(team)) {
-			throw new IllegalArgumentException("Team not in league.");
-		}
-		Integer bestRank = null;
-		
-		List<List<Game>> possibleOutcomes = new ArrayList<List<Game>>(); 
-		DefaultMutableTreeNode leaf = rootNode.getFirstLeaf();
-		while (leaf != null) {
-			TreeNode[] pathToRoot = leaf.getPath();
-			List<Game> outcome = new ArrayList<Game>();
-			for (TreeNode node : pathToRoot) {
-				if (node == rootNode) {
-					continue;
-				} 
-				Game gameInNode = (Game) ((DefaultMutableTreeNode) node).getUserObject();
-				outcome.add(gameInNode); 
-			}
-			possibleOutcomes.add(outcome);
-			leaf = leaf.getNextLeaf();	
-		}
-		
-		List<Game> oldGames = new ArrayList<Game>(games);
-		for (List<Game> outcome : possibleOutcomes) {
-			for (Game game : outcome) {
-				if (game.wasPlayedBy(team) && game.getResultFor(team) == Result.WIN) {
-					if (game.homeTeam.equals(team)) {
-						game.homeTeamScore = 9999;
-					} else {
-						game.awayTeamScore = 9999;
-					}
-				}
-			}
-			List<Game> playedGames = new ArrayList(getPlayedGames());
-			playedGames.addAll(outcome);
-			games = playedGames;
-			clearTeamRank();
-			List<Team> teams = getTeamsByRank();
-			if (bestRank == null || (teams.indexOf(team) + 1) < bestRank) {
-				bestRank = teams.indexOf(team) + 1;
-			}
-			games = new ArrayList<Game>(oldGames);
-		}
-		
-		return bestRank;
-	}
-
-	public Integer getWorstPossibleRankForTeam(Team team, DefaultMutableTreeNode rootNode) {
-		if (!teams.contains(team)) {
-			throw new IllegalArgumentException("Team not in league.");
-		}
-		Integer worstRank = null;
-		
-		List<List<Game>> possibleOutcomes = new ArrayList<List<Game>>(); 
-		DefaultMutableTreeNode leaf = rootNode.getFirstLeaf();
-		while (leaf != null) {
-			TreeNode[] pathToRoot = leaf.getPath();
-			List<Game> outcome = new ArrayList<Game>();
-			for (TreeNode node : pathToRoot) {
-				if (node == rootNode) {
-					continue;
-				} 
-				Game gameInNode = (Game) ((DefaultMutableTreeNode) node).getUserObject();
-				outcome.add(gameInNode); 
-			}
-			possibleOutcomes.add(outcome);
-			leaf = leaf.getNextLeaf();	
-		}
-		
-		List<Game> oldGames = new ArrayList<Game>(games);
-		for (List<Game> outcome : possibleOutcomes) {
-			for (Game game : outcome) {
-				if (game.wasPlayedBy(team) && game.getResultFor(team) == Result.LOSS) {
-					if (game.homeTeam.equals(team)) {
-						game.awayTeamScore = 9999;
-					} else {
-						game.homeTeamScore = 9999;
-					}
-				}
-			}
-			
-			List<Game> playedGames = new ArrayList(getPlayedGames());
-			playedGames.addAll(outcome);
-			games = playedGames;
-			clearTeamRank();
-			List<Team> teams = getTeamsByRank();
-			if (worstRank == null || (teams.indexOf(team) + 1) > worstRank) {
-				worstRank = teams.indexOf(team) + 1;
-			}
-			games = new ArrayList<Game>(oldGames);
-		}
-		
-		return worstRank;
-	}
-
 	public boolean isInUpperQualification(Team team) {
 		if (upperQualificationRank == null) { 
 			return false;
 		}
-		return isInUpperQualification(getRankForTeam(team));
+		return isInUpperQualification(getRankFor(team));
 	}
 
 	public boolean isBelowUpperQualification(Team team) {
 		if (lowerQualificationRank == null) { 
 			return false;
 		}
-		return isBelowUpperQualification(getRankForTeam(team));
+		return isBelowUpperQualification(getRankFor(team));
 	}
 
 	public boolean isAboveLowerQualification(Team team) {
 		if (upperQualificationRank == null) { 
 			return false;
 		}
-		return isAboveLowerQualification(getRankForTeam(team));
+		return isAboveLowerQualification(getRankFor(team));
 	}
 
 	public boolean isInLowerQualification(Team team) {
 		if (lowerQualificationRank == null) { 
 			return false;
 		}
-		return isInLowerQualification(getRankForTeam(team));
+		return isInLowerQualification(getRankFor(team));
 	}
 
 	public boolean isInUpperQualification(int rank) {
@@ -450,10 +463,6 @@ public class League extends Model {
 		}
 		return (rank > upperQualificationRank);
 	}
-	
-	public int getNumberOfFinishedGamesWithTeam(Team team) {
-		return getFinishedGamesWithTeam(team).size();
-	}
 
 	public boolean isAboveLowerQualification(int rank) {
 		if (upperQualificationRank == null) { 
@@ -462,7 +471,7 @@ public class League extends Model {
 		return (rank < lowerQualificationRank);
 	}
 
-	public Integer getRankForTeam(Team team) {
+	public Integer getRankFor(Team team) {
 		if (!teams.contains(team)) {
 			throw new IllegalArgumentException("Team not in league.");
 		}
@@ -471,7 +480,7 @@ public class League extends Model {
 		return teamsByRank.indexOf(team) + 1;
 	}
 	
-	public void clearTeamRank() {
+	public void clearRankCache() {
 		teamsByRank = null;
 	}
 }

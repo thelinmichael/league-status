@@ -15,7 +15,7 @@ public class PointComparator implements Comparator<Team> {
 	
 	@Override
 	public int compare(Team team1, Team team2) {
-		return league.getPointsForTeam(team1).compareTo(league.getPointsForTeam(team2));
+		return league.getPointsFor(team1).compareTo(league.getPointsFor(team2));
 	}
 
 }

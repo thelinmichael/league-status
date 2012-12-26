@@ -22,8 +22,8 @@ public class IndividualGamesComparator implements Comparator<Team> {
 
 	@Override
 	public int compare(Team team1, Team team2) {
-		List<Game> team1Games = league.getAllGamesPlayedBy(team1);
-		List<Game> team2Games = league.getAllGamesPlayedBy(team2);
+		List<Game> team1Games = league.getGamesPlayedBy(team1);
+		List<Game> team2Games = league.getGamesPlayedBy(team2);
 				
 		Set<Game> games = Sets.intersection(new HashSet(team1Games), new HashSet(team2Games));
 

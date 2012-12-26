@@ -24,16 +24,16 @@
 		#{list items:league.getTeamsByRank(), as:'team'}
 		<tr>
 			<td class="team">${team.getDisplayName()}</td> 
-			<td>${league.getNumberOfFinishedGamesWithTeam(team)}</td>
-			<td>${league.getWinsForTeam(team)}</td>
-			<td>${league.getTiesForTeam(team)}</td>
-			<td>${league.getLossesForTeam(team)}</td>
+			<td>${league.getNumberOfFinishedGamesBy(team)}</td>
+			<td>${league.getNumberOfWinsFor(team)}</td>
+			<td>${league.getNumberOfTiesFor(team)}</td>
+			<td>${league.getNumberOfLossesFor(team)}</td>
 			<td>${league.getGoalsScoredBy(team)}</td>
 			<td>${league.getGoalsConcededBy(team)}</span>
-			<td>${league.getGoalDifferenceForTeam(team)}</span>
-			<td>${league.getPointsForTeam(team)}</span>
-			<td><span #{if league.isInLowerQualification(league.getBestPossibleRankForTeam(team))} class="belowQualification"#{/if}#{elseif league.isInUpperQualification(league.getBestPossibleRankForTeam(team))} class="upperQualification"#{/elseif}>${league.getBestPossibleRankForTeam(team)}</span></td>
-			<td><span #{if league.isInLowerQualification(league.getWorstPossibleRankForTeam(team))} class="belowQualification"#{/if}#{elseif league.isInUpperQualification(league.getWorstPossibleRankForTeam(team))} class="upperQualification"#{/elseif}>${league.getWorstPossibleRankForTeam(team)}</span></td>
+			<td>${league.getGoalDifferenceFor(team)}</span>
+			<td>${league.getPointsFor(team)}</span>
+			<td><span #{if league.isInLowerQualification(league.getBestPossibleRankFor(team))} class="belowQualification"#{/if}#{elseif league.isInUpperQualification(league.getBestPossibleRankFor(team))} class="upperQualification"#{/elseif}>${league.getBestPossibleRankFor(team)}</span></td>
+			<td><span #{if league.isInLowerQualification(league.getWorstPossibleRankFor(team))} class="belowQualification"#{/if}#{elseif league.isInUpperQualification(league.getWorstPossibleRankFor(team))} class="upperQualification"#{/elseif}>${league.getWorstPossibleRankFor(team)}</span></td>
 		</tr>
 		#{/list}
 	</div>

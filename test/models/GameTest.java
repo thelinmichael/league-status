@@ -46,7 +46,7 @@ public class GameTest extends UnitTest{
 		League league = new League("Allsvenskan", new Football());
 		
 		Game game = new Game(league, team1, team2);
-		league.addGame(game);
+		league.games.add(game);
 		
 		assertThat(league.games.contains(game), is(true));
 	}

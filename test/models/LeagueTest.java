@@ -52,7 +52,7 @@ public class LeagueTest extends UnitTest {
 		Team team2 = league.teams.get(1);
 		
 		Game game = new Game(league, team1, team2);
-		league.addGame(game);
+		league.games.add(game);
 		
 		assertThat(league.games.size(), is(numberOfGamesBeforeAddingAnotherGame + 1));
 	}
@@ -100,7 +100,7 @@ public class LeagueTest extends UnitTest {
 		builder = new GameBuilder(league, team2, team1);
 		Game game4 = builder.time(new Date(677257800L)).build().save();
 		
-		league.addGames(Arrays.asList(game1, game2, game3, game4));
+		league.games.addAll(Arrays.asList(game1, game2, game3, game4));
 
 		List<Game> unsortedGames = league.games;
 		assertThat(unsortedGames.get(0), is(game1));
@@ -122,7 +122,7 @@ public class LeagueTest extends UnitTest {
 		Team bogusTeam = new Team("Bogus Team");
 		
 		try {
-			league.getPointsForTeam(bogusTeam);
+			league.getPointsFor(bogusTeam);
 			fail();
 		} catch(IllegalArgumentException e) {
 		}
@@ -137,10 +137,10 @@ public class LeagueTest extends UnitTest {
 		Team greece = Team.find("byName", "greece").first();
 		Team russia = Team.find("byName", "russia").first();
 		
-		assertThat(league.getPointsForTeam(czech), is(6));
-		assertThat(league.getPointsForTeam(russia), is(4));
-		assertThat(league.getPointsForTeam(greece), is(4));
-		assertThat(league.getPointsForTeam(poland), is(2));
+		assertThat(league.getPointsFor(czech), is(6));
+		assertThat(league.getPointsFor(russia), is(4));
+		assertThat(league.getPointsFor(greece), is(4));
+		assertThat(league.getPointsFor(poland), is(2));
 	}
 	
 	@Test
@@ -152,18 +152,18 @@ public class LeagueTest extends UnitTest {
 		Team greece = Team.find("byName", "greece").first();
 		Team russia = Team.find("byName", "russia").first();
 		
-		assertThat(league.getWinsForTeam(czech), is(2));
-		assertThat(league.getWinsForTeam(russia), is(1));
-		assertThat(league.getWinsForTeam(greece), is(1));
-		assertThat(league.getWinsForTeam(poland), is(0));
-		assertThat(league.getLossesForTeam(czech), is(1));
-		assertThat(league.getLossesForTeam(russia), is(1));
-		assertThat(league.getLossesForTeam(greece), is(1));
-		assertThat(league.getLossesForTeam(poland), is(1));
-		assertThat(league.getTiesForTeam(czech), is(0));
-		assertThat(league.getTiesForTeam(russia), is(1));
-		assertThat(league.getTiesForTeam(greece), is(1));
-		assertThat(league.getTiesForTeam(poland), is(2));
+		assertThat(league.getNumberOfWinsFor(czech), is(2));
+		assertThat(league.getNumberOfWinsFor(russia), is(1));
+		assertThat(league.getNumberOfWinsFor(greece), is(1));
+		assertThat(league.getNumberOfWinsFor(poland), is(0));
+		assertThat(league.getNumberOfLossesFor(czech), is(1));
+		assertThat(league.getNumberOfLossesFor(russia), is(1));
+		assertThat(league.getNumberOfLossesFor(greece), is(1));
+		assertThat(league.getNumberOfLossesFor(poland), is(1));
+		assertThat(league.getNumberOfTiesFor(czech), is(0));
+		assertThat(league.getNumberOfTiesFor(russia), is(1));
+		assertThat(league.getNumberOfTiesFor(greece), is(1));
+		assertThat(league.getNumberOfTiesFor(poland), is(2));
 	}
 	
 	@Test
@@ -208,7 +208,7 @@ public class LeagueTest extends UnitTest {
 		newGames.add(new Game(league, team4, team2));
 		newGames.add(new Game(league, team4, team3));
 		
-		league.addGames(newGames);
+		league.games.addAll(newGames);
 		assertThat(league.games, is(notNullValue()));
 		league.games.get(0).homeTeamScore = 1;
 		league.games.get(0).awayTeamScore = 2;
@@ -276,11 +276,11 @@ public class LeagueTest extends UnitTest {
 		builder = new GameBuilder(league, team2, team3);
 		Game game4 = builder.score(3,0).build();
 
-		league.addGames(Arrays.asList(game1, game2, game3, game4));
+		league.games.addAll(Arrays.asList(game1, game2, game3, game4));
 		
-		assertThat(league.getPointsForTeam(team1), is(5));
-		assertThat(league.getPointsForTeam(team2), is(5));
-		assertThat(league.getPointsForTeam(team3), is(0));
+		assertThat(league.getPointsFor(team1), is(5));
+		assertThat(league.getPointsFor(team2), is(5));
+		assertThat(league.getPointsFor(team3), is(0));
 		
 		assertThat(league.getGoalsScoredBy(team1) - league.getGoalsConcededBy(team1), is(1));
 		assertThat(league.getGoalsScoredBy(team2) - league.getGoalsConcededBy(team2), is(3));
@@ -359,7 +359,7 @@ public class LeagueTest extends UnitTest {
 		Game greeceRussia = new Game(league, greece, russia);
 		newGames.addAll(Arrays.asList(polandGreece, russiaCzech, greeceCzech, polandRussia, czechPoland, greeceRussia));
 		
-		league.addGames(newGames);
+		league.games.addAll(newGames);
 		league.games.get(0).homeTeamScore = 1;
 		league.games.get(0).awayTeamScore = 1;
 		league.games.get(1).homeTeamScore = 4;
@@ -369,8 +369,8 @@ public class LeagueTest extends UnitTest {
 		league.games.get(3).homeTeamScore = 1;
 		league.games.get(3).awayTeamScore = 1;
 		
-		List<Game> russiaFinishedGames = league.getFinishedGamesWithTeam(russia);
-		List<Game> russiaAllGames = league.getAllGamesPlayedBy(russia);
+		List<Game> russiaFinishedGames = league.getFinishedGamesPlayedBy(russia);
+		List<Game> russiaAllGames = league.getGamesPlayedBy(russia);
 		
 		assertThat(russiaAllGames.size(), is(3));
 		assertThat(russiaAllGames.containsAll(Arrays.asList(russiaCzech, polandRussia, greeceRussia)), is(true));
@@ -453,7 +453,7 @@ public class LeagueTest extends UnitTest {
 		assertThat(thirdChildGame.homeTeam, is(team1));
 		assertThat(thirdChildGame.awayTeam, is(team2));
 		
-		assertThat(league.getBestPossibleRankForTeam(team1,node), is(1));
+		assertThat(league.getBestPossibleRankFor(team1,node), is(1));
 	}
 	
 	@Test
@@ -467,10 +467,10 @@ public class LeagueTest extends UnitTest {
 		DefaultMutableTreeNode node = league.getAllPossibleGameEndCombinations();
 		assertThat(node.getLeafCount(), is(9));
 		
-		assertThat(league.getBestPossibleRankForTeam(england), is(1));
-		assertThat(league.getBestPossibleRankForTeam(france), is(1));
-		assertThat(league.getBestPossibleRankForTeam(ukraine), is(1));
-		assertThat(league.getBestPossibleRankForTeam(sweden), is(4));
+		assertThat(league.getBestPossibleRankFor(england), is(1));
+		assertThat(league.getBestPossibleRankFor(france), is(1));
+		assertThat(league.getBestPossibleRankFor(ukraine), is(1));
+		assertThat(league.getBestPossibleRankFor(sweden), is(4));
 	}
 	
 	@Test
@@ -481,20 +481,20 @@ public class LeagueTest extends UnitTest {
 		Team ukraine = Team.find("byName", "ukraine").first();
 		Team france = Team.find("byName", "france").first();
 		
-		System.out.println("France: " + league.getGoalDifferenceForTeam(france) + " " + league.getPointsForTeam(france));
-		System.out.println("England: " + league.getGoalDifferenceForTeam(england) + " " + league.getPointsForTeam(england));
-		System.out.println("Ukraine: " + league.getGoalDifferenceForTeam(ukraine) + " " + league.getPointsForTeam(ukraine));
-		System.out.println("Sweden: " + league.getGoalDifferenceForTeam(sweden) + " " + league.getPointsForTeam(sweden));
+		System.out.println("France: " + league.getGoalDifferenceFor(france) + " " + league.getPointsFor(france));
+		System.out.println("England: " + league.getGoalDifferenceFor(england) + " " + league.getPointsFor(england));
+		System.out.println("Ukraine: " + league.getGoalDifferenceFor(ukraine) + " " + league.getPointsFor(ukraine));
+		System.out.println("Sweden: " + league.getGoalDifferenceFor(sweden) + " " + league.getPointsFor(sweden));
 		
-		assertThat(league.getBestPossibleRankForTeam(france), is(1));
-		assertThat(league.getBestPossibleRankForTeam(england), is(1));
-		assertThat(league.getBestPossibleRankForTeam(ukraine), is(1));
-		assertThat(league.getBestPossibleRankForTeam(sweden), is(4));
+		assertThat(league.getBestPossibleRankFor(france), is(1));
+		assertThat(league.getBestPossibleRankFor(england), is(1));
+		assertThat(league.getBestPossibleRankFor(ukraine), is(1));
+		assertThat(league.getBestPossibleRankFor(sweden), is(4));
 		
-		assertThat(league.getWorstPossibleRankForTeam(france), is(3));
-		assertThat(league.getWorstPossibleRankForTeam(england), is(3));
-		assertThat(league.getWorstPossibleRankForTeam(ukraine), is(3));
-		assertThat(league.getWorstPossibleRankForTeam(sweden), is(4));
+		assertThat(league.getWorstPossibleRankFor(france), is(3));
+		assertThat(league.getWorstPossibleRankFor(england), is(3));
+		assertThat(league.getWorstPossibleRankFor(ukraine), is(3));
+		assertThat(league.getWorstPossibleRankFor(sweden), is(4));
 	}
 	
 	@Test
@@ -560,14 +560,14 @@ public class LeagueTest extends UnitTest {
 		Team ukraine = Team.find("byName", "ukraine").first();
 		Team france = Team.find("byName", "france").first();
 		
-		assertThat(league.getRankForTeam(france), is(1));
-		assertThat(league.getRankForTeam(england), is(2));
-		assertThat(league.getRankForTeam(ukraine), is(3));
-		assertThat(league.getRankForTeam(sweden), is(4));
+		assertThat(league.getRankFor(france), is(1));
+		assertThat(league.getRankFor(england), is(2));
+		assertThat(league.getRankFor(ukraine), is(3));
+		assertThat(league.getRankFor(sweden), is(4));
 		
 		Team team = new Team("Team not in league");
 		try {
-			league.getRankForTeam(team);
+			league.getRankFor(team);
 			fail();
 		} catch (IllegalArgumentException e) {}
 	}
