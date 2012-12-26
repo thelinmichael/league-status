@@ -50,8 +50,13 @@ public class Game extends Model implements HasTime {
 		this.homeTeamScore = homeTeamScore;
 		this.awayTeamScore = awayTeamScore;
 	}
-	
-	/* TODO: More work to be done here! */
+
+	/* TODO: The concept of publishing needs to be expanded on.
+	 * For example, all league functions relating to games should 
+	 * only use games that are published. Games should be able to
+	 * be added to leagues without being visible, or affecting
+	 * the stats of the teams in the league (or its cache).
+	 */
 	public void publishChangesToLeague() {
 		league.clearCache();
 	}

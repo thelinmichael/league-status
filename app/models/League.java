@@ -56,15 +56,6 @@ public class League extends Model {
 		return teamName.replace(' ', '_').toLowerCase();
 	}
 	
-	public void addGame(Game game) {
-		if (this.rankCache == null) {
-			this.rankCache = new RankCache();
-		} else {
-			this.rankCache.clearCache();
-		}
-		this.games.add(game);
-	}
-	
 	public List<Game> getPlayedGames() {
 		List<Game> playedGames = new ArrayList<Game>();
 		for (Game game : games) {
@@ -214,6 +205,10 @@ public class League extends Model {
 	}
 	
 	public int getBestPossibleRankFor(Team team) {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
 		if (rankCache == null) {
 			this.rankCache = new RankCache();
 		}
@@ -229,6 +224,10 @@ public class League extends Model {
 	}
 	
 	public int getWorstPossibleRankFor(Team team) {
+		if (!teams.contains(team)) {
+			throw new IllegalArgumentException("Team not in league.");
+		}
+		
 		if (rankCache == null) {
 			this.rankCache = new RankCache();
 		}

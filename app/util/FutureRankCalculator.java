@@ -103,12 +103,13 @@ public class FutureRankCalculator {
 	/* A tree structure where every node represents a finished game, 
 	 * except for the root node which is empty. 
 	 */
+	// TODO: See if this is cachable.
 	public static DefaultMutableTreeNode getAllPossibleGameEndCombinations(League league) {
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode();
 		addPossibleCombinations(league.getRemainingGames(), rootNode);
 		return rootNode;
 	}
-
+	
 	private static void addPossibleCombinations(List<Game> remainingGames, DefaultMutableTreeNode rootNode) {
 		if (remainingGames == null || remainingGames.size() == 0) {
 			return;
@@ -117,6 +118,7 @@ public class FutureRankCalculator {
 		Game game = remainingGames.get(0);
 		remainingGames.remove(0);
 		
+		// Get every leaf in the tree. 
 		Enumeration enumeration = rootNode.depthFirstEnumeration();
 		List<DefaultMutableTreeNode> leafs = new ArrayList<DefaultMutableTreeNode>();
 		while (enumeration.hasMoreElements()) {
@@ -126,6 +128,8 @@ public class FutureRankCalculator {
 			}
 		}
 		
+		// For every leaf, add three new child nodes, one for each possible outcome (win, tie, loss)
+		// of the first game in the list of remaining games.
 		for (DefaultMutableTreeNode leaf : leafs) { 
 			Game possibleOutcome1 = new Game(game.league, game.homeTeam, game.awayTeam);
 			Game possibleOutcome2 = new Game(game.league, game.homeTeam, game.awayTeam);
@@ -145,6 +149,7 @@ public class FutureRankCalculator {
 			leaf.add(node3);
 		}
 		
+		// Use function recursively until there's no remaining games left.
 		addPossibleCombinations(remainingGames, rootNode);
 	}
 }
